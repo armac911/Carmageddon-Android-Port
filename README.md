@@ -1,3 +1,5 @@
+![Carmageddon Android Port — promotional artwork for the AndroGaming.com project](docs/images/carmageddon-android-port-featured.jpg)
+
 # Carmageddon Android Port
 
 **An [AndroGaming.com](https://androgaming.com) project · Version 0.9 · Android ARM64**
@@ -346,6 +348,8 @@ Host checks require Python 3 and a C compiler. GPU tests also need Linux Mesa
 EGL/GLES libraries; they require no original game assets.
 
 ## AI disclosure
+
+The README cover is AI-generated promotional artwork created with OpenAI's image-generation tool.
 
 **The changes developed for this AndroGaming fork were made with extensive
 OpenAI ChatGPT/Codex assistance, including generated and edited code.** Its role
