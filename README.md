@@ -13,6 +13,10 @@ no original `DATA/` or `MUSIC/` files.
 
 
 
+https://github.com/user-attachments/assets/c38f63f8-6cae-43a0-aac4-69e019bd09e9
+
+
+
 Development of this fork used OpenAI ChatGPT/Codex extensively. See the
 [full AI disclosure](#ai-disclosure) and [credits](#credits-and-licenses).
 
