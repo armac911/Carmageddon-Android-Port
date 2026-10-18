@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include "harness/os.h"
+#include "../platforms/error_log.h"
 
 #include <ctype.h>
 #include <dirent.h>
@@ -19,24 +20,10 @@
 
 #define LOG_TAG "DethRace-native"
 
-static void signal_handler(int sig, siginfo_t *si, void *ctx) {
-    (void)si;
-    (void)ctx;
-    __android_log_print(ANDROID_LOG_FATAL, LOG_TAG, "Caught signal %d", sig);
-    _exit(128 + sig);
-}
-
+/* Keep Android's fatal-signal reporting; optional capture chains to it. */
 void OS_InstallSignalHandler(char *program_name) {
     (void)program_name;
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
-    sa.sa_sigaction = signal_handler;
-    sa.sa_flags = SA_SIGINFO;
-    sigaction(SIGSEGV, &sa, NULL);
-    sigaction(SIGFPE, &sa, NULL);
-    sigaction(SIGBUS, &sa, NULL);
-    sigaction(SIGILL, &sa, NULL);
-    sigaction(SIGABRT, &sa, NULL);
+    DRErrorLogStart();
 }
 
 FILE *OS_fopen(const char *pathname, const char *mode) {

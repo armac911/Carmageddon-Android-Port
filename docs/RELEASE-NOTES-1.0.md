@@ -1,3 +1,5 @@
+> Historical candidate notes: the 1.0 milestone is held after a reported mid-race exit. Current investigation version: 0.8. See README and CHANGELOG.
+
 # Carmageddon Android Port 1.0
 
 First tested AndroGaming.com release milestone, promoting the revised 0.2 code.

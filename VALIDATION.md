@@ -1,10 +1,10 @@
-# Validation — 1.0
+# Validation — 0.8 investigation build
 
 - Android ARM64 assembleDebug succeeds with JDK 17, Gradle 8.7, AGP 8.6.1,
   SDK/build tools 35, NDK 28.2 and CMake 3.22.1.
-- Android metadata: com.androgaming.carma.next, versionCode 23, versionName 1.0,
+- Android metadata: com.androgaming.carma.next, versionCode 24, versionName 0.8,
   display name Carmageddon Android Port.
-- Native engine version is androgaming-1.0. CMake now watches the VERSION file
+- Native engine version is androgaming-0.8. CMake now watches the VERSION file
   so future incremental builds refresh the native version header.
 - APK v2 signing, 16 KB zip alignment and ELF PT_LOAD >=16 KB checks pass.
 - Signing certificate SHA-256 matches the previous Next/Port builds:
@@ -23,7 +23,7 @@
 - test/android/test_touch_bridge.py passes, including combined controller and
   touch actions, custom loaded keyboard bindings, steering priority and reset.
 - The maintainer confirms controller defaults and launcher remapping work in the
-  revised 0.2 build promoted to 1.0. SDL standardized names are used. Right-stick
+  revised 0.2 driving/input base. SDL standardized names are used. Right-stick
   gear changes are forward-gear overrides; the original automatic gearbox stays
   active. Select map and R3 camera use loaded game bindings.
 - test/android/test_gear_override.py passes gear bounds and blocked-state guards.
@@ -52,7 +52,33 @@ were also tested. The report covers the two-device pass collectively and does
 not assign each individual check to a specific device. No additional devices,
 all-game completion, multiplayer or fully manual transmission are claimed.
 
-Version 1.0 changes release metadata and documentation only relative to that
-revised 0.2 code. Its APK receives a fresh local build/signature/alignment check;
-that exact renamed APK has not yet been separately replayed on the devices.
+Version 0.8 adds error capture and changes inherited crash reporting on top of
+that base. A later unexpected-exit report holds the 1.0 milestone. The original
+crash cause is unresolved. No physical-device test of 0.8 is claimed.
 The manual GitHub Actions workflow is supplied but has not been run on GitHub.
+
+
+## Error-capture regression checks
+
+- test_error_capture.py: production native logger, disabled capture, 2 MiB log
+  rotation, terminal signal status, original context/previous-handler chaining,
+  restoration/clean stop. Linux host test; not an Android debuggerd test.
+- test_error_export.py: production Java handler/storage, delegation while off or
+  on write failure, bounded exception stacks/logs, retention, allowlisted ZIP,
+  raw trace preservation and path containment.
+- Manifest uses CarmaApplication for early Java-handler setup. No READ_LOGS,
+  network, root or new broad-storage permission is requested.
+- Android logcat availability, native tombstone recovery and export after an
+  actual phone crash remain unverified. Error recording defaults to false and
+  is independent of graphics profiling. No new renderer FPS gain is claimed.
+
+## Exact 0.8 build identity
+
+APK SHA-256: ea4e382a74b23eb7f9f133746dc8553aaa5588475d4a0ca8386cfff55ff1f1cf
+
+- libmain.so Build ID: 66e67bb0ce8836f11571ab161f4b96afebb6a821
+- libSDL2.so Build ID: 66fee9cd9d62da0387e5e2a318bf143316c7778d
+
+APK and unstripped-symbol Build IDs agree. Both ARM64 libraries retain 16 KiB ELF
+alignment; APK alignment and v2 signing checks pass with the existing Next/Port
+certificate. Android versionCode is 24 and versionName is 0.8.

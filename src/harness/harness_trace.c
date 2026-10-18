@@ -8,6 +8,7 @@
 
 #ifdef __ANDROID__
 #include <android/log.h>
+#include "platforms/error_log.h"
 #endif
 
 int harness_debug_level = 4;
@@ -44,6 +45,7 @@ void debug_printf(const char* fmt, const char* fn, const char* fmt2, ...) {
     else if (strstr(prefix, "[WARN]")) prio = ANDROID_LOG_WARN;
     else if (strstr(prefix, "[DEBUG]")) prio = ANDROID_LOG_DEBUG;
     __android_log_print(prio, "dethrace", "%s%s", prefix, body);
+    DRErrorLogMessage(prio, prefix, body);
 #else
     printf(fmt, fn);
 

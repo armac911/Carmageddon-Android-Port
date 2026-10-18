@@ -23,6 +23,7 @@ static DRFramePacer frame_pacer;
 
 #ifdef __ANDROID__
 #include "android_widescreen.h"
+#include "error_log.h"
 #include "android_controller.h"
 static void dr_close_controllers(void);
 #include "../../DETHRACE/android_input.h"
@@ -185,6 +186,7 @@ static void destroy_window(void* hWnd) {
     SDL_DestroyWindow(window);
 #ifdef __ANDROID__
     dr_close_controllers();
+    DRErrorLogStop();
 #endif
     SDL_Quit();
     window = NULL;
@@ -380,6 +382,7 @@ static int get_and_handle_message(MSG_* msg) {
             break;
 #endif
         case SDL_QUIT:
+            LOG_INFO("SDL_QUIT received");
             msg->message = WM_QUIT;
             return 1;
         }

@@ -20,7 +20,7 @@ import java.io.IOException;
 
 /** Launcher-only presentation. Existing game preferences and data paths are preserved. */
 public class LauncherActivity extends Activity {
-    private static final int PICK_ZIP=1, EXPORT_PROFILE=2;
+    private static final int PICK_ZIP=1, EXPORT_PROFILE=2, EXPORT_ERRORS=3;
     private static final int BG=0xff0c0e12, PANEL=0xff171a20, LINE=0xff30343d,
         TEXT=0xfff3f3f5, MUTED=0xffa4a9b4, RED=0xffed343f;
     private File[] exportSessions;
@@ -57,7 +57,7 @@ public class LauncherActivity extends Activity {
         LinearLayout rail=new LinearLayout(this);rail.setOrientation(LinearLayout.VERTICAL);
         rail.setPadding(dp(16),dp(18),dp(16),dp(14));rail.setBackgroundColor(0xff111318);
         TextView mark=text("CARMA",25,TEXT,true); mark.setLetterSpacing(.1f);rail.addView(mark);
-        TextView sub=text("ANDROID  /  0.2",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
+        TextView sub=text("ANDROID  /  0.8",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
         nav=new LinearLayout(this);nav.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams np=new LinearLayout.LayoutParams(-1,0,1);np.topMargin=dp(18);
         // Scroll the navigation on compact screens and with larger system fonts.
@@ -134,7 +134,7 @@ public class LauncherActivity extends Activity {
         play=button("PLAY  ›",true);play.setTextSize(20);play.setOnClickListener(v->startActivity(new Intent(this,DethraceActivity.class)));launch.addView(play);
         importButton=button("Import game data ZIP",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
         note(launch,"Use your own PC game files: DATA/ at the ZIP root, with optional MUSIC/. Game content is not included.");
-        TextView about=text("Powered by Dethrace  •  Version 1.0",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
+        TextView about=text("Powered by Dethrace  •  Version 0.8",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
         update();
     }
     private String capitalize(String s){return s.isEmpty()?s:Character.toUpperCase(s.charAt(0))+s.substring(1);}
@@ -188,6 +188,13 @@ public class LauncherActivity extends Activity {
         note(c,"Records up to 120 seconds of racing per session. For comparisons: stay stationary for 20 seconds, then drive for 30 seconds.");
         Button export=button("Export diagnostics ZIP  ↑",false);export.setOnClickListener(v->exportDiagnostics());c.addView(export);
         note(c,"Includes the latest 12 sessions, graphics settings and battery/thermal readings. No game data. Nothing is uploaded automatically.");
+        LinearLayout errors=card();
+        Switch errorSwitch=new Switch(this);errorSwitch.setText("Record error logs");errorSwitch.setTextColor(TEXT);errorSwitch.setTextSize(14);errorSwitch.setMinHeight(dp(52));
+        errorSwitch.setChecked(getSharedPreferences("diagnostics",0).getBoolean("error_logging",false));
+        errorSwitch.setOnCheckedChangeListener((button,checked)->ErrorLogs.setEnabled(this,checked));errors.addView(errorSwitch);
+        note(errors,"Off by default. Enable before Play. After an unexpected exit, return here and export the error ZIP. Recording is separate from performance diagnostics.");
+        Button errorExport=button("Export error logs ZIP  ↑",false);errorExport.setOnClickListener(v->exportErrors());errors.addView(errorExport);
+        note(errors,"Keeps up to 12 bounded sessions: app errors, lifecycle events and available Android exit reports. Reports vary by Android/device. Logs may contain app messages and file paths. Nothing is uploaded automatically.");
     }
     private void choice(LinearLayout c,String title,String store,String key,String[] labels,String[] values,boolean bool){
         SharedPreferences prefs=getSharedPreferences(store,0);
@@ -212,13 +219,18 @@ public class LauncherActivity extends Activity {
         Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream"});startActivityForResult(intent,PICK_ZIP);
     }
+    private void exportErrors(){
+        if(ErrorLogStore.sessions(ErrorLogs.root(this)).length==0){new AlertDialog.Builder(this).setMessage("No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.").setPositiveButton("OK",null).show();return;}
+        Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("application/zip");
+        intent.putExtra(Intent.EXTRA_TITLE,"carma-errors-"+new java.text.SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.US).format(new java.util.Date())+".zip");startActivityForResult(intent,EXPORT_ERRORS);
+    }
     private void exportDiagnostics(){
         exportSessions=Diagnostics.sessions(this);
         if(exportSessions.length==0){new AlertDialog.Builder(this).setMessage("No profiling sessions yet. Enable recording and start a race first.").setPositiveButton("OK",null).show();return;}
         Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("application/zip");
         intent.putExtra(Intent.EXTRA_TITLE,"carma-profiling-"+new java.text.SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.US).format(new java.util.Date())+".zip");startActivityForResult(intent,EXPORT_PROFILE);
     }
-    @Override protected void onResume(){super.onResume();update();}
+    @Override protected void onResume(){super.onResume();update();ErrorLogs.recoverAsync(this);}
     @Override public void onBackPressed(){if(!"Home".equals(page))showPage("Home");else super.onBackPressed();}
     private void update(){
         if(play==null||importButton==null||status==null)return;
@@ -231,6 +243,15 @@ public class LauncherActivity extends Activity {
 
     @Override protected void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
+        if(request==EXPORT_ERRORS&&result==RESULT_OK&&data!=null&&data.getData()!=null){
+            final Uri destination=data.getData();
+            new Thread(()->{
+                String message="Error logs exported. Share the ZIP for investigation.";
+                try{ErrorLogs.export(this,destination);}catch(Exception e){message="Error export failed: "+e.getMessage();}
+                final String text=message;
+                runOnUiThread(()->{if(!isFinishing()&&!isDestroyed())new AlertDialog.Builder(this).setMessage(text).setPositiveButton("OK",null).show();});
+            },"error-export").start();return;
+        }
         if (request == EXPORT_PROFILE && result == RESULT_OK && data != null && data.getData() != null) {
             final Uri destination=data.getData();
             final File[] sessions=exportSessions!=null?exportSessions:Diagnostics.sessions(this);

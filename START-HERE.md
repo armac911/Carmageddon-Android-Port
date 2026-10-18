@@ -1,15 +1,16 @@
-# Carmageddon Android Port 1.0
+# Carmageddon Android Port 0.8 — crash investigation
 
-Start with [README.md](README.md) for installation, game data, controls,
-requirements, tested devices, AI disclosure and credits.
+Version 1.0 is held after a reported unexpected mid-race exit. The cause is not
+yet known. Version 0.8 keeps the driving/rendering features and adds opt-in error
+capture. Its internal build code is higher than the 1.0 candidate, so install it
+as an update without uninstalling or clearing storage.
 
-- [CHANGELOG.md](CHANGELOG.md): major milestones.
-- [VALIDATION.md](VALIDATION.md): automated checks and maintainer device testing.
-- [PERFORMANCE-NOTES.md](PERFORMANCE-NOTES.md): measurements and rendering work.
-- [CONTRIBUTING.md](CONTRIBUTING.md): bug reports and contributions.
-- [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md): historical build notes;
-  old test requests and installation instructions there describe their original
-  versions and are superseded by the current README.
+1. Open Diagnostics and enable **Record error logs** (off by default).
+2. Press Play and try the affected race. Performance recording is independent.
+3. After an exit, reopen the launcher and choose **Export error logs ZIP**.
+4. Save and share that ZIP with the device, settings and reproduction steps.
 
-Version 1.0 promotes the device-tested revised 0.2 code. Install over the current
-Next/Port app without uninstalling. Package and signing identity are retained.
+See [README.md](README.md), [error capture details](docs/ERROR-LOGGING.md),
+[CHANGELOG.md](CHANGELOG.md) and [VALIDATION.md](VALIDATION.md).
+Historical notes remain in docs/DEVELOPMENT-HISTORY.md; earlier claims/test
+requests there describe their original versions, not a resolution of this crash.

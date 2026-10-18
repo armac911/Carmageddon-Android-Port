@@ -4,12 +4,29 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
-## 1.0 — first tested release milestone
+## 0.8 — pre-release crash investigation
 
-- Promote the revised 0.2 code after maintainer testing on Galaxy S24 FE and
+- Return the displayed release version from the 1.0 candidate to 0.8 after a
+  reported mid-race exit. Keep a higher Android build code for in-place updates;
+  no save/data migration or gameplay-feature rollback is performed.
+- Add independent opt-in error capture and Android document-picker ZIP export,
+  off by default, with bounded files and retention of the latest 12 sessions.
+- Record engine messages, app warnings/errors, lifecycle/settings metadata and
+  Java exception stacks; recover app process-exit reasons and available OS traces.
+- Replace the inherited fatal-signal handler's immediate _exit with an optional
+  async-signal-safe marker chained to Android's existing reporting path. The old
+  handler could suppress normal native crash reporting. This fixes reporting,
+  not the currently unidentified gameplay crash.
+- Add host regression checks for opt-out/default exception delegation, log limits,
+  rotation, ZIP allowlisting/containment, native fatal status and handler chaining.
+  Physical-device crash/export verification is pending.
+
+## Earlier 1.0 candidate — held for investigation
+
+- Prepared from the revised 0.2 code after maintainer testing on Galaxy S24 FE and
   Retroid Pocket Flip 2: multiple completed races, car upgrades and stage 2
   progression; installation/import, saving/loading and controller defaults/remapping.
-- Add player-focused setup, requirements, tested-device evidence, limitations,
+- Added player-focused setup, requirements, tested-device evidence, limitations,
   AI disclosure, component credits and contributor/release documentation.
 - Keep package/signing compatibility with 0.1.15+; no new gameplay/rendering change
   relative to the tested revised 0.2. Distributed APK remains development-signed.

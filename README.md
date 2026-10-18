@@ -1,6 +1,6 @@
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 1.0 · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.8 · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -18,12 +18,13 @@ Development of this fork used OpenAI ChatGPT/Codex extensively. See the
 
 ## What to expect
 
-Version 1.0 is the first AndroGaming release milestone, promoted from the
-device-tested 0.2 build. The maintainer completed multiple races on a Galaxy
-S24 FE and Retroid Pocket Flip 2, including car upgrades and stage 2 progression,
-and verified installation, game-data import, saving/loading, controller defaults
-and remapping. This is a practical single-player release, not a claim that every
-race, accessory, game-data edition or Android device has been tested.
+Version **0.8 is a pre-release investigation build**. The planned 1.0 milestone
+is on hold after an unexpected mid-race exit was reported. Its cause is not yet
+identified. Earlier testing completed multiple races on Galaxy S24 FE and Retroid
+Pocket Flip 2, including upgrades/stage 2 progression, installation/import,
+saving/loading and controller remapping. That useful coverage does not rule out
+an intermittent crash. This build adds opt-in error capture for investigation;
+it does not claim to fix the original mid-race exit.
 
 - Dark landscape launcher with Graphics, Controls and Diagnostics pages.
 - Native 4:3 or 16:9 rendering, three 3D resolution levels and adjustable distance.
@@ -31,7 +32,7 @@ race, accessory, game-data edition or Android device has been tested.
 - 60, 120, 144 FPS or uncapped, with 60 FPS selected by default.
 - Customizable touch layout, analog/digital steering and optional haptics.
 - Controller driving controls, map, camera, gear overrides and launcher remapping.
-- Optional local performance recording and FPS/battery-temperature overlays,
+- Separate optional error-log ZIP export and performance recording/overlays,
   **off by default**.
 
 The launcher logo/“Android port by” credit opens [AndroGaming.com](https://androgaming.com).
@@ -55,7 +56,7 @@ The ZIP importer accepts up to 2 GiB of extracted data and 50,000 entries.
 
 ## Installation
 
-1. Download `carmageddon-android-port-1.0-arm64.apk` from this repository's
+1. Download `carmageddon-android-port-0.8-arm64.apk` from this repository's
    **Releases** when available, or use the maintainer-supplied APK.
 2. Open the APK on your device. If Android asks, allow APK installation for the
    browser/file manager you are using, then complete installation.
@@ -84,14 +85,15 @@ For installations using the GOG Max Pack layout, merge the contents of
 `__support/app/CARMA/DATA/` into a copy of `CARMA/DATA/` before zipping. Those support
 files include the key maps. Paths can vary by installer. This release's importer
 validates original Carmageddon data; Splat Pack, demos, mods and other editions
-are not part of the verified 1.0 compatibility claim.
+are not part of the verified 0.8 compatibility claim.
 
 ### Updates and saves
 
 Install updates **over the existing app**, using the same signing identity.
 Do not uninstall or clear storage if you want to retain imported data and saves.
 The current application ID is `com.androgaming.carma.next`; AndroGaming versions
-0.1.15 onward share this identity. The older `com.androgaming.carma` installation
+0.1.15 onward share this identity. The 0.8 APK has a higher internal build code
+than the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
 is separate, with no automatic migration.
 
 The imported game lives under the app's external files directory in `game/`;
@@ -175,7 +177,7 @@ and a shadow/main-scene pair becomes one readback instead of two, with identical
 palette output. These are test workloads, not a promise of those counts in every
 race. A Flip 2 0.1.19 gameplay capture at 16:9 / High / Far / Sharp averaged
 49.44 FPS after excluding startup/interrupted frames. Readback/synchronization
-remained the largest measured cost. That older capture is not a controlled 1.0
+remained the largest measured cost. That older capture is not a controlled 0.8
 benchmark, and no measured FPS gain is claimed for the later NEON change.
 
 ## Tested devices and release validation
@@ -188,8 +190,10 @@ benchmark, and no measured FPS gain is claimed for the later NEON change.
 The maintainer also confirmed controller defaults/remapping, installation, import,
 saving/loading, car upgrades and stage 2 progression during this two-device test
 pass. The report did not enumerate every check separately for each device.
-These results cover the 0.2 code promoted to 1.0; 1.0 is a version/documentation
-release of that code, without new gameplay/rendering changes.
+Those results cover the driving/rendering base from revised 0.2. The later
+unexpected-exit report keeps 1.0 on hold. Version 0.8 adds error capture and fixes
+inherited crash-report suppression; those changes still need physical-device
+validation. The original intermittent exit remains unresolved.
 
 Automated checks cover viewport/pointer mapping, sprite-copy memory safety,
 input bridges and controller polling, gear bounds, frame pacing, culling,
@@ -207,10 +211,32 @@ checked separately. [VALIDATION.md](VALIDATION.md) records the evidence and limi
 - The legacy engine and original game may retain bugs beyond this test pass.
 - Heavy scenes can run below the selected cap; some synchronous readbacks remain.
 - The distributed APK currently uses the preserved **development signing key**
-  and is debuggable. “1.0” marks the tested feature milestone, not Play Store
-  certification or a new production-signing pipeline.
+  and is debuggable; it is not Play Store certified or a new production-signing
+  pipeline.
+- An intermittent mid-race exit is under investigation. Error capture is best
+  effort; Android can omit reports, especially on older devices or SIGKILL exits.
 
 ## Diagnostics and bug reports
+
+### Error logs (0.8)
+
+In **Diagnostics**, enable **Record error logs** before pressing Play. It is
+separate from performance recording and defaults to **off**. After an unexpected
+exit, reopen the launcher and choose **Export error logs ZIP**. Choose a save
+location using Android's document picker, then attach the ZIP to a bug report.
+Previous captures can still be exported after switching recording off.
+
+The export contains bounded engine/app warning/error messages, lifecycle events,
+settings/version metadata, Java exception stacks if caught, a minimal fatal-native
+signal marker when available, and Android's process-exit reason/traces where the
+OS provides them. Android 11+ supports exit history; Android 12+ may provide native
+tombstone protobufs. No root, broad device-log permission or automatic upload is
+added. Logs may contain app messages, local paths or text printed by the app;
+review the ZIP before sharing. The latest 12 sessions are retained with per-file
+limits. This cannot recover a missing stack from a past uncaptured crash or
+guarantee a report for every kind of exit. See [error logging](docs/ERROR-LOGGING.md).
+
+### Performance logs
 
 Recording and the overlay default to **off**. Enable them under **Diagnostics**
 when needed; recording captures up to 120 seconds of racing per launch. Export
@@ -267,6 +293,8 @@ its own key; it does not publish or replace maintainer releases automatically.
 Selected tests, after SDL setup:
 
 ```sh
+python3 test/android/test_error_capture.py
+python3 test/android/test_error_export.py
 python3 test/android/test_controller_mapping.py
 python3 test/android/test_touch_bridge.py
 python3 test/android/test_gear_override.py
@@ -321,3 +349,4 @@ are separate from the engine source license. The maintainer supplied the launche
 branding and game-art icon; inclusion does not grant rights to original game
 artwork. No commercial game data is distributed here. This unofficial project
 is provided without warranty; see the applicable licenses.
+

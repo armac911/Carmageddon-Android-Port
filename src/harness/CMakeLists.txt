@@ -121,6 +121,7 @@ elseif(ANDROID)
     target_sources(harness PRIVATE
         os/android.c
         platforms/profiler.c
+        platforms/error_log.c
     )
     target_link_libraries(harness PRIVATE log android GLESv3 EGL)
 elseif(APPLE)

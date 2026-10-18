@@ -119,6 +119,7 @@ public class DethraceActivity extends SDLActivity {
     public void closeGameTextInput() { runOnUiThread(this::closeTextDialog); }
 
     @Override protected void onPause() {
+        ErrorLogs.event("game.onPause");
         if (mOverlay != null) mOverlay.reset();
         mUiHandler.removeCallbacks(mPollMonitor);
         try { nativeProfilePause(); } catch (UnsatisfiedLinkError ignored) {}
@@ -129,6 +130,7 @@ public class DethraceActivity extends SDLActivity {
 
     @Override protected void onResume() {
         super.onResume();
+        ErrorLogs.event("game.onResume");
         if (diagnostics != null) diagnostics.resume();
         mUiHandler.removeCallbacks(mPollMonitor);
         if (mMonitor != null) mUiHandler.postDelayed(mPollMonitor, 500);
@@ -168,7 +170,7 @@ public class DethraceActivity extends SDLActivity {
         closeTextDialog();
         if (diagnostics != null) diagnostics.pause();
         if (mOverlay != null) mOverlay.reset();
-        super.onDestroy();
+        try { super.onDestroy(); } finally { ErrorLogs.finishGame(); }
     }
 
     @Override
@@ -184,6 +186,7 @@ public class DethraceActivity extends SDLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ErrorLogs.startGame(this);
         File appDir = getExternalFilesDir(null);
         File extDir = appDir != null ? new File(appDir, "game") : null;
         String rootDir = (extDir != null) ? extDir.getAbsolutePath() : new File(getFilesDir(), "game").getAbsolutePath();
