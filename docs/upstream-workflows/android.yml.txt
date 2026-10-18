@@ -1,0 +1,119 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - android-port
+      - androgaming-dev
+      - 'ci-*'
+    tags:
+      - 'v*'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Android (arm64-v8a debug)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-35 build-tools;35.0.0 ndk;28.2.13676358 cmake;3.22.1'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Cache SDL2 source
+        uses: actions/cache@v4
+        with:
+          path: android/app/jni/SDL
+          key: sdl2-2.30.10
+
+      - name: Fetch SDL2 source
+        run: ./android/scripts/setup-sdl.sh
+
+      # The repo's VERSION file is gitignored (developers regenerate it locally),
+      # so on CI we synthesize one from the git ref. Without this, CMake falls
+      # through to the GetGitRevisionDescription path, which the Android build
+      # does not have on its module path.
+      - name: Write VERSION file
+        run: |
+          if [ -n "${GITHUB_REF_NAME:-}" ]; then
+            printf '%s\n' "${GITHUB_REF_NAME}-${GITHUB_SHA::8}" > VERSION
+          else
+            printf '%s\n' "ci-${GITHUB_SHA::8}" > VERSION
+          fi
+          cat VERSION
+
+      - name: Make Gradle wrapper executable
+        working-directory: android
+        run: chmod +x ./gradlew
+
+      - name: Check viewport and pointer mapping
+        run: |
+          gcc -std=c99 -Wall -Wextra -Werror test/android/screen_layout_test.c -o /tmp/carma-layout-test
+          /tmp/carma-layout-test
+
+      - name: Check cursor sprite copy with sanitizers
+        run: python3 test/android/test_masked_copy.py
+
+      - name: Check centered menu blit with sanitizers
+        run: python3 test/android/test_doubled_copy.py
+
+      - name: Check Android text and touch bridges
+        run: |
+          python3 test/android/test_touch_bridge.py
+          python3 test/android/test_text_bridge.py
+          python3 test/android/test_touch_overlay.py
+
+      - name: Check conservative frustum culling
+        run: |
+          gcc -std=c99 -Wall -Wextra -Werror test/android/frustum_test.c -lm -o /tmp/carma-frustum-test
+          /tmp/carma-frustum-test
+
+      - name: Check GPU readback with headless Mesa GLES
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1-mesa-dri
+          python3 test/android/test_gpu_readback.py
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/debug/app-debug.apk \
+             out/dethrace-android-${{ github.sha }}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dethrace-android-debug-apk
+          path: out/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload to Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.apk
+          generate_release_notes: true

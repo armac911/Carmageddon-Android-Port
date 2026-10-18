@@ -1,0 +1,37 @@
+name: Android build (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-35 build-tools;35.0.0 ndk;28.2.13676358 cmake;3.22.1'
+      - name: Build ARM64 debug APK
+        run: |
+          chmod +x android/gradlew android/scripts/*.sh
+          ./android/scripts/build-dev.sh
+      - name: Check input and masked row merge
+        run: |
+          python3 test/android/test_controller_mapping.py
+          python3 test/android/test_touch_bridge.py
+          python3 test/android/test_gear_override.py
+          python3 test/android/test_indexed_copy.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: carmageddon-android-ci-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
