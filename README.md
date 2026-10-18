@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/c38f63f8-6cae-43a0-aac4-69e019bd09e9
 
 
 
-Development of this fork used OpenAI ChatGPT/Codex extensively. See the
+See the
 [full AI disclosure](#ai-disclosure) and [credits](#credits-and-licenses).
 
 [Install](#installation) · [Game data](#prepare-your-game-data) ·
@@ -365,7 +365,7 @@ The README cover is AI-generated promotional artwork created with OpenAI's image
 OpenAI ChatGPT/Codex assistance, including generated and edited code.** Its role
 covered source analysis, implementation, renderer investigation/optimization,
 bug fixing, launcher/interface work, automated tests, build tooling, packaging
-and documentation. AndroGaming.com project designed features, directed iterations, supplied
+and documentation. Real world testing by AndroGaming.com members designed features, directed iterations, supplied
 branding and screenshots/logs, installed builds, performed physical-device
 playtesting and approved results.
 
