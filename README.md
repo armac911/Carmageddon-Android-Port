@@ -284,14 +284,9 @@ EGL/GLES libraries; they require no original game assets.
 OpenAI ChatGPT/Codex assistance, including generated and edited code.** Its role
 covered source analysis, implementation, renderer investigation/optimization,
 bug fixing, launcher/interface work, automated tests, build tooling, packaging
-and documentation. This README and release notes were also AI-assisted.
-
-Dejan / AndroGaming chose the goals and features, directed iterations, supplied
+and documentation. AndroGaming.com project designed features, directed iterations, supplied
 branding and screenshots/logs, installed builds, performed physical-device
-playtesting and approved results. ChatGPT/Codex operated the build and test tools;
-it did not independently play the game on those devices. Automated tests and
-maintainer reports are distinguished above; AI assistance is not a guarantee
-of correctness or a substitute for upstream attribution.
+playtesting and approved results.
 
 The original game, Dethrace engine, inherited Android port and third-party
 libraries were not authored by this AI-assisted iteration. Their contributors
