@@ -155,3 +155,29 @@ synchronization, shadow boundaries or palette output. Headless production GPU
 flush tests preserve exact output at 1x/2x/3x, including shadows and blends.
 Device FPS and copy-time improvement have not yet been measured. The 8.74 ms
 GPU synchronization category remains the larger unresolved cost.
+
+
+## 0.9 review of the supplied 0.8 S24 FE logs
+
+Files: carma-errors-20261018-221052kooo.zip and
+carma-profiling-20261018-22104oooo3.zip. The maintainer reports almost two hours
+without errors/crashes. The supplied 0.8 session itself spans about 54 minutes,
+with Android EXIT_SELF/status 0, an empty native-signal file, no Java exception
+file and no OS crash trace. Routine inherited stubs/driver warnings are present;
+USB HID initialization also reports a caught receiver-export-flag exception.
+Version 0.9 fixes that registration issue. None of this identifies the earlier
+intermittent exit's cause.
+
+The recorder's first two racing minutes contain 6,918 rows. Excluding interrupted
+frames and the first five session seconds leaves 6,658 frames: effective 57.89 FPS,
+mean frame 17.275 ms, median 16.861 ms, p95 19.112 ms. Settings: 16:9, High, Far,
+Sharp, digital steering, 60 FPS cap; S24 FE Android 16 / Xclipse 940 via ANGLE.
+Mean update 0.513 ms, inclusive render 16.676 ms, readback/sync 6.835 ms, CPU copy
+0.395 ms, presentation 0.233 ms, swap 0.631 ms and limiter 2.480 ms. Approximately
+702 model draws and 1.61 readbacks/frame. Categories overlap and must not be summed.
+
+The first 300 sensor samples span the recorder's ten-minute limit; battery is
+31.3–35.5 C and thermal status is 0. These are not CPU/GPU clock/temperature data.
+An earlier 1.0 session in the ZIP contains metadata/sensors only. The export is
+not a two-hour frame trace, nor a controlled before/after speed benchmark.
+No new rendering optimization or FPS gain is claimed for 0.9.

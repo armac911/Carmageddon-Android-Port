@@ -1,10 +1,10 @@
-# Validation — 0.8 investigation build
+# Validation — 0.9 Splat Pack integration
 
 - Android ARM64 assembleDebug succeeds with JDK 17, Gradle 8.7, AGP 8.6.1,
   SDK/build tools 35, NDK 28.2 and CMake 3.22.1.
-- Android metadata: com.androgaming.carma.next, versionCode 24, versionName 0.8,
+- Android metadata: com.androgaming.carma.next, versionCode 25, versionName 0.9,
   display name Carmageddon Android Port.
-- Native engine version is androgaming-0.8. CMake now watches the VERSION file
+- Native engine version is androgaming-0.9. CMake now watches the VERSION file
   so future incremental builds refresh the native version header.
 - APK v2 signing, 16 KB zip alignment and ELF PT_LOAD >=16 KB checks pass.
 - Signing certificate SHA-256 matches the previous Next/Port builds:
@@ -54,7 +54,9 @@ all-game completion, multiplayer or fully manual transmission are claimed.
 
 Version 0.8 adds error capture and changes inherited crash reporting on top of
 that base. A later unexpected-exit report holds the 1.0 milestone. The original
-crash cause is unresolved. No physical-device test of 0.8 is claimed.
+crash cause is unresolved. The maintainer subsequently reports almost two hours
+of stable 0.8 testing; the supplied S24 FE session records about 54 minutes
+and a normal exit. This does not establish the earlier crash cause.
 The manual GitHub Actions workflow is supplied but has not been run on GitHub.
 
 
@@ -72,13 +74,28 @@ The manual GitHub Actions workflow is supplied but has not been run on GitHub.
   actual phone crash remain unverified. Error recording defaults to false and
   is independent of graphics profiling. No new renderer FPS gain is claimed.
 
-## Exact 0.8 build identity
 
-APK SHA-256: ea4e382a74b23eb7f9f133746dc8553aaa5588475d4a0ca8386cfff55ff1f1cf
+## 0.9 expansion checks
 
-- libmain.so Build ID: 66e67bb0ce8836f11571ab161f4b96afebb6a821
-- libSDL2.so Build ID: 66fee9cd9d62da0387e5e2a318bf143316c7778d
+- test_game_content.py: production Java importer/root selection, original-save
+  sentinel preservation, separate full-expansion import, wrong-edition/demo
+  rejection, transactional staging cleanup and existing-install protection.
+- test_game_detection.py: actual inherited native detector recognizes original
+  Carmageddon and full Splat Pack markers/intro selection using synthetic files.
+- test_usb_registration.py: actual registration helper uses legacy behavior on
+  API 24/32 and separate exported system/private permission filters on API 33/36.
+- Supplied 0.8 S24 FE session: normal exit/status 0, no Java/native crash record;
+  one caught USB registration error is addressed here. Performance: 57.89 FPS in
+  the captured early racing interval, not a full two-hour trace or 0.9 benchmark.
+- No actual Splat Pack data was available to this build/test pass. Intro, first
+  race, progression, save/load and game switching still require maintainer
+  device testing. This build integrates the inherited engine's expansion path;
+  it does not claim a new expansion-engine implementation or fix for the earlier
+  intermittent exit.
 
-APK and unstripped-symbol Build IDs agree. Both ARM64 libraries retain 16 KiB ELF
-alignment; APK alignment and v2 signing checks pass with the existing Next/Port
-certificate. Android versionCode is 24 and versionName is 0.8.
+## Exact 0.9 build identity
+
+- APK SHA-256: `00463ab13c241cb625538bf9c021a3e44edfeeae56c26530b3673a09f683023c`.
+- libmain.so Build ID: `23d600021c79dc9f2ebbf4a94c2d24ed014d0e87`; minimum ELF load alignment 16384 bytes.
+- libSDL2.so Build ID: `90e4dfdef746306763a5ea1b3510be04694332e8`; minimum ELF load alignment 16384 bytes.
+- Matching unstripped libraries are retained in the 0.9 native-symbols ZIP.

@@ -4,6 +4,24 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9 — Splat Pack launcher integration
+
+- Expose Dethrace's existing full Splat Pack support through a Home game selector.
+- Add edition-aware ZIP checks and transactional imports into separate `game/`
+  and `splatpack/` roots. Original data/saves remain in place; the expansion has
+  its own saves/configuration. Reject mismatched or demo expansion data.
+- Prevent switching/importing while the game activity is open; remember the
+  import target through Android's document picker and label both diagnostic logs.
+- Fix the nonfatal USB HID receiver-registration exception seen on Android 16:
+  protected system broadcasts and private permission replies use separate filters
+  with explicit Android 13+ export flags. Controller assignments are unchanged.
+- Add structural import/save-preservation, native edition-detection and receiver
+  registration tests. Actual Splat Pack assets and physical-device playtesting
+  are still needed; no commercial expansion content is bundled.
+- Review the 0.8 capture: normal exit, status 0, no native-signal or Java crash
+  record; 57.9 FPS during the captured early racing interval at 16:9 High/Far.
+  The earlier intermittent exit is not declared fixed.
+
 ## 0.8 — pre-release crash investigation
 
 - Return the displayed release version from the 1.0 candidate to 0.8 after a

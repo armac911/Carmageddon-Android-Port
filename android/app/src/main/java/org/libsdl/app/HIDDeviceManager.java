@@ -188,15 +188,26 @@ public class HIDDeviceManager {
         Log.i(TAG," No more devices connected.");
         */
 
-        // Register for USB broadcasts and permission completions
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        filter.addAction(HIDDeviceManager.ACTION_USB_PERMISSION);
-        mContext.registerReceiver(mUsbBroadcast, filter);
+        registerUsbBroadcasts();
 
         for (UsbDevice usbDevice : mUsbManager.getDeviceList().values()) {
             handleUsbDeviceAttached(usbDevice);
+        }
+    }
+
+    private void registerUsbBroadcasts() {
+        IntentFilter systemFilter=new IntentFilter();
+        systemFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        systemFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        if(Build.VERSION.SDK_INT>=33){
+            // Keep protected system actions separate from our private permission reply.
+            mContext.registerReceiver(mUsbBroadcast,systemFilter,Context.RECEIVER_EXPORTED);
+            IntentFilter permissionFilter=new IntentFilter();
+            permissionFilter.addAction(HIDDeviceManager.ACTION_USB_PERMISSION);
+            mContext.registerReceiver(mUsbBroadcast,permissionFilter,Context.RECEIVER_NOT_EXPORTED);
+        }else{
+            systemFilter.addAction(HIDDeviceManager.ACTION_USB_PERMISSION);
+            mContext.registerReceiver(mUsbBroadcast,systemFilter);
         }
     }
 

@@ -22,6 +22,7 @@ final class Diagnostics {
         if(!dir.mkdirs()) throw new IOException("Cannot create profiling directory");
         JSONObject m=new JSONObject();
         m.put("app_version",c.getPackageManager().getPackageInfo(c.getPackageName(),0).versionName);
+        m.put("game",GameContent.label(GameContent.normalize(c.getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL))));
         m.put("device",Build.MANUFACTURER+" "+Build.MODEL);m.put("android",Build.VERSION.RELEASE);
         m.put("api",Build.VERSION.SDK_INT);m.put("hardware",Build.HARDWARE);
         java.text.SimpleDateFormat utc=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.US);utc.setTimeZone(TimeZone.getTimeZone("UTC"));

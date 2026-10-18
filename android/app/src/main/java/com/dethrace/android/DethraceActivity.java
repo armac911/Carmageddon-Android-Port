@@ -18,6 +18,8 @@ import org.libsdl.app.SDLActivity;
 import java.io.File;
 
 public class DethraceActivity extends SDLActivity {
+    private static volatile boolean gameRunning;
+    static boolean isGameRunning(){return gameRunning;}
 
     private static final String TAG = "DethRace";
 
@@ -170,7 +172,7 @@ public class DethraceActivity extends SDLActivity {
         closeTextDialog();
         if (diagnostics != null) diagnostics.pause();
         if (mOverlay != null) mOverlay.reset();
-        try { super.onDestroy(); } finally { ErrorLogs.finishGame(); }
+        try { super.onDestroy(); } finally { gameRunning=false;ErrorLogs.finishGame(); }
     }
 
     @Override
@@ -188,8 +190,9 @@ public class DethraceActivity extends SDLActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ErrorLogs.startGame(this);
         File appDir = getExternalFilesDir(null);
-        File extDir = appDir != null ? new File(appDir, "game") : null;
-        String rootDir = (extDir != null) ? extDir.getAbsolutePath() : new File(getFilesDir(), "game").getAbsolutePath();
+        String edition=GameContent.normalize(getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL));
+        File extDir = appDir != null ? GameContent.directory(appDir,edition) : null;
+        String rootDir = (extDir != null) ? extDir.getAbsolutePath() : GameContent.directory(getFilesDir(),edition).getAbsolutePath();
 
         File f = new File(rootDir);
         if (!f.exists()) {
@@ -224,6 +227,7 @@ public class DethraceActivity extends SDLActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         super.onCreate(savedInstanceState);
+        gameRunning=true;
 
         // Draw under cutout (notch / camera hole)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

@@ -43,6 +43,7 @@ final class ErrorLogs {
             if(!dir.mkdirs())throw new IOException("Cannot create error session");
             JSONObject m=new JSONObject();
             m.put("app_version",c.getPackageManager().getPackageInfo(c.getPackageName(),0).versionName);
+        m.put("game",GameContent.label(GameContent.normalize(c.getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL))));
             m.put("version_code",c.getPackageManager().getPackageInfo(c.getPackageName(),0).versionCode);
             m.put("device",Build.MANUFACTURER+" "+Build.MODEL);m.put("android",Build.VERSION.RELEASE);m.put("api",Build.VERSION.SDK_INT);
             m.put("error_logging",true);m.put("pid",android.os.Process.myPid());m.put("started_utc_ms",System.currentTimeMillis());m.put("started_elapsed_ms",SystemClock.elapsedRealtime());

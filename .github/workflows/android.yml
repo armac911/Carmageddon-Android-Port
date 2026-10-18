@@ -25,6 +25,9 @@ jobs:
           ./android/scripts/build-dev.sh
       - name: Check input and masked row merge
         run: |
+          python3 test/android/test_game_content.py
+          python3 test/android/test_game_detection.py
+          python3 test/android/test_usb_registration.py
           python3 test/android/test_error_capture.py
           python3 test/android/test_error_export.py
           python3 test/android/test_controller_mapping.py

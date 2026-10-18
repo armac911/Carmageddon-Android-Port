@@ -1,16 +1,23 @@
-# Carmageddon Android Port 0.8 — crash investigation
+# Carmageddon Android Port 0.9 — Splat Pack
 
-Version 1.0 is held after a reported unexpected mid-race exit. The cause is not
-yet known. Version 0.8 keeps the driving/rendering features and adds opt-in error
-capture. Its internal build code is higher than the 1.0 candidate, so install it
-as an update without uninstalling or clearing storage.
+Install over 0.8 or the earlier 1.0 candidate without uninstalling. The app/signing
+identity is retained, with versionCode 25. Original imported data and saves stay
+in their existing location.
 
-1. Open Diagnostics and enable **Record error logs** (off by default).
-2. Press Play and try the affected race. Performance recording is independent.
-3. After an exit, reopen the launcher and choose **Export error logs ZIP**.
-4. Save and share that ZIP with the device, settings and reproduction steps.
+1. In Home, press **Game: Carmageddon**, then choose **Splat Pack**.
+2. Import a ZIP made from your own full Splat Pack installation: `DATA/` directly
+   at the ZIP root, with optional `MUSIC/`. In a Max Pack layout this is usually
+   `CARSPLAT/DATA/`, merged with matching support DATA files if supplied.
+3. Press **Play Splat Pack**. Its data/saves use a separate `splatpack/` folder.
+4. Exit the game fully before switching back to Carmageddon in the launcher.
 
-See [README.md](README.md), [error capture details](docs/ERROR-LOGGING.md),
-[CHANGELOG.md](CHANGELOG.md) and [VALIDATION.md](VALIDATION.md).
-Historical notes remain in docs/DEVELOPMENT-HISTORY.md; earlier claims/test
-requests there describe their original versions, not a resolution of this crash.
+No game files need to be uploaded here. If import fails, share the error text
+and a file listing rather than the commercial game assets. First test the intro,
+first race, save/load, and switching back to the original game with its saves.
+Splat Pack gameplay on real data has not yet been verified in this build.
+
+Error and performance capture remain independent opt-ins; defaults are off.
+The submitted 0.8 error log records a normal exit, not a crash. The earlier
+intermittent exit remains unexplained, so the 1.0 milestone stays on hold.
+
+See README, CHANGELOG, VALIDATION and docs/ERROR-LOGGING.md for details.

@@ -1,6 +1,6 @@
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 0.8 · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.9 · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -18,15 +18,18 @@ Development of this fork used OpenAI ChatGPT/Codex extensively. See the
 
 ## What to expect
 
-Version **0.8 is a pre-release investigation build**. The planned 1.0 milestone
+Version **0.9 adds Splat Pack launcher/import support**. The planned 1.0 milestone
 is on hold after an unexpected mid-race exit was reported. Its cause is not yet
 identified. Earlier testing completed multiple races on Galaxy S24 FE and Retroid
 Pocket Flip 2, including upgrades/stage 2 progression, installation/import,
 saving/loading and controller remapping. That useful coverage does not rule out
-an intermittent crash. This build adds opt-in error capture for investigation;
-it does not claim to fix the original mid-race exit.
+an intermittent crash. The subsequent 0.8 test report describes nearly two hours without crashes;
+the supplied 0.8 log records a roughly 54-minute session ending with status 0.
+That improves confidence but does not establish a fix for the earlier exit.
+Splat Pack integration in 0.9 still requires testing with your own expansion data.
 
-- Dark landscape launcher with Graphics, Controls and Diagnostics pages.
+- Dark landscape launcher with game selection and Graphics/Controls/Diagnostics pages.
+- Separate Carmageddon and Splat Pack installs/saves using the existing Dethrace expansion support.
 - Native 4:3 or 16:9 rendering, three 3D resolution levels and adjustable distance.
 - Sharp textures or palette-aware bilinear smoothing; menus and HUD stay sharp.
 - 60, 120, 144 FPS or uncapped, with 60 FPS selected by default.
@@ -45,7 +48,7 @@ Added project branding appears only in the launcher, with no gameplay watermark.
 | Android | Android 7.0 / API 24 or newer |
 | CPU / Android ABI | 64-bit ARM (`arm64-v8a`); a 64-bit Android installation is required |
 | Graphics | OpenGL ES 3.0 support |
-| Game files | Compatible original Carmageddon PC `DATA/`; optional `MUSIC/` |
+| Game files | Compatible Carmageddon or full Splat Pack PC `DATA/`; optional `MUSIC/` |
 | Storage | Room for the APK, your ZIP and a second, extracted copy of its contents |
 | Input | Touchscreen or Android-compatible controller |
 
@@ -56,12 +59,13 @@ The ZIP importer accepts up to 2 GiB of extracted data and 50,000 entries.
 
 ## Installation
 
-1. Download `carmageddon-android-port-0.8-arm64.apk` from this repository's
+1. Download `carmageddon-android-port-0.9-arm64.apk` from this repository's
    **Releases** when available, or use the maintainer-supplied APK.
 2. Open the APK on your device. If Android asks, allow APK installation for the
    browser/file manager you are using, then complete installation.
-3. Prepare the game-data ZIP below and copy it to your device.
-4. Open **Carmageddon Android Port → Import game data ZIP** and select the ZIP
+3. Prepare the selected game’s data ZIP below and copy it to your device.
+4. Open **Carmageddon Android Port**, choose **Game: Carmageddon** or **Splat Pack**,
+   then **Import [game] data ZIP** and select the ZIP
    using Android's document picker.
 5. Wait until the launcher reports **Ready to race**. Choose settings, then **Play**.
 
@@ -83,22 +87,35 @@ of `DATA/` as duplicate ZIP entries.
 
 For installations using the GOG Max Pack layout, merge the contents of
 `__support/app/CARMA/DATA/` into a copy of `CARMA/DATA/` before zipping. Those support
-files include the key maps. Paths can vary by installer. This release's importer
-validates original Carmageddon data; Splat Pack, demos, mods and other editions
-are not part of the verified 0.8 compatibility claim.
+files include the key maps. Paths can vary by installer. For **Splat Pack**, use the complete installed expansion data, usually
+`CARSPLAT/DATA/` in a Max Pack layout, and merge its matching
+`__support/app/CARSPLAT/DATA/` support files if that folder exists. The resulting
+ZIP must have `DATA/` at its root, not `CARSPLAT/DATA/`. Include all expansion data,
+not just its new tracks. Its checks require `GENERAL.TXT`, `KEYMAP_0.TXT`, `CARS/`,
+`RACES/CASTLE.TXT` and `RACES/CASTLE2.TXT`; these markers are not an exhaustive
+asset list. `MUSIC/` is optional. Never merge the two games' DATA trees together.
+
+The Home **Game** button switches between the installed games. Finish/exit the
+current game before switching or importing; the launcher blocks those actions
+while its game activity remains open. Missing expansion data does not affect
+Play for the original game. No expansion files are bundled and none need to be
+uploaded to the developer to install them. Splat Pack gameplay is awaiting the
+maintainer's data/device test; demos, mods and other editions remain unverified.
 
 ### Updates and saves
 
 Install updates **over the existing app**, using the same signing identity.
 Do not uninstall or clear storage if you want to retain imported data and saves.
 The current application ID is `com.androgaming.carma.next`; AndroGaming versions
-0.1.15 onward share this identity. The 0.8 APK has a higher internal build code
-than the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
+0.1.15 onward share this identity. The 0.9 APK has a higher internal build code
+than 0.8 and the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
 is separate, with no automatic migration.
 
 The imported game lives under the app's external files directory in `game/`;
 on typical devices this is
-`Android/data/com.androgaming.carma.next/files/game/`. Android may restrict file
+`Android/data/com.androgaming.carma.next/files/game/`. Splat Pack uses the sibling
+`splatpack/` directory, keeping its saves/configuration independent of the original.
+Existing `game/` data and saves remain in place. Android may restrict file
 manager access. Keep a backup of important saves before changing installations.
 Importing is initial setup: the launcher does not overwrite an existing `game/`
 directory. Reimport is not a save-migration or backup feature.
@@ -191,9 +208,10 @@ The maintainer also confirmed controller defaults/remapping, installation, impor
 saving/loading, car upgrades and stage 2 progression during this two-device test
 pass. The report did not enumerate every check separately for each device.
 Those results cover the driving/rendering base from revised 0.2. The later
-unexpected-exit report keeps 1.0 on hold. Version 0.8 adds error capture and fixes
-inherited crash-report suppression; those changes still need physical-device
-validation. The original intermittent exit remains unresolved.
+unexpected-exit report keeps 1.0 on hold. Version 0.8 added error capture and fixed
+inherited crash-report suppression; the supplied 0.8 session contains no Java/native crash report and ends normally.
+Version 0.9 expansion selection/import and USB initialization changes still require
+device verification. The original intermittent exit remains unexplained.
 
 Automated checks cover viewport/pointer mapping, sprite-copy memory safety,
 input bridges and controller polling, gear bounds, frame pacing, culling,
@@ -218,7 +236,7 @@ checked separately. [VALIDATION.md](VALIDATION.md) records the evidence and limi
 
 ## Diagnostics and bug reports
 
-### Error logs (0.8)
+### Error logs (0.8+)
 
 In **Diagnostics**, enable **Record error logs** before pressing Play. It is
 separate from performance recording and defaults to **off**. After an unexpected
@@ -293,6 +311,9 @@ its own key; it does not publish or replace maintainer releases automatically.
 Selected tests, after SDL setup:
 
 ```sh
+python3 test/android/test_game_content.py
+python3 test/android/test_game_detection.py
+python3 test/android/test_usb_registration.py
 python3 test/android/test_error_capture.py
 python3 test/android/test_error_export.py
 python3 test/android/test_controller_mapping.py

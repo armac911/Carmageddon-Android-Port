@@ -14,14 +14,23 @@ public final class GameDataZip {
 
     private GameDataZip() {}
 
-    public static boolean isReady(File root) {
-        return new File(root, "DATA/GENERAL.TXT").isFile()
-            && new File(root, "DATA/KEYMAP_0.TXT").isFile()
-            && new File(root, "DATA/CARS").isDirectory()
-            && new File(root, "DATA/RACES/CITYA1.TXT").isFile();
+    public static boolean isReady(File root) {return isReady(root,GameContent.ORIGINAL);}
+
+    public static boolean isReady(File root,String edition) {
+        boolean common=new File(root,"DATA/GENERAL.TXT").isFile()
+            &&new File(root,"DATA/KEYMAP_0.TXT").isFile()&&new File(root,"DATA/CARS").isDirectory();
+        if(!common)return false;
+        if(GameContent.SPLAT.equals(edition))return new File(root,"DATA/RACES/CASTLE.TXT").isFile()
+            &&new File(root,"DATA/RACES/CASTLE2.TXT").isFile();
+        return new File(root,"DATA/RACES/CITYA1.TXT").isFile()
+            &&!new File(root,"DATA/RACES/CASTLE.TXT").exists();
     }
 
-    public static void extract(InputStream input, File destination) throws IOException {
+    public static void extract(InputStream input,File destination)throws IOException {
+        extract(input,destination,GameContent.ORIGINAL);
+    }
+    public static void extract(InputStream input,File destination,String edition)throws IOException {
+        if(!GameContent.ORIGINAL.equals(edition)&&!GameContent.SPLAT.equals(edition))throw new IOException("Unknown game selection");
         if (destination.exists()) throw new IOException("Import destination already exists");
         if (!destination.mkdirs()) throw new IOException("Cannot create import directory");
         long total = 0;
@@ -65,9 +74,13 @@ public final class GameDataZip {
                 zip.closeEntry();
             }
         }
-        if (!isReady(destination)) throw new IOException(
-            "Incomplete original PC game data: need DATA/GENERAL.TXT, KEYMAP_0.TXT, CARS/ and RACES/CITYA1.TXT. "
-            + "For GOG, merge support DATA files before making the ZIP.");
+        if(!isReady(destination,edition)) {
+            if(GameContent.ORIGINAL.equals(edition)&&new File(destination,"DATA/RACES/CASTLE.TXT").isFile())
+                throw new IOException("This looks like Splat Pack data. Select Splat Pack in the launcher, then import its ZIP there.");
+            throw new IOException("Incomplete "+GameContent.label(edition)+" PC game data. Need DATA/GENERAL.TXT, KEYMAP_0.TXT, CARS/ and "
+                +(GameContent.SPLAT.equals(edition)?"RACES/CASTLE.TXT plus CASTLE2.TXT (full expansion).":"RACES/CITYA1.TXT.")
+                +" Merge the matching support DATA files before creating the ZIP; do not merge the two games.");
+        }
     }
 
     public static void deleteTree(File file) throws IOException {
