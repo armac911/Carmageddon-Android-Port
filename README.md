@@ -11,6 +11,8 @@ This is an unofficial community port, unaffiliated with the original game's
 owners. **You must supply your own compatible PC game data.** The APK contains
 no original `DATA/` or `MUSIC/` files.
 
+
+
 Development of this fork used OpenAI ChatGPT/Codex extensively. See the
 [full AI disclosure](#ai-disclosure) and [credits](#credits-and-licenses).
 
@@ -42,6 +44,10 @@ Splat Pack integration in 0.9 still requires testing with your own expansion dat
 
 The launcher logo/“Android port by” credit opens [AndroGaming.com](https://androgaming.com).
 Added project branding appears only in the launcher, with no gameplay watermark.
+
+
+
+
 
 ## Minimum requirements
 
