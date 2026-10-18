@@ -14,7 +14,7 @@ Development of this fork used OpenAI ChatGPT/Codex extensively. See the
 
 [Install](#installation) · [Game data](#prepare-your-game-data) ·
 [Controls](#controls) · [Tested devices](#tested-devices-and-release-validation) ·
-[Changelog](CHANGELOG.md) · [Build](#building-from-source)
+[Changelog](CHANGELOG.md) · [1.0 roadmap](#roadmap-toward-10) · [Build](#building-from-source)
 
 ## What to expect
 
@@ -219,6 +219,24 @@ palette/filter shaders, readback composition, shadows and GL state restoration.
 GPU checks use Mesa software GLES with synthetic data, alongside real-device
 maintainer testing. APK signing, ARM64 native libraries and 16 KiB alignment are
 checked separately. [VALIDATION.md](VALIDATION.md) records the evidence and limits.
+
+## Roadmap toward 1.0
+
+These are planned development goals, not features available in 0.9. Version 1.0
+will depend on implementation and device testing; no release date is set.
+
+- **Working local LAN/Wi-Fi multiplayer:** allow devices on the same local
+  network to host and join races, with connection, synchronization and
+  disconnect/reconnect testing.
+- **Improved performance:** use profiling to reduce remaining rendering and
+  GPU/CPU synchronization costs, improve frame pacing and heavy-scene
+  performance, and validate changes on Galaxy S24 FE and Retroid Pocket Flip 2.
+- **More 3D filtering and smoothing options:** extend the existing texture
+  filtering implementation, assess additional anti-aliasing/smoothing approaches,
+  and offer launcher controls with measured image-quality/performance tradeoffs.
+
+Stability testing, Splat Pack validation and regression checks for existing
+controls, importing and saves remain part of preparing the 1.0 milestone.
 
 ## Known limitations
 
