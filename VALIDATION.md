@@ -1,4 +1,15 @@
-# Validation — 0.9.1 test candidate
+# Unreleased launcher cheats — source validation
+
+- `python3 test/android/test_launcher_cheats.py` compiles and exercises the
+  production initialization, per-frame and race-exit hooks. Defaults, strict
+  opt-in, all eight option combinations, repeated races, timed pickup expiry,
+  normal powerups, cleanup and network isolation pass on the host.
+- The complete modified `powerup.c` passes GCC syntax checking with the Android
+  cheat path enabled and production headers. This is not an Android ABI build.
+- APK compilation and physical-device validation of the Cheats page remain
+  pending. The 0.9.1 APK/hash below predates these source changes.
+
+# Validation — previously built 0.9.1 test candidate
 
 - Import JVM tests pass for wrapped ZIPs, Max Pack edition isolation, matching
   support overlays, music selection, ambiguity rejection and transactional saves.

@@ -108,7 +108,7 @@ public class LauncherActivity extends Activity {
     private void note(LinearLayout c,String value){TextView t=text(value,12,MUTED,false);t.setPadding(0,dp(8),0,dp(2));c.addView(t);}
     private void showPage(String name){
         page=name;body.removeAllViews();nav.removeAllViews();play=null;importButton=null;status=null;gameButton=null;
-        String[] pages={"Home","Graphics","Controls","Diagnostics"};
+        String[] pages={"Home","Graphics","Controls","Cheats","Diagnostics"};
         for(String n:pages){
             Button b=button(n,false);b.setTextSize(14);b.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
             b.setBackground(new RippleDrawable(ColorStateList.valueOf(0x33ffffff),surface(n.equals(page)?0xff402027:0xff111318,8),null));
@@ -116,7 +116,7 @@ public class LauncherActivity extends Activity {
             LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(48));lp.bottomMargin=dp(6);nav.addView(b,lp);
         }
         if("Graphics".equals(page))graphics();else if("Controls".equals(page))controls();
-        else if("Diagnostics".equals(page))diagnostics();else home();
+        else if("Cheats".equals(page))cheats();else if("Diagnostics".equals(page))diagnostics();else home();
     }
     private void openWebsite(){
         try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://androgaming.com")));}
@@ -165,6 +165,15 @@ public class LauncherActivity extends Activity {
         choice(c,"Draw distance","graphics","distance",new String[]{"Original","Extended (1.5×)","Far (2×)"},new String[]{"original","extended","far"},false);
         choice(c,"Frame-rate cap","graphics","fps_cap",new String[]{"60 FPS","120 FPS","144 FPS","Uncapped"},new String[]{"60","120","144","0"},false);
         note(c,"The cap covers menus and races. Higher settings may reduce performance. A higher cap does not change your display’s refresh rate.");
+    }
+    private void cheats(){
+        heading("Cheats","Optional single-player race helpers.");LinearLayout c=card();
+        toggle(c,"Enable cheats","cheats","enabled",false);
+        toggle(c,"Invulnerability","cheats","invulnerable",false);
+        toggle(c,"Free repairs","cheats","free_repairs",false);
+        toggle(c,"Freeze race timer","cheats","freeze_timer",false);
+        note(c,"Enable the master switch and choose your cheats. Changes apply on the next Play and last throughout each single-player race, including Splat Pack. Free repairs still require holding Repair.");
+        note(c,"Switch off Enable cheats for normal gameplay; your selections are remembered. Races still save progress and rewards.");
     }
     private void controls(){
         heading("Controls","Make it feel right.");LinearLayout c=card();

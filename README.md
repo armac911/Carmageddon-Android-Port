@@ -42,6 +42,11 @@ That improves confidence but does not establish a fix for the earlier exit.
 Splat Pack integration in 0.9 still requires testing with your own expansion data.
 
 - Dark landscape launcher with game selection and Graphics/Controls/Diagnostics pages.
+- Upcoming build: a Cheats page with invulnerability, free repairs and a frozen
+  race timer. Master switch and individual options default off. Selections apply
+  on the next Play to single-player races in both editions. Free repairs require
+  holding Repair; normal progress and rewards still save. The previously supplied
+  0.9.1 test APK does not include this source addition yet.
 - Separate Carmageddon and Splat Pack installs/saves using the existing Dethrace expansion support.
 - Automatic game-file selection, streamed MUSIC playback and a cockpit rear-view mirror.
 - Native 4:3 or 16:9 rendering, three 3D resolution levels and adjustable distance.

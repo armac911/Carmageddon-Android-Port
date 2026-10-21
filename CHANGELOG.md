@@ -4,6 +4,18 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## Unreleased — launcher cheats
+
+- Add a Cheats page with a master switch and separate invulnerability, free
+  repair and frozen race timer options. All switches default off; selections
+  apply on the next Play and are remembered when the master switch is disabled.
+- Apply selected cheats throughout single-player races for both editions,
+  restore them after timed pickups expire, and clear their flags at race exit.
+  Normal powerups remain unchanged when disabled. No launcher cheats in network games.
+- Production race-hook regression checks cover defaults, all combinations,
+  repeated races, pickup expiry, cleanup and master-off/network isolation.
+  These source changes are not included in the previously supplied 0.9.1 APK.
+
 ## 0.9.1 — import, music and cockpit mirror (test candidate)
 
 - Automatically locate the selected game's DATA and MUSIC inside wrapped ZIPs,
