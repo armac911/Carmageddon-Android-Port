@@ -30,3 +30,20 @@ from the engine code. Original game development is credited to Stainless Games.
 The project includes a maintainer-supplied game-art app icon and AndroGaming
 launcher logo; it makes no claim to ownership of the original game artwork.
 No original DATA/ or MUSIC/ directory or private signing key belongs in Git.
+
+## 0.9.1 additions
+
+- innoextract by Daniel Scharrer/contributors: zlib-style license retained in
+  docs/licenses/innoextract-LICENSE.txt. Its extraction implementation is
+  unchanged; only CMake integration is patched in the build directory.
+- Boost 1.85.0: Boost Software License 1.0, docs/licenses/Boost-LICENSE.txt.
+- XZ 5.4.6 liblzma: public domain; complete package licensing summary retained
+  in docs/licenses/XZ-COPYING.txt. Only liblzma is linked into the helper.
+- bzip2 1.0.8: license retained in docs/licenses/bzip2-LICENSE.txt.
+- stb_vorbis: Sean Barrett and contributors, dual MIT/public domain; complete
+  license remains in lib/miniaudio/stb_vorbis.c, with source commit recorded in
+  STB-SOURCE.txt. The original miniaudio source is unchanged; a wrapper enables
+  its documented Vorbis backend.
+
+Pinned installer source URLs/checksums and build modifications are in
+android/installer/CMakeLists.txt and docs/IMPORTER-BUILD.md.

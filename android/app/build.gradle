@@ -10,8 +10,8 @@ android {
         applicationId "com.androgaming.carma.next"
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 25
-        versionName "0.9"
+        versionCode 26
+        versionName "0.9.1"
 
         externalNativeBuild {
             cmake {
@@ -42,6 +42,10 @@ android {
         }
     }
 
+    packagingOptions {
+        jniLibs { useLegacyPackaging true }
+    }
+
     sourceSets.main {
         jniLibs.srcDir 'libs'
     }
@@ -63,4 +67,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+// The installer reader is an Android PIE packaged in the read-only native lib directory.
+tasks.named("preBuild").configure {
+    doFirst {
+        if (!file("libs/arm64-v8a/libinnoextract.so").isFile()) {
+            throw new GradleException("Missing installer helper: run android/scripts/setup-importer.sh first")
+        }
+    }
 }

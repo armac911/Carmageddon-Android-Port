@@ -372,6 +372,41 @@ void LoadPowerups(void) {
     fclose(f);
 }
 
+// Launcher helpers deliberately bypass timed pickups: a pickup expiring must
+// not cancel a selected race-long cheat. Never change normal powerup state
+// when the master switch is off, and never apply launcher cheats in networking.
+#ifdef __ANDROID__
+static unsigned int gLauncher_cheats;
+
+static int LauncherCheatEnabled(const char* name) {
+    const char* value = getenv(name);
+    return value != NULL && strcmp(value, "1") == 0;
+}
+
+static void CloseLauncherCheats(void) {
+    if (gLauncher_cheats & 1) gProgram_state.current_car.invulnerable = 0;
+    if (gLauncher_cheats & 2) gFree_repairs = 0;
+    if (gLauncher_cheats & 4) gFreeze_timer = 0;
+    gLauncher_cheats = 0;
+}
+
+static void ApplyLauncherCheats(void) {
+    if (gNet_mode != eNet_mode_none) return;
+    if (gLauncher_cheats & 1) gProgram_state.current_car.invulnerable = 1;
+    if (gLauncher_cheats & 2) gFree_repairs = 1;
+    if (gLauncher_cheats & 4) gFreeze_timer = 1;
+}
+
+static void InitLauncherCheats(void) {
+    CloseLauncherCheats();
+    if (gNet_mode != eNet_mode_none || !LauncherCheatEnabled("DETHRACE_CHEAT_ENABLED")) return;
+    if (LauncherCheatEnabled("DETHRACE_CHEAT_INVULNERABLE")) gLauncher_cheats |= 1;
+    if (LauncherCheatEnabled("DETHRACE_CHEAT_FREE_REPAIRS")) gLauncher_cheats |= 2;
+    if (LauncherCheatEnabled("DETHRACE_CHEAT_FREEZE_TIMER")) gLauncher_cheats |= 4;
+    ApplyLauncherCheats();
+}
+#endif
+
 // IDA: void __cdecl InitPowerups()
 void InitPowerups(void) {
     int i;
@@ -382,6 +417,9 @@ void InitPowerups(void) {
         the_powerup->got_time = 0;
         the_powerup->current_value = -1;
     }
+#ifdef __ANDROID__
+    InitLauncherCheats();
+#endif
 }
 
 // IDA: void __cdecl CloseDownPowerUps()
@@ -395,6 +433,9 @@ void CloseDownPowerUps(void) {
             LosePowerup(the_powerup);
         }
     }
+#ifdef __ANDROID__
+    CloseLauncherCheats();
+#endif
 }
 
 // IDA: void __usercall DrawPowerups(tU32 pTime@<EAX>)
@@ -479,6 +520,10 @@ void DoPowerupPeriodics(tU32 pFrame_period) {
             }
         }
     }
+#ifdef __ANDROID__
+    // A timed pickup expiring must not cancel a selected race-long cheat.
+    ApplyLauncherCheats();
+#endif
 }
 
 // IDA: void __usercall GotPowerupN(int pN@<EAX>)

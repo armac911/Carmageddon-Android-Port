@@ -59,7 +59,7 @@ public class LauncherActivity extends Activity {
         LinearLayout rail=new LinearLayout(this);rail.setOrientation(LinearLayout.VERTICAL);
         rail.setPadding(dp(16),dp(18),dp(16),dp(14));rail.setBackgroundColor(0xff111318);
         TextView mark=text("CARMA",25,TEXT,true); mark.setLetterSpacing(.1f);rail.addView(mark);
-        TextView sub=text("ANDROID  /  0.9",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
+        TextView sub=text("ANDROID  /  0.9.1",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
         nav=new LinearLayout(this);nav.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams np=new LinearLayout.LayoutParams(-1,0,1);np.topMargin=dp(18);
         // Scroll the navigation on compact screens and with larger system fonts.
@@ -108,7 +108,7 @@ public class LauncherActivity extends Activity {
     private void note(LinearLayout c,String value){TextView t=text(value,12,MUTED,false);t.setPadding(0,dp(8),0,dp(2));c.addView(t);}
     private void showPage(String name){
         page=name;body.removeAllViews();nav.removeAllViews();play=null;importButton=null;status=null;gameButton=null;
-        String[] pages={"Home","Graphics","Controls","Diagnostics"};
+        String[] pages={"Home","Graphics","Controls","Cheats","Diagnostics"};
         for(String n:pages){
             Button b=button(n,false);b.setTextSize(14);b.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
             b.setBackground(new RippleDrawable(ColorStateList.valueOf(0x33ffffff),surface(n.equals(page)?0xff402027:0xff111318,8),null));
@@ -116,7 +116,7 @@ public class LauncherActivity extends Activity {
             LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(48));lp.bottomMargin=dp(6);nav.addView(b,lp);
         }
         if("Graphics".equals(page))graphics();else if("Controls".equals(page))controls();
-        else if("Diagnostics".equals(page))diagnostics();else home();
+        else if("Cheats".equals(page))cheats();else if("Diagnostics".equals(page))diagnostics();else home();
     }
     private void openWebsite(){
         try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://androgaming.com")));}
@@ -135,9 +135,9 @@ public class LauncherActivity extends Activity {
         String aspect=getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3";
         note(launch,aspect+"  •  "+capitalize(quality)+"  •  "+capitalize(distance)+" distance  •  "+("0".equals(cap)?"Uncapped":cap+" FPS"));
         play=button("PLAY  ›",true);play.setTextSize(20);play.setOnClickListener(v->startActivity(new Intent(this,DethraceActivity.class)));launch.addView(play);
-        importButton=button("Import game data ZIP",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
-        note(launch,"Choose Carmageddon or Splat Pack. Import each game’s own DATA/ ZIP, with optional MUSIC/. Installs and saves stay separate; game content is not included.");
-        TextView about=text("Powered by Dethrace  •  Version 0.9",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
+        importButton=button("Import game ZIP or GOG installer",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
+        note(launch,"Choose Carmageddon or Splat Pack, then select your game ZIP or supported GOG offline installer EXE. DATA, MUSIC and matching support files are found automatically. Game content is not included.");
+        TextView about=text("Powered by Dethrace  •  Version 0.9.1",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
         update();
     }
     private String selectedGame(){return GameContent.normalize(getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL));}
@@ -165,6 +165,15 @@ public class LauncherActivity extends Activity {
         choice(c,"Draw distance","graphics","distance",new String[]{"Original","Extended (1.5×)","Far (2×)"},new String[]{"original","extended","far"},false);
         choice(c,"Frame-rate cap","graphics","fps_cap",new String[]{"60 FPS","120 FPS","144 FPS","Uncapped"},new String[]{"60","120","144","0"},false);
         note(c,"The cap covers menus and races. Higher settings may reduce performance. A higher cap does not change your display’s refresh rate.");
+    }
+    private void cheats(){
+        heading("Cheats","Optional single-player race helpers.");LinearLayout c=card();
+        toggle(c,"Enable cheats","cheats","enabled",false);
+        toggle(c,"Invulnerability","cheats","invulnerable",false);
+        toggle(c,"Free repairs","cheats","free_repairs",false);
+        toggle(c,"Freeze race timer","cheats","freeze_timer",false);
+        note(c,"Enable the master switch and choose your cheats. Changes apply on the next Play and last throughout each single-player race, including Splat Pack. Free repairs still require holding Repair.");
+        note(c,"Switch off Enable cheats for normal gameplay; your selections are remembered. Races still save progress and rewards.");
     }
     private void controls(){
         heading("Controls","Make it feel right.");LinearLayout c=card();
@@ -236,7 +245,7 @@ public class LauncherActivity extends Activity {
         if(!canChangeGame())return;
         pendingImportEdition=selectedGame();
         Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream"});startActivityForResult(intent,PICK_ZIP);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream","application/x-msdownload","application/vnd.microsoft.portable-executable","application/x-ms-dos-executable"});startActivityForResult(intent,PICK_ZIP);
     }
     private void exportErrors(){
         if(ErrorLogStore.sessions(ErrorLogs.root(this)).length==0){new AlertDialog.Builder(this).setMessage("No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.").setPositiveButton("OK",null).show();return;}
@@ -257,10 +266,10 @@ public class LauncherActivity extends Activity {
         boolean ready=root!=null&&GameDataZip.isReady(GameContent.directory(root,edition),edition);
         if(gameButton!=null){gameButton.setText("Game: "+GameContent.label(edition)+"  ›");gameButton.setEnabled(!busy);}
         play.setText("PLAY "+GameContent.label(edition).toUpperCase(java.util.Locale.ROOT)+"  ›");
-        importButton.setText("Import "+GameContent.label(edition)+" data ZIP");
+        importButton.setText("Import "+GameContent.label(edition)+" ZIP or GOG installer");
         play.setEnabled(ready&&!busy);play.setAlpha(ready&&!busy?1f:.45f);
         importButton.setEnabled(root!=null&&!busy&&!ready);importButton.setVisibility(ready?View.GONE:View.VISIBLE);
-        status.setText(busy?"Importing game data…":ready?"●  Ready to race":root==null?"Storage unavailable":"Import "+GameContent.label(edition)+" data to begin");
+        status.setText(busy?"Importing game data… Please wait; large files can take a few minutes.":ready?"●  Ready to race":root==null?"Storage unavailable":"Import "+GameContent.label(edition)+" data to begin");
         status.setTextColor(ready?0xff72d3aa:MUTED);
     }
 
@@ -296,8 +305,8 @@ public class LauncherActivity extends Activity {
         new Thread(() -> {
             String failure = null;
             try(InputStream stream=getContentResolver().openInputStream(uri)){
-                if(stream==null)throw new IOException("Cannot open ZIP");
-                GameContent.install(stream,root,importEdition);
+                if(stream==null)throw new IOException("Cannot open game file");
+                GameContent.install(stream,root,importEdition,new File(getApplicationInfo().nativeLibraryDir,"libinnoextract.so"));
             }catch(Exception e){failure=e.getMessage();}
             final String message = failure;
             runOnUiThread(() -> {

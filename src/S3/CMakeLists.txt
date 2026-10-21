@@ -48,6 +48,7 @@ target_sources(s3 PRIVATE
     resource.h
     s3cda.c
     s3cda.h
+    stream_music.c
     s3music.c
     s3music.h
     s3sound.c

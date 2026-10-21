@@ -33,3 +33,6 @@ key.properties
 __pycache__/
 *.pyc
 /MUSIC/
+
+# Native installer helper dependency/build cache
+android/.installer-build/

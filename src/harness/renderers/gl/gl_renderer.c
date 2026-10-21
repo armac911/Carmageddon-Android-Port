@@ -30,6 +30,19 @@ static GLuint deferred_shadow_texture;
 static int pending_shadow;
 #endif
 static GLuint framebuffer_id, framebuffer_texture = 0;
+#ifdef __ANDROID__
+static GLuint mirror_fbo,mirror_colour,mirror_depth;
+static int mirror_scene;
+static int cpu_rect[4];
+static void SwapMirrorTarget(void) {
+    GLuint swap=framebuffer_id;framebuffer_id=mirror_fbo;mirror_fbo=swap;
+    swap=framebuffer_texture;framebuffer_texture=mirror_colour;mirror_colour=swap;
+    swap=depth_texture;depth_texture=mirror_depth;mirror_depth=swap;
+}
+void DRPresentCpuRect(int x,int y,int width,int height) {
+    cpu_rect[0]=x;cpu_rect[1]=y;cpu_rect[2]=width;cpu_rect[3]=height;
+}
+#endif
 
 // Pixmap snapshot taken right after the 3D readback inside FlushBuffer; the
 // present-time shader compares the current pixmap to this snapshot to detect
@@ -427,6 +440,23 @@ void GLRenderer_Init(tOpenGL_profile profile, int pRender_width, int pRender_hei
         LOG_PANIC("Readback framebuffer is not complete");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #endif
+#ifdef __ANDROID__
+    // Mirror has a separate colour/depth target. Never overwrite the main
+    // high-resolution scene while rendering this second camera.
+    glGenFramebuffers(1,&mirror_fbo);glBindFramebuffer(GL_FRAMEBUFFER,mirror_fbo);
+    glGenTextures(1,&mirror_colour);glBindTexture(GL_TEXTURE_2D,mirror_colour);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_R8UI,super_width,super_height,0,GL_RED_INTEGER,GL_UNSIGNED_BYTE,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,mirror_colour,0);
+    glGenTextures(1,&mirror_depth);glBindTexture(GL_TEXTURE_2D,mirror_depth);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT24,super_width,super_height,0,GL_DEPTH_COMPONENT,GL_UNSIGNED_INT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,mirror_depth,0);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE)LOG_PANIC("Mirror framebuffer incomplete");
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+#endif
     screen_buffer_flip_pixels = malloc(sizeof(uint8_t) * super_width * super_height);
     depth_buffer_flip_pixels = malloc(sizeof(uint16_t) * super_width * super_height);
     snapshot_pixels = calloc(render_width * render_height, sizeof(uint8_t));
@@ -514,6 +544,18 @@ void GLRenderer_SetBlendTable(br_pixelmap* table) {
 extern br_v1db_state v1db;
 
 void GLRenderer_BeginScene(br_actor* camera, br_pixelmap* colour_buffer, br_pixelmap* depth_buffer) {
+#ifdef __ANDROID__
+    extern br_pixelmap* gRearview_screen;
+    mirror_scene=colour_buffer==gRearview_screen;
+    if(mirror_scene) {
+        SwapMirrorTarget();
+        static const GLuint zero[4]={0,0,0,0};
+        glBindFramebuffer(GL_FRAMEBUFFER,framebuffer_id);
+        glClearBufferuiv(GL_COLOR,0,zero);glDepthMask(GL_TRUE);glClear(GL_DEPTH_BUFFER_BIT);
+    }
+    // The retail mirror camera contains a reflection (negative determinant).
+    glFrontFace(mirror_scene?GL_CW:GL_CCW);
+#endif
     last_colour_buffer = colour_buffer;
     last_depth_buffer = depth_buffer;
     /* The 3D pass renders into a super-res framebuffer, so scale viewport
@@ -560,6 +602,10 @@ void GLRenderer_BeginScene(br_actor* camera, br_pixelmap* colour_buffer, br_pixe
 }
 
 void GLRenderer_EndScene(void) {
+#ifdef __ANDROID__
+    if(mirror_scene){SwapMirrorTarget();mirror_scene=0;}
+    glFrontFace(GL_CCW);
+#endif
     //  switch back to default fb and reset state
     CHECK_GL_ERROR("GLRenderer_EndScene2");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -571,6 +617,14 @@ void GLRenderer_EndScene(void) {
 void GLRenderer_FullScreenQuad(uint8_t* screen_buffer) {
     uint64_t profile_present = DRProfileClock();
 
+#ifdef __ANDROID__
+    // Force the composited mirror rectangle through the CPU image, even where
+    // a mirror palette index happens to equal the main-scene snapshot index.
+    for(int y=cpu_rect[1];y<cpu_rect[1]+cpu_rect[3];y++)
+        for(int x=cpu_rect[0];x<cpu_rect[0]+cpu_rect[2];x++)
+            if(x>=0&&x<render_width&&y>=0&&y<render_height)
+                snapshot_pixels[y*render_width+x]=screen_buffer[y*render_width+x]^255;
+#endif
     glViewport(vp_x, vp_y, vp_width, vp_height);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -610,6 +664,7 @@ void GLRenderer_FullScreenQuad(uint8_t* screen_buffer) {
 void GLRenderer_ClearBuffers(void) {
 #ifdef __ANDROID__
     pending_shadow = 0;
+    memset(cpu_rect,0,sizeof(cpu_rect));
 #endif
     // clear our virtual framebuffer. The colour attachment is GL_R8UI so
     // glClear/glClearColor (which are float-typed) do not portably write a
@@ -1056,7 +1111,11 @@ void GLRenderer_FlushBuffer(tRenderer_flush_type flush_type) {
     // touched by 2D draws that ran after the 3D pass. We always copy from
     // gBack_screen (not from last_colour_buffer, which may be a sub-pixmap)
     // because the present shader sees the full back buffer.
-    if (snapshot_pixels != NULL) {
+    if (snapshot_pixels != NULL
+#ifdef __ANDROID__
+        && !mirror_scene
+#endif
+    ) {
         extern br_pixelmap* gBack_screen;
         if (gBack_screen != NULL && gBack_screen->pixels != NULL) {
             memcpy(snapshot_pixels, gBack_screen->pixels, render_width * render_height);

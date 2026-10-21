@@ -2,7 +2,7 @@
 
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 0.9 · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.1 test build · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -26,6 +26,11 @@ See the
 
 ## What to expect
 
+**0.9.1 is a test candidate** for automatic nested-ZIP/GOG installer import, real
+streamed music playback and the cockpit rear-view mirror. The public 0.9 release
+remains available. See [candidate notes](docs/RELEASE-NOTES-0.9.1.md) for validation
+and remaining device checks.
+
 Version **0.9 adds Splat Pack launcher/import support**. The planned 1.0 milestone
 is on hold after an unexpected mid-race exit was reported. Its cause is not yet
 identified. Earlier testing completed multiple races on Galaxy S24 FE and Retroid
@@ -37,7 +42,13 @@ That improves confidence but does not establish a fix for the earlier exit.
 Splat Pack integration in 0.9 still requires testing with your own expansion data.
 
 - Dark landscape launcher with game selection and Graphics/Controls/Diagnostics pages.
+- Upcoming build: a Cheats page with invulnerability, free repairs and a frozen
+  race timer. Master switch and individual options default off. Selections apply
+  on the next Play to single-player races in both editions. Free repairs require
+  holding Repair; normal progress and rewards still save. The previously supplied
+  0.9.1 test APK does not include this source addition yet.
 - Separate Carmageddon and Splat Pack installs/saves using the existing Dethrace expansion support.
+- Automatic game-file selection, streamed MUSIC playback and a cockpit rear-view mirror.
 - Native 4:3 or 16:9 rendering, three 3D resolution levels and adjustable distance.
 - Sharp textures or palette-aware bilinear smoothing; menus and HUD stay sharp.
 - 60, 120, 144 FPS or uncapped, with 60 FPS selected by default.
@@ -61,7 +72,7 @@ Added project branding appears only in the launcher, with no gameplay watermark.
 | CPU / Android ABI | 64-bit ARM (`arm64-v8a`); a 64-bit Android installation is required |
 | Graphics | OpenGL ES 3.0 support |
 | Game files | Compatible Carmageddon or full Splat Pack PC `DATA/`; optional `MUSIC/` |
-| Storage | Room for the APK, your ZIP and a second, extracted copy of its contents |
+| Storage | Room for the APK, input/staging copies and extracted game; EXE imports need extra staging space |
 | Input | Touchscreen or Android-compatible controller |
 
 These are build/API requirements. Android 7 and low-end devices have not been
@@ -71,13 +82,13 @@ The ZIP importer accepts up to 2 GiB of extracted data and 50,000 entries.
 
 ## Installation
 
-1. Download `carmageddon-android-port-0.9-arm64.apk` from this repository's
+1. Download `carmageddon-android-port-0.9.1-arm64.apk` from this repository's
    **Releases** when available, or use the maintainer-supplied APK.
 2. Open the APK on your device. If Android asks, allow APK installation for the
    browser/file manager you are using, then complete installation.
 3. Prepare the selected game’s data ZIP below and copy it to your device.
 4. Open **Carmageddon Android Port**, choose **Game: Carmageddon** or **Splat Pack**,
-   then **Import [game] data ZIP** and select the ZIP
+   then **Import [game] ZIP or GOG installer** and select the file
    using Android's document picker.
 5. Wait until the launcher reports **Ready to race**. Choose settings, then **Play**.
 
@@ -86,41 +97,32 @@ An APK alone cannot play the game without imported data.
 
 ### Prepare your game data
 
-Use files from your own PC installation of the original Carmageddon. Merge the
-required files into **one** `DATA/` directory before creating the ZIP. Its root
-must contain `DATA/`, optionally alongside `MUSIC/`, without an enclosing game
-folder. Do not include executables, installers or unrelated folders.
+In 0.9.1, choose **Carmageddon** or **Splat Pack** on Home and select either:
 
-The importer checks for `DATA/GENERAL.TXT`, `DATA/KEYMAP_0.TXT`, `DATA/CARS/` and
-`DATA/RACES/CITYA1.TXT`. A ZIP containing only these checks is insufficient: keep
-the rest of the original game's data too. Duplicate paths and unsafe paths are
-rejected. Build the ZIP from the merged folder, rather than adding two copies
-of `DATA/` as duplicate ZIP entries.
+- A ZIP of your installed PC game. Enclosing folders, GOG Max Pack layouts and
+  archives containing both games are supported. The launcher selects the chosen
+  game's DATA, locates its MUSIC, and merges matching GOG support files itself.
+  No manual DATA-root ZIP preparation is needed. Duplicate complete installations
+  of the same game are ambiguous and require a ZIP containing one copy.
+- A supported, self-contained GOG offline installer EXE. The bundled innoextract
+  reader unpacks its data without executing Windows code. The named installer
+  `setup_carmageddon_2.0.0.63.exe` still needs real-file/device verification.
+  Installers needing companion BIN/RAR files require a ZIP of the installed game
+  in this first implementation. See [installer details](docs/IMPORTER-BUILD.md).
 
-For installations using the GOG Max Pack layout, merge the contents of
-`__support/app/CARMA/DATA/` into a copy of `CARMA/DATA/` before zipping. Those support
-files include the key maps. Paths can vary by installer. For **Splat Pack**, use the complete installed expansion data, usually
-`CARSPLAT/DATA/` in a Max Pack layout, and merge its matching
-`__support/app/CARSPLAT/DATA/` support files if that folder exists. The resulting
-ZIP must have `DATA/` at its root, not `CARSPLAT/DATA/`. Include all expansion data,
-not just its new tracks. Its checks require `GENERAL.TXT`, `KEYMAP_0.TXT`, `CARS/`,
-`RACES/CASTLE.TXT` and `RACES/CASTLE2.TXT`; these markers are not an exhaustive
-asset list. `MUSIC/` is optional. Never merge the two games' DATA trees together.
-
-The Home **Game** button switches between the installed games. Finish/exit the
-current game before switching or importing; the launcher blocks those actions
-while its game activity remains open. Missing expansion data does not affect
-Play for the original game. No expansion files are bundled and none need to be
-uploaded to the developer to install them. Splat Pack gameplay is awaiting the
-maintainer's data/device test; demos, mods and other editions remain unverified.
+Full game data is required; demos and a few marker files are insufficient. No
+commercial files are bundled. Original and expansion data/saves stay separate.
+Existing installs are never overwritten. Exit the game before importing or
+switching. MUSIC is optional; supported audio files are OGG, MP3, FLAC and WAV.
+ISO/CUE/BIN disc images and other installer formats are not imported.
 
 ### Updates and saves
 
 Install updates **over the existing app**, using the same signing identity.
 Do not uninstall or clear storage if you want to retain imported data and saves.
 The current application ID is `com.androgaming.carma.next`; AndroGaming versions
-0.1.15 onward share this identity. The 0.9 APK has a higher internal build code
-than 0.8 and the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
+0.1.15 onward share this identity. The 0.9.1 APK has a higher internal build code
+than 0.9, 0.8 and the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
 is separate, with no automatic migration.
 
 The imported game lives under the app's external files directory in `game/`;
@@ -303,7 +305,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 Common setup fixes:
 
 - **Missing key map / incomplete data:** merge the PC support files and check
-  the ZIP root is `DATA/`, not `CARMA/DATA/`.
+  the archive includes the matching GOG support files. Wrapped ZIP folders are detected automatically in 0.9.1.
 - **Data already installed:** the importer does not replace an existing game.
   Do not clear storage casually; that also risks saves.
 - **Update rejected:** confirm the package/signing key matches. A self-built APK
@@ -330,7 +332,7 @@ The clone command requires account access while the repository is private.
 Output: `android/app/build/outputs/apk/debug/app-debug.apk`.
 On Windows, fetch/extract SDL into `android/app/jni/SDL`, set `sdk.dir` in
 `android/local.properties`, and run `gradlew.bat assembleDebug` from `android`.
-Windows builds have not been validated in this release pass.
+Build the installer helper described in [IMPORTER-BUILD.md](docs/IMPORTER-BUILD.md) before packaging. Windows builds have not been validated in this release pass.
 
 The source retains `VERSION` so native and Android release metadata agree.
 A local debug build uses your machine's signing key and normally cannot update
@@ -342,6 +344,8 @@ Selected tests, after SDL setup:
 
 ```sh
 python3 test/android/test_game_content.py
+python3 test/android/test_stream_music.py
+python3 test/android/test_mirror_target.py
 python3 test/android/test_game_detection.py
 python3 test/android/test_usb_registration.py
 python3 test/android/test_error_capture.py
@@ -354,7 +358,7 @@ python3 test/android/test_gpu_batch.py
 python3 test/android/shadow_compat_test.py
 ```
 
-Host checks require Python 3 and a C compiler. GPU tests also need Linux Mesa
+Host checks require Python 3, JDK 17 and a C compiler. The synthetic music test also uses ffmpeg. GPU tests also need Linux Mesa
 EGL/GLES libraries; they require no original game assets.
 
 ## AI disclosure
@@ -388,6 +392,10 @@ It builds on substantial prior work:
 | [libsmacker](https://libsmacker.sourceforge.net/), Greg Kennedy and contributors | Smacker video/audio decoding | [LGPL 2.1 or later](lib/libsmacker/COPYING), source notices |
 | [glad](https://github.com/Dav1dde/glad), David Herberth; Khronos Group | Generated GL/GLES loading and API/platform definitions | [glad/Khronos notices](lib/glad/LICENSE), [platform header](lib/glad/include/KHR/khrplatform.h) |
 | [Unity](https://github.com/ThrowTheSwitch/Unity), contributors | Inherited C test framework | [MIT license](test/framework/LICENSE.txt) |
+| [innoextract](https://github.com/dscharrer/innoextract), Daniel Scharrer and contributors | Native Inno Setup data extraction | [License](docs/licenses/innoextract-LICENSE.txt), [pinned build/source details](docs/IMPORTER-BUILD.md) |
+| [Boost](https://www.boost.org/) contributors | Installer reader dependencies | [Boost Software License](docs/licenses/Boost-LICENSE.txt) |
+| XZ/liblzma and bzip2 contributors | Installer decompression | [XZ notices](docs/licenses/XZ-COPYING.txt), [bzip2 license](docs/licenses/bzip2-LICENSE.txt) |
+| [stb_vorbis](https://github.com/nothings/stb), Sean Barrett and contributors | OGG/Vorbis music decoding | [Pinned source](lib/miniaudio/STB-SOURCE.txt), dual MIT/public-domain notice retained in [source](lib/miniaudio/stb_vorbis.c) |
 | OpenAI ChatGPT/Codex | AI development assistance | Full disclosure above |
 
 The codebase carries [GNU GPL version 3](LICENSE); dependency notices retain their
