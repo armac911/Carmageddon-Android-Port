@@ -1,6 +1,13 @@
 #ifndef S3_SOUND_H
 #define S3_SOUND_H
 
+void S3MusicMute(void);
+void S3MusicOpen(void);
+void S3MusicClose(void);
+void S3MusicStart(void);
+void S3MusicStop(void);
+void S3MusicService(int level);
+
 // External typedefs
 
 typedef float tF32;

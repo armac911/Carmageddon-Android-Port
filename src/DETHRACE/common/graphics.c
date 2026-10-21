@@ -1568,7 +1568,8 @@ void RenderAFrame(int pDepth_mask_on) {
     the_time = GetTotalTime();
     old_pixels = gRender_screen->pixels;
     cockpit_on = gProgram_state.cockpit_on && gProgram_state.cockpit_image_index >= 0 && !gMap_mode;
-    gMirror_on__graphics = gProgram_state.mirror_on && cockpit_on && gProgram_state.which_view == eView_forward;
+    gMirror_on__graphics = gProgram_state.mirror_on && cockpit_on && gProgram_state.which_view == eView_forward
+        && gRearview_screen && gRearview_depth_buffer && gRearview_screen->width>0 && gRearview_screen->height>0;
     if (gMap_mode) {
         real_origin_x = gBack_screen->origin_x;
         real_origin_y = gBack_screen->origin_y;
@@ -1707,29 +1708,30 @@ void RenderAFrame(int pDepth_mask_on) {
     }
     BrMatrix34Copy(&gCamera->t.t.mat, &old_camera_matrix);
     if (gMirror_on__graphics) {
-        LOG_WARN_ONCE("rearview mirror not implemented");
-        // BrPixelmapFill(gRearview_depth_buffer, 0xFFFFFFFF);
-        // gRendering_mirror = 1;
-        // DoSpecialCameraEffect(gRearview_camera, &gRearview_camera_to_world);
-        // ConditionallyFillWithSky(gRearview_screen);
-        // BrZbSceneRenderBegin(gUniverse_actor, gRearview_camera, gRearview_screen, gRearview_depth_buffer);
-        // ProcessNonTrackActors(
-        //     gRearview_screen,
-        //     gRearview_depth_buffer,
-        //     gRearview_camera,
-        //     &gRearview_camera_to_world,
-        //     &old_mirror_cam_matrix);
-        // ProcessTrack(gUniverse_actor, &gProgram_state.track_spec, gRearview_camera, &gRearview_camera_to_world, 0);
-        // RenderLollipops();
-        // DepthEffectSky(gRearview_screen, gRearview_depth_buffer, gRearview_camera, &gRearview_camera_to_world);
-        // DepthEffect(gRearview_screen, gRearview_depth_buffer, gRearview_camera, &gRearview_camera_to_world);
-        // if (!gAusterity_mode) {
-        //     ProcessTrack(gUniverse_actor, &gProgram_state.track_spec, gRearview_camera, &gRearview_camera_to_world, 1);
-        // }
-        // RenderSplashes();
-        // BrZbSceneRenderEnd();
-        // BrMatrix34Copy(&gRearview_camera->t.t.mat, &old_mirror_cam_matrix);
-        // gRendering_mirror = 0;
+        BrPixelmapFill(gRearview_screen, 0);
+        BrPixelmapFill(gRearview_depth_buffer, 0xFFFFFFFF);
+        gRendering_mirror = 1;
+        DoSpecialCameraEffect(gRearview_camera, &gRearview_camera_to_world);
+        ConditionallyFillWithSky(gRearview_screen);
+        BrZbSceneRenderBegin(gUniverse_actor, gRearview_camera, gRearview_screen, gRearview_depth_buffer);
+        ProcessNonTrackActors(
+            gRearview_screen,
+            gRearview_depth_buffer,
+            gRearview_camera,
+            &gRearview_camera_to_world,
+            &old_mirror_cam_matrix);
+        ProcessTrack(gUniverse_actor, &gProgram_state.track_spec, gRearview_camera, &gRearview_camera_to_world, 0);
+        RenderLollipops();
+        gHarness_platform.Renderer_FlushBuffers();
+        DepthEffectSky(gRearview_screen, gRearview_depth_buffer, gRearview_camera, &gRearview_camera_to_world);
+        DepthEffect(gRearview_screen, gRearview_depth_buffer, gRearview_camera, &gRearview_camera_to_world);
+        if (!gAusterity_mode) {
+            ProcessTrack(gUniverse_actor, &gProgram_state.track_spec, gRearview_camera, &gRearview_camera_to_world, 1);
+        }
+        RenderSplashes();
+        BrZbSceneRenderEnd();
+        BrMatrix34Copy(&gRearview_camera->t.t.mat, &old_mirror_cam_matrix);
+        gRendering_mirror = 0;
     }
     if (gMap_mode) {
         if (gNet_mode == eNet_mode_none) {
@@ -1865,6 +1867,19 @@ void RenderAFrame(int pDepth_mask_on) {
                     -gRearview_screen->origin_y,
                     gProgram_state.current_car.mirror_right - gProgram_state.current_car.mirror_left,
                     gProgram_state.current_car.mirror_bottom - gProgram_state.current_car.mirror_top);
+                int mirror_present_x=gScreen_wobble_x+gProgram_state.current_car.mirror_left;
+                int mirror_present_y=gScreen_wobble_y+gProgram_state.current_car.mirror_top;
+#ifdef __ANDROID__
+                // Cockpit/HUD drawing can use a centred sub-view of the wide canvas.
+                // The present snapshot is full-canvas, so include that view's offset.
+                if(wide_back) {
+                    int offset=(char*)gBack_screen->pixels-(char*)wide_back->pixels;
+                    mirror_present_x+=offset%wide_back->row_bytes;
+                    mirror_present_y+=offset/wide_back->row_bytes;
+                }
+#endif
+                DRPresentCpuRect(mirror_present_x,mirror_present_y,
+                    gRearview_screen->width,gRearview_screen->height);
             }
         }
         DimAFewBits();

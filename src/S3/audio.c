@@ -122,6 +122,7 @@ void S3Enable(void) {
 }
 
 void S3Disable(void) {
+    S3MusicMute();
     S3StopAllOutletSounds();
     gS3_enabled = 0;
 }
@@ -175,7 +176,8 @@ int S3OpenCDADevice(void) {
     // S3CDAEnable();
     // return 1;
 
-    return 0;
+    S3MusicOpen();
+    return 1;
 }
 
 void Audio_SetPaused(int paused) {
@@ -195,6 +197,7 @@ void S3CloseDevices(void) {
     //     mciSendCommandA(gS3_cda_device.wDeviceID, 0x804u, 0, 0); // MCI_CLOSE
     // }
 
+    S3MusicClose();
     ma_engine_uninit(&miniaudio_engine);
 }
 

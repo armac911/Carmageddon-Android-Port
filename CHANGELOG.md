@@ -4,6 +4,20 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.1 — import, music and cockpit mirror (test candidate)
+
+- Automatically locate the selected game's DATA and MUSIC inside wrapped ZIPs,
+  select between CARMA/CARSPLAT, and merge matching GOG support files.
+- Bundle a pinned native innoextract reader for self-contained GOG offline EXEs;
+  no Windows executable code is run. Exact named-installer/device testing pending.
+- Replace empty inherited music start/stop hooks with streamed playback; add
+  OGG/Vorbis decoding alongside MP3, FLAC and WAV, volume and lifecycle handling.
+- Restore cockpit rear-view rendering with isolated GPU colour/depth targets,
+  reflected winding and widescreen-aware CPU composition. Third-person has no
+  new mirror overlay. Additional camera rendering has a performance cost.
+- Preserve existing installs/saves and extend import/audio/GLES regression checks.
+  This candidate does not replace the public 0.9 release until device validation.
+
 ## 0.9 — Splat Pack launcher integration
 
 - Expose Dethrace's existing full Splat Pack support through a Home game selector.

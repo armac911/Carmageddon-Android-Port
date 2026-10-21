@@ -1,4 +1,27 @@
-# Validation — 0.9 Splat Pack integration
+# Validation — 0.9.1 test candidate
+
+- Import JVM tests pass for wrapped ZIPs, Max Pack edition isolation, matching
+  support overlays, music selection, ambiguity rejection and transactional saves.
+- Controlled installer-helper tests pass; the real built native reader rejects
+  an invalid MZ input cleanly. No real Carmageddon installer was supplied.
+- The native Inno Setup reader builds for Linux and Android ARM64. The ARM64 PIE
+  uses the Android linker, platform shared libraries only and 16 KiB LOAD alignment.
+- The full game builds for Linux and Android ARM64 with the restored mirror and
+  streamed music. No game assets are needed for compilation.
+- Synthetic production music decoding/mixing passes OGG, MP3, FLAC and WAV,
+  case-insensitive discovery, volume, stop/restart and cleanup without a sound device.
+- Production GLES readback/shadow tests pass. New mirror target tests pass
+  separate colour/depth, bounded sub-pixmap copy, unchanged main scene/snapshot,
+  restored winding/state and 1x/2x/3x settings using Mesa software GLES.
+- Java extractor management uses Process APIs available at minSdk 24; timed
+  polling avoids Process methods introduced at API 26.
+- Physical-device music, reflected scene orientation, cockpit/widescreen placement,
+  frame rate and exact `setup_carmageddon_2.0.0.63.exe` extraction remain pending.
+- APK assembleDebug passes; version 0.9.1/code 26, expected package and label,
+  matching 0.9 signing certificate, v2 signature and ZIP/ELF 16 KiB alignment pass.
+- APK SHA-256: `802c9ed369d93d7c64ccfbc09a536356d5c56448b05d2b552307ae457f220f02`. Matching unstripped symbols are retained.
+
+# Prior 0.9 validation
 
 - Android ARM64 assembleDebug succeeds with JDK 17, Gradle 8.7, AGP 8.6.1,
   SDK/build tools 35, NDK 28.2 and CMake 3.22.1.

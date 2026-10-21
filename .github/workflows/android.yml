@@ -23,9 +23,13 @@ jobs:
         run: |
           chmod +x android/gradlew android/scripts/*.sh
           ./android/scripts/build-dev.sh
-      - name: Check input and masked row merge
+      - name: Install native regression test dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libegl1-mesa-dev
+      - name: Check imports, audio, mirror and input
         run: |
           python3 test/android/test_game_content.py
+          python3 test/android/test_stream_music.py
+          python3 test/android/test_mirror_target.py
           python3 test/android/test_game_detection.py
           python3 test/android/test_usb_registration.py
           python3 test/android/test_error_capture.py

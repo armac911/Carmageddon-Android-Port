@@ -396,6 +396,7 @@ void SoundService(void) {
                 StartMusic();
             }
         }
+        S3MusicService(gProgram_state.music_volume);
         DRS3Service();
         gServicing_sound = 0;
     }
@@ -678,8 +679,10 @@ int DRS3StopCDA(void) {
 
 // IDA: void __cdecl StartMusic()
 void StartMusic(void) {
+    if(gSound_enabled)S3MusicStart();
 }
 
 // IDA: void __cdecl StopMusic()
 void StopMusic(void) {
+    S3MusicStop();
 }

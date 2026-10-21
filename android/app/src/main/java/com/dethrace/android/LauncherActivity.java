@@ -59,7 +59,7 @@ public class LauncherActivity extends Activity {
         LinearLayout rail=new LinearLayout(this);rail.setOrientation(LinearLayout.VERTICAL);
         rail.setPadding(dp(16),dp(18),dp(16),dp(14));rail.setBackgroundColor(0xff111318);
         TextView mark=text("CARMA",25,TEXT,true); mark.setLetterSpacing(.1f);rail.addView(mark);
-        TextView sub=text("ANDROID  /  0.9",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
+        TextView sub=text("ANDROID  /  0.9.1",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
         nav=new LinearLayout(this);nav.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams np=new LinearLayout.LayoutParams(-1,0,1);np.topMargin=dp(18);
         // Scroll the navigation on compact screens and with larger system fonts.
@@ -135,9 +135,9 @@ public class LauncherActivity extends Activity {
         String aspect=getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3";
         note(launch,aspect+"  •  "+capitalize(quality)+"  •  "+capitalize(distance)+" distance  •  "+("0".equals(cap)?"Uncapped":cap+" FPS"));
         play=button("PLAY  ›",true);play.setTextSize(20);play.setOnClickListener(v->startActivity(new Intent(this,DethraceActivity.class)));launch.addView(play);
-        importButton=button("Import game data ZIP",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
-        note(launch,"Choose Carmageddon or Splat Pack. Import each game’s own DATA/ ZIP, with optional MUSIC/. Installs and saves stay separate; game content is not included.");
-        TextView about=text("Powered by Dethrace  •  Version 0.9",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
+        importButton=button("Import game ZIP or GOG installer",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
+        note(launch,"Choose Carmageddon or Splat Pack, then select your game ZIP or supported GOG offline installer EXE. DATA, MUSIC and matching support files are found automatically. Game content is not included.");
+        TextView about=text("Powered by Dethrace  •  Version 0.9.1",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
         update();
     }
     private String selectedGame(){return GameContent.normalize(getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL));}
@@ -236,7 +236,7 @@ public class LauncherActivity extends Activity {
         if(!canChangeGame())return;
         pendingImportEdition=selectedGame();
         Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream"});startActivityForResult(intent,PICK_ZIP);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream","application/x-msdownload","application/vnd.microsoft.portable-executable","application/x-ms-dos-executable"});startActivityForResult(intent,PICK_ZIP);
     }
     private void exportErrors(){
         if(ErrorLogStore.sessions(ErrorLogs.root(this)).length==0){new AlertDialog.Builder(this).setMessage("No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.").setPositiveButton("OK",null).show();return;}
@@ -257,10 +257,10 @@ public class LauncherActivity extends Activity {
         boolean ready=root!=null&&GameDataZip.isReady(GameContent.directory(root,edition),edition);
         if(gameButton!=null){gameButton.setText("Game: "+GameContent.label(edition)+"  ›");gameButton.setEnabled(!busy);}
         play.setText("PLAY "+GameContent.label(edition).toUpperCase(java.util.Locale.ROOT)+"  ›");
-        importButton.setText("Import "+GameContent.label(edition)+" data ZIP");
+        importButton.setText("Import "+GameContent.label(edition)+" ZIP or GOG installer");
         play.setEnabled(ready&&!busy);play.setAlpha(ready&&!busy?1f:.45f);
         importButton.setEnabled(root!=null&&!busy&&!ready);importButton.setVisibility(ready?View.GONE:View.VISIBLE);
-        status.setText(busy?"Importing game data…":ready?"●  Ready to race":root==null?"Storage unavailable":"Import "+GameContent.label(edition)+" data to begin");
+        status.setText(busy?"Importing game data… Please wait; large files can take a few minutes.":ready?"●  Ready to race":root==null?"Storage unavailable":"Import "+GameContent.label(edition)+" data to begin");
         status.setTextColor(ready?0xff72d3aa:MUTED);
     }
 
@@ -296,8 +296,8 @@ public class LauncherActivity extends Activity {
         new Thread(() -> {
             String failure = null;
             try(InputStream stream=getContentResolver().openInputStream(uri)){
-                if(stream==null)throw new IOException("Cannot open ZIP");
-                GameContent.install(stream,root,importEdition);
+                if(stream==null)throw new IOException("Cannot open game file");
+                GameContent.install(stream,root,importEdition,new File(getApplicationInfo().nativeLibraryDir,"libinnoextract.so"));
             }catch(Exception e){failure=e.getMessage();}
             final String message = failure;
             runOnUiThread(() -> {
