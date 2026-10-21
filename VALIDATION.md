@@ -19,7 +19,7 @@
   frame rate and exact `setup_carmageddon_2.0.0.63.exe` extraction remain pending.
 - APK assembleDebug passes; version 0.9.1/code 26, expected package and label,
   matching 0.9 signing certificate, v2 signature and ZIP/ELF 16 KiB alignment pass.
-- APK SHA-256: `802c9ed369d93d7c64ccfbc09a536356d5c56448b05d2b552307ae457f220f02`. Matching unstripped symbols are retained.
+- APK SHA-256: `de284e8025f9b9fa641034dc3994e8ade8dc628c9cc1b628a1b772537f786f4d`. Matching unstripped symbols are retained.
 
 # Prior 0.9 validation
 

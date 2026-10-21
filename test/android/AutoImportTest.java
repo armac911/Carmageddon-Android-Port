@@ -27,6 +27,10 @@ public class AutoImportTest {
             File c=new File(tmp,"c");GameDataZip.extract(new ByteArrayInputStream(zip(noKey)),c);
             check(GameDataZip.isReady(c)&&new File(c,"MUSIC/TRACK04.OGG").isFile());
             try{GameDataZip.extract(new ByteArrayInputStream(zip(join(full("one/",false),full("two/",false)))),new File(tmp,"ambiguous"));throw new AssertionError();}catch(IOException expected){}
+            // innoextract can place __support beside app rather than inside it.
+            String[] externalSupport={"app/CARMA/DATA/GENERAL.TXT","app/CARMA/DATA/CARS/A.TXT","app/CARMA/DATA/RACES/CITYA1.TXT","__support/app/CARMA/DATA/KEYMAP_0.TXT","MUSIC/Track05.ogg"};
+            File external=new File(tmp,"external");GameDataZip.extract(new ByteArrayInputStream(zip(externalSupport)),external);
+            check(GameDataZip.isReady(external)&&new File(external,"MUSIC/Track05.ogg").isFile());
             // Installer directory and ZIP follow the same selection/overlay path.
             File unpacked=new File(tmp,"unpacked");for(String path:noKey){File f=new File(unpacked,path);f.getParentFile().mkdirs();Files.write(f.toPath(),path.getBytes("UTF-8"));}
             File d=new File(tmp,"d");GameDataZip.extractDirectory(unpacked,d,GameContent.ORIGINAL);check(GameDataZip.isReady(d));

@@ -98,8 +98,14 @@ public final class GameDataZip {
         List<String> support=new ArrayList<>();
         // GOG Max Pack: sibling __support/app/CARMA or CARSPLAT. Only the selected game's support tree.
         String packageRoot=root.isEmpty()?"":leaf.equals(gameName)?root.substring(0,root.length()-leaf.length()-1):root;
-        String supportRoot=packageRoot+"__SUPPORT/APP/"+gameName+"/";
-        for(String path:files.keySet())if(path.startsWith(supportRoot+"DATA/")){support.add(supportRoot);break;}
+        String supportParent=packageRoot;
+        while(true) {
+            String supportRoot=supportParent+"__SUPPORT/APP/"+gameName+"/";
+            for(String path:files.keySet())if(path.startsWith(supportRoot+"DATA/")){support.add(supportRoot);break;}
+            if(!support.isEmpty()||supportParent.isEmpty())break;
+            String parent=supportParent.substring(0,supportParent.length()-1);
+            int slash=parent.lastIndexOf('/');supportParent=slash<0?"":parent.substring(0,slash+1);
+        }
         if(!destination.mkdirs())throw new IOException("Cannot create import directory");
         long remaining=MAX_BYTES;
         Map<String,Boolean> layers=new LinkedHashMap<>();layers.put(root,true);
