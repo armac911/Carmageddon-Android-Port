@@ -27,6 +27,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg libegl1-mesa-dev
       - name: Check imports, audio, mirror and input
         run: |
+          python3 test/android/test_localization.py
+          python3 test/android/test_launcher_cheats.py
           python3 test/android/test_game_content.py
           python3 test/android/test_stream_music.py
           python3 test/android/test_mirror_target.py

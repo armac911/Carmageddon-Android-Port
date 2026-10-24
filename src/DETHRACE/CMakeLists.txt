@@ -98,6 +98,8 @@ target_sources(dethrace_obj PRIVATE
     common/intrface.h
     common/loading.c
     common/loading.h
+    common/localization.c
+    common/localization.h
     common/loadsave.c
     common/loadsave.h
     common/main.c

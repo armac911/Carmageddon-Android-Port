@@ -2,7 +2,7 @@
 
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.1 test build · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.2 test build · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -26,10 +26,11 @@ See the
 
 ## What to expect
 
-**0.9.1 is a test candidate** for automatic nested-ZIP/GOG installer import, real
-streamed music playback and the cockpit rear-view mirror. The public 0.9 release
-remains available. See [candidate notes](docs/RELEASE-NOTES-0.9.1.md) for validation
-and remaining device checks.
+**0.9.2 is a test candidate** adding an explicit language selector (English by
+default, Spanish, Italian and French) and optional launcher cheats. It also
+includes the 0.9.1 automatic import, streamed music and cockpit mirror changes.
+The public 0.9 release remains available. See [candidate notes](docs/RELEASE-NOTES-0.9.2.md)
+for coverage and device checks.
 
 Version **0.9 adds Splat Pack launcher/import support**. The planned 1.0 milestone
 is on hold after an unexpected mid-race exit was reported. Its cause is not yet
@@ -42,11 +43,15 @@ That improves confidence but does not establish a fix for the earlier exit.
 Splat Pack integration in 0.9 still requires testing with your own expansion data.
 
 - Dark landscape launcher with game selection and Graphics/Controls/Diagnostics pages.
-- Upcoming build: a Cheats page with invulnerability, free repairs and a frozen
-  race timer. Master switch and individual options default off. Selections apply
-  on the next Play to single-player races in both editions. Free repairs require
-  holding Repair; normal progress and rewards still save. The previously supplied
-  0.9.1 test APK does not include this source addition yet.
+- A Language page selects English, Español, Italiano or Français. English is
+  the default on every phone; another language requires an explicit launcher
+  choice. Launcher text changes immediately; game text changes on the next Play.
+  This initial translation covers launcher controls, selected game buttons and
+  core race messages. Some artwork/text remains original; voices/videos are retained.
+- A Cheats page offers invulnerability, free repairs and a frozen race timer.
+  Master switch and individual options default off. Selections apply on the next
+  Play to single-player races in both editions. Free repairs require holding Repair;
+  normal progress and rewards still save.
 - Separate Carmageddon and Splat Pack installs/saves using the existing Dethrace expansion support.
 - Automatic game-file selection, streamed MUSIC playback and a cockpit rear-view mirror.
 - Native 4:3 or 16:9 rendering, three 3D resolution levels and adjustable distance.
@@ -82,7 +87,7 @@ The ZIP importer accepts up to 2 GiB of extracted data and 50,000 entries.
 
 ## Installation
 
-1. Download `carmageddon-android-port-0.9.1-arm64.apk` from this repository's
+1. Download `carmageddon-android-port-0.9.2-arm64.apk` from this repository's
    **Releases** when available, or use the maintainer-supplied APK.
 2. Open the APK on your device. If Android asks, allow APK installation for the
    browser/file manager you are using, then complete installation.
@@ -121,7 +126,7 @@ ISO/CUE/BIN disc images and other installer formats are not imported.
 Install updates **over the existing app**, using the same signing identity.
 Do not uninstall or clear storage if you want to retain imported data and saves.
 The current application ID is `com.androgaming.carma.next`; AndroGaming versions
-0.1.15 onward share this identity. The 0.9.1 APK has a higher internal build code
+0.1.15 onward share this identity. The 0.9.2 APK has a higher internal build code
 than 0.9, 0.8 and the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
 is separate, with no automatic migration.
 

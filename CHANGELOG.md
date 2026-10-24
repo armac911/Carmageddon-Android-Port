@@ -4,8 +4,15 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
-## Unreleased — launcher cheats
+## 0.9.2 — optional languages and launcher cheats (test candidate)
 
+- Add explicit English/Spanish/Italian/French selection in the launcher. English
+  is always the default, independent of Android language. Translations live in
+  an immutable catalogue; imported DATA/MUSIC and saves are never rewritten.
+- Localize launcher controls, recognised game menu buttons and core race HUD
+  messages; compose Latin diacritics with the existing font/palette, preserving
+  HUD font-switch commands and falling back to original text/artwork elsewhere.
+  Original voices/videos remain unchanged. Translations need device/native-speaker review.
 - Add a Cheats page with a master switch and separate invulnerability, free
   repair and frozen race timer options. All switches default off; selections
   apply on the next Play and are remembered when the master switch is disabled.
@@ -14,7 +21,7 @@ Versions group related work rather than documenting every intermediate tweak.
   Normal powerups remain unchanged when disabled. No launcher cheats in network games.
 - Production race-hook regression checks cover defaults, all combinations,
   repeated races, pickup expiry, cleanup and master-off/network isolation.
-  These source changes are not included in the previously supplied 0.9.1 APK.
+  These cheats are now included in the 0.9.2 APK. The prior 0.9.1 APK predates them.
 
 ## 0.9.1 — import, music and cockpit mirror (test candidate)
 

@@ -9,6 +9,7 @@
 #include "globvrpb.h"
 #include "grafdata.h"
 #include "graphics.h"
+#include "localization.h"
 #include "harness/trace.h"
 #include "netgame.h"
 #include "pd/sys.h"
@@ -119,6 +120,10 @@ int HeadupActive(int pIndex) {
 
 // IDA: void __usercall DRPixelmapText(br_pixelmap *pPixelmap@<EAX>, int pX@<EDX>, int pY@<EBX>, tDR_font *pFont@<ECX>, char *pText, int pRight_edge)
 void DRPixelmapText(br_pixelmap* pPixelmap, int pX, int pY, tDR_font* pFont, char* pText, int pRight_edge) {
+    if (DRLanguageHasUtf8(pText)) {
+        DRLanguageDrawText(pPixelmap, pX, pY, pFont, pText, pRight_edge, 0);
+        return;
+    }
     int i;
     int x;
     int len;
@@ -168,6 +173,10 @@ void DRPixelmapText(br_pixelmap* pPixelmap, int pX, int pY, tDR_font* pFont, cha
 
 // IDA: void __usercall DRPixelmapCleverText2(br_pixelmap *pPixelmap@<EAX>, int pX@<EDX>, int pY@<EBX>, tDR_font *pFont@<ECX>, signed char *pText, int pRight_edge)
 void DRPixelmapCleverText2(br_pixelmap* pPixelmap, int pX, int pY, tDR_font* pFont, char* pText, int pRight_edge) {
+    if (DRLanguageHasUtf8(pText)) {
+        DRLanguageDrawText(pPixelmap, pX, pY, pFont, pText, pRight_edge, 1);
+        return;
+    }
     int i;
     int x;
     int len;
@@ -625,6 +634,7 @@ int FindAHeadupHoleWoofBarkSoundsABitRude(int pSlot_index) {
 
 // IDA: int __usercall DRTextWidth@<EAX>(tDR_font *pFont@<EAX>, char *pText@<EDX>)
 int DRTextWidth(tDR_font* pFont, char* pText) {
+    if (DRLanguageHasUtf8(pText)) return DRLanguageTextWidth(pFont, pText, 0);
     int i;
     int len;
     int result;
@@ -644,6 +654,7 @@ int DRTextWidth(tDR_font* pFont, char* pText) {
 
 // IDA: int __usercall DRTextCleverWidth@<EAX>(tDR_font *pFont@<EAX>, signed char *pText@<EDX>)
 int DRTextCleverWidth(tDR_font* pFont, signed char* pText) {
+    if (DRLanguageHasUtf8((char*)pText)) return DRLanguageTextWidth(pFont, (char*)pText, 1);
     int i;
     int len;
     int result;
@@ -741,6 +752,7 @@ int MungeHeadupWidth(tHeadup* pHeadup) {
 
 // IDA: int __usercall NewTextHeadupSlot2@<EAX>(int pSlot_index@<EAX>, int pFlash_rate@<EDX>, int pLifetime@<EBX>, int pFont_index@<ECX>, char *pText, int pQueue_it)
 int NewTextHeadupSlot2(int pSlot_index, int pFlash_rate, int pLifetime, int pFont_index, char* pText, int pQueue_it) {
+    pText = DRLocalize(pText);
     int index;
     tHeadup* the_headup;
     tHeadup_slot* headup_slot;

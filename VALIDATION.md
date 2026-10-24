@@ -1,13 +1,28 @@
-# Unreleased launcher cheats — source validation
+# Validation — 0.9.2 test candidate
 
-- `python3 test/android/test_launcher_cheats.py` compiles and exercises the
-  production initialization, per-frame and race-exit hooks. Defaults, strict
-  opt-in, all eight option combinations, repeated races, timed pickup expiry,
-  normal powerups, cleanup and network isolation pass on the host.
-- The complete modified `powerup.c` passes GCC syntax checking with the Android
-  cheat path enabled and production headers. This is not an Android ABI build.
-- APK compilation and physical-device validation of the Cheats page remain
-  pending. The 0.9.1 APK/hash below predates these source changes.
+- Full Android ARM64 game and Java launcher assembleDebug passes with version
+  0.9.2/code 27. Existing application ID and signing certificate are retained.
+- APK v2 signature, ZIP alignment and all three native ELF LOAD alignments
+  (16 KiB or higher) pass. Matching unstripped native symbols are retained.
+- APK SHA-256: `26a367b46adff16baac02c6cc4b209eaf1bbd2237f86f986294179cca1566a17`.
+- `test/android/test_localization.py` compiles production native catalogue/render
+  code under AddressSanitizer/UBSan: all languages, unknown-key/language fallback,
+  English passthrough, accented UTF-8, HUD font commands, width, clipping,
+  sub-pixmap bounds and recognised menu caption overlays pass. Empty save-slot
+  captions are checked for uppercase ASCII and the original 12-character limit.
+- The same test compiles the generated Java catalogue and verifies English
+  remains default under a French system locale, explicit selection, dynamic
+  game-name templates and reset to English.
+- Production cheat race-hook checks pass for defaults, all option combinations,
+  repeated races, timed pickup expiry, cleanup and normal/network isolation.
+- Production Java import tests pass for edition isolation, wrapped ZIPs, support
+  merges, controlled installer routing and preservation of existing data/saves.
+- This is an initial text translation, not complete localisation of all artwork,
+  race/car descriptions, powerups, technical error details or voices/videos.
+  Native-speaker review and physical-device checks of fonts, caption placement,
+  4:3/16:9, both editions and switching back to English remain pending.
+- Previous synthetic music/mirror results below apply to the inherited changes;
+  this iteration does not claim new physical-device music/mirror validation.
 
 # Validation — previously built 0.9.1 test candidate
 

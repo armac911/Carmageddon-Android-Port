@@ -8,6 +8,7 @@
 #include "harness/trace.h"
 #include "input.h"
 #include "loading.h"
+#include "localization.h"
 #include "main.h"
 #include "pd/sys.h"
 #include "sound.h"
@@ -375,6 +376,7 @@ int DoInterfaceScreen(tInterface_spec* pSpec, int pOptions, int pCurrent_choice)
             pSpec->draw_proc(gCurrent_choice, gCurrent_mode);
         }
         ProcessFlicQueue(gFrame_period);
+        DRLanguageInterface(pSpec, gCurrent_choice);
         if (DoMouseCursor() || EitherMouseButtonDown()) {
             ResetInterfaceTimeout();
         }
