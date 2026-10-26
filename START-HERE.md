@@ -1,23 +1,22 @@
-# Carmageddon Android Port 0.9 — Splat Pack
+# Carmageddon Android Port 0.9.1 — test candidate
 
-Install over 0.8 or the earlier 1.0 candidate without uninstalling. The app/signing
-identity is retained, with versionCode 25. Original imported data and saves stay
-in their existing location.
+Install the new APK over 0.9. Do not uninstall or clear storage: existing game
+files, saves, controller mappings and settings are retained. The public 0.9
+release remains available while this candidate is tested.
 
-1. In Home, press **Game: Carmageddon**, then choose **Splat Pack**.
-2. Import a ZIP made from your own full Splat Pack installation: `DATA/` directly
-   at the ZIP root, with optional `MUSIC/`. In a Max Pack layout this is usually
-   `CARSPLAT/DATA/`, merged with matching support DATA files if supplied.
-3. Press **Play Splat Pack**. Its data/saves use a separate `splatpack/` folder.
-4. Exit the game fully before switching back to Carmageddon in the launcher.
+On a fresh install, select **Carmageddon** or **Splat Pack**, press **Import**, and
+choose a ZIP of your PC installation or a supported self-contained GOG offline
+installer EXE. The launcher finds DATA/MUSIC and matching GOG support files.
+No manual ZIP folder rearrangement is needed. No commercial game data is bundled.
 
-No game files need to be uploaded here. If import fails, share the error text
-and a file listing rather than the commercial game assets. First test the intro,
-first race, save/load, and switching back to the original game with its saves.
-Splat Pack gameplay on real data has not yet been verified in this build.
+Existing 0.9 installs need no reimport for the music or mirror fixes. Check music
+volume, playback after pause/resume and a working rear-view mirror in cockpit
+view. Test 4:3 and 16:9 and switch to third person/map and back. The mirror adds a
+second camera pass; compare performance in the same race/settings.
 
-Error and performance capture remain independent opt-ins; defaults are off.
-The submitted 0.8 error log records a normal exit, not a crash. The earlier
-intermittent exit remains unexplained, so the 1.0 milestone stays on hold.
+To test fresh importing without losing your main saves, use a spare device or
+separate Android profile. Existing installations are never replaced by Import.
 
-See README, CHANGELOG, VALIDATION and docs/ERROR-LOGGING.md for details.
+The exact `setup_carmageddon_2.0.0.63.exe` still needs a real-file/device test.
+Multipart BIN/RAR installers require a ZIP of the installed game in this build.
+See README.md and docs/RELEASE-NOTES-0.9.1.md for requirements and test limits.

@@ -20,6 +20,7 @@
 #include "harness/config.h"
 #include "harness/trace.h"
 #include "loading.h"
+#include "localization.h"
 #include "loadsave.h"
 #include "netgame.h"
 #include "network.h"
@@ -386,6 +387,7 @@ void InitialiseApplication(int pArgc, char** pArgv) {
     InitializeBRenderEnvironment();
     InitDRFonts();
     InitBRFonts();
+    DRLanguageInit(getenv("DETHRACE_LANGUAGE"));
     LoadMiscStrings();
     LoadInRegistees();
     FinishLoadingGeneral();

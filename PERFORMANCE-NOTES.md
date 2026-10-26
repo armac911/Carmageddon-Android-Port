@@ -181,3 +181,20 @@ The first 300 sensor samples span the recorder's ten-minute limit; battery is
 An earlier 1.0 session in the ZIP contains metadata/sensors only. The export is
 not a two-hour frame trace, nor a controlled before/after speed benchmark.
 No new rendering optimization or FPS gain is claimed for 0.9.
+
+## 0.9.1 cockpit mirror
+
+The inherited mirror pass was disabled. The candidate renders it into separate
+GPU colour/depth attachments, then copies the indexed result into the cockpit.
+The full-canvas snapshot is retained for the main camera; the mirror rectangle
+is forced through CPU composition, including the widescreen HUD sub-view offset.
+Synthetic GLES tests confirm target/state isolation and bounded readback.
+
+This adds a second camera and synchronization work in cockpit view. No measured
+phone FPS gain or unchanged performance is claimed; compare the same race and
+settings on device. Third-person view does not render the cockpit mirror.
+
+## 0.9.2 cockpit performance report
+
+Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in 0.9.2. Use the external view as the current workaround.
+This is a maintainer observation, not a controlled mirror-on/off benchmark.

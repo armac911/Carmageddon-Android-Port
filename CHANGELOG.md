@@ -4,6 +4,41 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.2 — optional languages and launcher cheats (test candidate)
+
+- Add explicit English/Spanish/Italian/French selection in the launcher. English
+  is always the default, independent of Android language. Translations live in
+  an immutable catalogue; imported DATA/MUSIC and saves are never rewritten.
+- Localize launcher controls, recognised game menu buttons and core race HUD
+  messages; compose Latin diacritics with the existing font/palette, preserving
+  HUD font-switch commands and falling back to original text/artwork elsewhere.
+  Original voices/videos remain unchanged. Translations need device/native-speaker review.
+- Add a Cheats page with a master switch and separate invulnerability, free
+  repair and frozen race timer options. All switches default off; selections
+  apply on the next Play and are remembered when the master switch is disabled.
+- Apply selected cheats throughout single-player races for both editions,
+  restore them after timed pickups expire, and clear their flags at race exit.
+  Normal powerups remain unchanged when disabled. No launcher cheats in network games.
+- Production race-hook regression checks cover defaults, all combinations,
+  repeated races, pickup expiry, cleanup and master-off/network isolation.
+  These cheats are now included in the 0.9.2 APK. The prior 0.9.1 APK predates them.
+
+- Known issue: Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in 0.9.2. Use the external view as the current workaround.
+
+## 0.9.1 — import, music and cockpit mirror (test candidate)
+
+- Automatically locate the selected game's DATA and MUSIC inside wrapped ZIPs,
+  select between CARMA/CARSPLAT, and merge matching GOG support files.
+- Bundle a pinned native innoextract reader for self-contained GOG offline EXEs;
+  no Windows executable code is run. Exact named-installer/device testing pending.
+- Replace empty inherited music start/stop hooks with streamed playback; add
+  OGG/Vorbis decoding alongside MP3, FLAC and WAV, volume and lifecycle handling.
+- Restore cockpit rear-view rendering with isolated GPU colour/depth targets,
+  reflected winding and widescreen-aware CPU composition. Third-person has no
+  new mirror overlay. Additional camera rendering has a performance cost.
+- Preserve existing installs/saves and extend import/audio/GLES regression checks.
+  This candidate does not replace the public 0.9 release until device validation.
+
 ## 0.9 — Splat Pack launcher integration
 
 - Expose Dethrace's existing full Splat Pack support through a Home game selector.

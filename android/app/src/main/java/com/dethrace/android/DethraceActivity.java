@@ -86,8 +86,8 @@ public class DethraceActivity extends SDLActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT, (int)(56*density)));
             android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog_Alert)
                 .setView(box)
-                .setPositiveButton("Done", (d,w) -> nativeSubmitText(session,edit.getText().toString(),true))
-                .setNegativeButton("Cancel", (d,w) -> nativeSubmitText(session,"",false))
+                .setPositiveButton(UiLanguage.text("Done"), (d,w) -> nativeSubmitText(session,edit.getText().toString(),true))
+                .setNegativeButton(UiLanguage.text("Cancel"), (d,w) -> nativeSubmitText(session,"",false))
                 .create();
             dialog.setCanceledOnTouchOutside(false);
             dialog.setOnCancelListener(d -> nativeSubmitText(session,"",false));
@@ -188,6 +188,7 @@ public class DethraceActivity extends SDLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        UiLanguage.set(getSharedPreferences("language",0).getString("code","en"));
         ErrorLogs.startGame(this);
         File appDir = getExternalFilesDir(null);
         String edition=GameContent.normalize(getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL));
@@ -203,6 +204,15 @@ public class DethraceActivity extends SDLActivity {
 
         try {
             android.system.Os.setenv("DETHRACE_ROOT_DIR", rootDir, true);
+            android.system.Os.setenv("DETHRACE_LANGUAGE", UiLanguage.normalize(
+                getSharedPreferences("language", MODE_PRIVATE).getString("code", "en")), true);
+            android.content.SharedPreferences cheats = getSharedPreferences("cheats", MODE_PRIVATE);
+            // Always export all values, including zeroes, on every Play.
+            // SDL/native code can outlive an Activity; no previous session may leak in.
+            for (String key : new String[]{"enabled","invulnerable","free_repairs","freeze_timer"}) {
+                android.system.Os.setenv("DETHRACE_CHEAT_" + key.toUpperCase(java.util.Locale.ROOT),
+                    cheats.getBoolean(key, false) ? "1" : "0", true);
+            }
             boolean wide = getSharedPreferences("display", MODE_PRIVATE).getBoolean("widescreen_16_9", false);
             android.system.Os.setenv("DETHRACE_WIDESCREEN_16_9", wide ? "1" : "0", true);
             String distance = getSharedPreferences("graphics", MODE_PRIVATE).getString("distance", "original");

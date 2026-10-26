@@ -1,4 +1,53 @@
-# Validation — 0.9 Splat Pack integration
+# Validation — 0.9.2 test candidate
+
+- Full Android ARM64 game and Java launcher assembleDebug passes with version
+  0.9.2/code 27. Existing application ID and signing certificate are retained.
+- APK v2 signature, ZIP alignment and all three native ELF LOAD alignments
+  (16 KiB or higher) pass. Matching unstripped native symbols are retained.
+- APK SHA-256: `26a367b46adff16baac02c6cc4b209eaf1bbd2237f86f986294179cca1566a17`.
+- `test/android/test_localization.py` compiles production native catalogue/render
+  code under AddressSanitizer/UBSan: all languages, unknown-key/language fallback,
+  English passthrough, accented UTF-8, HUD font commands, width, clipping,
+  sub-pixmap bounds and recognised menu caption overlays pass. Empty save-slot
+  captions are checked for uppercase ASCII and the original 12-character limit.
+- The same test compiles the generated Java catalogue and verifies English
+  remains default under a French system locale, explicit selection, dynamic
+  game-name templates and reset to English.
+- Production cheat race-hook checks pass for defaults, all option combinations,
+  repeated races, timed pickup expiry, cleanup and normal/network isolation.
+- Production Java import tests pass for edition isolation, wrapped ZIPs, support
+  merges, controlled installer routing and preservation of existing data/saves.
+- This is an initial text translation, not complete localisation of all artwork,
+  race/car descriptions, powerups, technical error details or voices/videos.
+  Native-speaker review and physical-device checks of fonts, caption placement,
+  4:3/16:9, both editions and switching back to English remain pending.
+- Previous synthetic music/mirror results below apply to the inherited changes;
+  this iteration does not claim new physical-device music/mirror validation.
+
+# Validation — previously built 0.9.1 test candidate
+
+- Import JVM tests pass for wrapped ZIPs, Max Pack edition isolation, matching
+  support overlays, music selection, ambiguity rejection and transactional saves.
+- Controlled installer-helper tests pass; the real built native reader rejects
+  an invalid MZ input cleanly. No real Carmageddon installer was supplied.
+- The native Inno Setup reader builds for Linux and Android ARM64. The ARM64 PIE
+  uses the Android linker, platform shared libraries only and 16 KiB LOAD alignment.
+- The full game builds for Linux and Android ARM64 with the restored mirror and
+  streamed music. No game assets are needed for compilation.
+- Synthetic production music decoding/mixing passes OGG, MP3, FLAC and WAV,
+  case-insensitive discovery, volume, stop/restart and cleanup without a sound device.
+- Production GLES readback/shadow tests pass. New mirror target tests pass
+  separate colour/depth, bounded sub-pixmap copy, unchanged main scene/snapshot,
+  restored winding/state and 1x/2x/3x settings using Mesa software GLES.
+- Java extractor management uses Process APIs available at minSdk 24; timed
+  polling avoids Process methods introduced at API 26.
+- Physical-device music, reflected scene orientation, cockpit/widescreen placement,
+  frame rate and exact `setup_carmageddon_2.0.0.63.exe` extraction remain pending.
+- APK assembleDebug passes; version 0.9.1/code 26, expected package and label,
+  matching 0.9 signing certificate, v2 signature and ZIP/ELF 16 KiB alignment pass.
+- APK SHA-256: `de284e8025f9b9fa641034dc3994e8ade8dc628c9cc1b628a1b772537f786f4d`. Matching unstripped symbols are retained.
+
+# Prior 0.9 validation
 
 - Android ARM64 assembleDebug succeeds with JDK 17, Gradle 8.7, AGP 8.6.1,
   SDK/build tools 35, NDK 28.2 and CMake 3.22.1.

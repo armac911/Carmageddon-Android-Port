@@ -35,6 +35,7 @@ public class LauncherActivity extends Activity {
 
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);
+        UiLanguage.set(getSharedPreferences("language",0).getString("code","en"));
         // Make diagnostic capture opt-in for both fresh installs and this upgrade.
         SharedPreferences diagnosticsPrefs=getSharedPreferences("graphics",0);
         if(!diagnosticsPrefs.getBoolean("diagnostics_opt_in_v17",false))
@@ -59,7 +60,7 @@ public class LauncherActivity extends Activity {
         LinearLayout rail=new LinearLayout(this);rail.setOrientation(LinearLayout.VERTICAL);
         rail.setPadding(dp(16),dp(18),dp(16),dp(14));rail.setBackgroundColor(0xff111318);
         TextView mark=text("CARMA",25,TEXT,true); mark.setLetterSpacing(.1f);rail.addView(mark);
-        TextView sub=text("ANDROID  /  0.9",10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
+        TextView sub=text("ANDROID  /  "+BuildConfig.VERSION_NAME,10,MUTED,true);sub.setLetterSpacing(.1f);rail.addView(sub);
         nav=new LinearLayout(this);nav.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams np=new LinearLayout.LayoutParams(-1,0,1);np.topMargin=dp(18);
         // Scroll the navigation on compact screens and with larger system fonts.
@@ -84,14 +85,14 @@ public class LauncherActivity extends Activity {
     @Override protected void onSaveInstanceState(Bundle state){super.onSaveInstanceState(state);state.putString("launcher_page",page);state.putString("import_edition",pendingImportEdition);}
     private int dp(int n){return Math.round(n*getResources().getDisplayMetrics().density);}
     private TextView text(String value,int size,int color,boolean bold){
-        TextView v=new TextView(this);v.setText(value);v.setTextSize(size);v.setTextColor(color);
+        TextView v=new TextView(this);v.setText(t(value));v.setTextSize(size);v.setTextColor(color);
         if(bold)v.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));return v;
     }
     private GradientDrawable surface(int color,int radius){
         GradientDrawable d=new GradientDrawable();d.setColor(color);d.setCornerRadius(dp(radius));d.setStroke(dp(1),LINE);return d;
     }
     private Button button(String label,boolean primary){
-        Button b=new Button(this);b.setText(label);b.setAllCaps(false);b.setTextSize(15);
+        Button b=new Button(this);b.setText(t(label));b.setAllCaps(false);b.setTextSize(15);
         b.setTypeface(Typeface.DEFAULT,Typeface.BOLD);b.setGravity(Gravity.CENTER);
         b.setTextColor(new ColorStateList(new int[][]{new int[]{-android.R.attr.state_enabled},new int[]{}},new int[]{0xff747984,TEXT}));
         b.setBackground(new RippleDrawable(ColorStateList.valueOf(0x44ffffff),surface(primary?RED:0xff22262e,10),null));
@@ -108,7 +109,7 @@ public class LauncherActivity extends Activity {
     private void note(LinearLayout c,String value){TextView t=text(value,12,MUTED,false);t.setPadding(0,dp(8),0,dp(2));c.addView(t);}
     private void showPage(String name){
         page=name;body.removeAllViews();nav.removeAllViews();play=null;importButton=null;status=null;gameButton=null;
-        String[] pages={"Home","Graphics","Controls","Diagnostics"};
+        String[] pages={"Home","Graphics","Controls","Language","Cheats","Diagnostics"};
         for(String n:pages){
             Button b=button(n,false);b.setTextSize(14);b.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
             b.setBackground(new RippleDrawable(ColorStateList.valueOf(0x33ffffff),surface(n.equals(page)?0xff402027:0xff111318,8),null));
@@ -116,11 +117,36 @@ public class LauncherActivity extends Activity {
             LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(48));lp.bottomMargin=dp(6);nav.addView(b,lp);
         }
         if("Graphics".equals(page))graphics();else if("Controls".equals(page))controls();
-        else if("Diagnostics".equals(page))diagnostics();else home();
+        else if("Language".equals(page))language();else if("Cheats".equals(page))cheats();else if("Diagnostics".equals(page))diagnostics();else home();
+        localize(body);
+    }
+    private String t(String value){return UiLanguage.text(value);}
+    private void localize(View view){
+        if(view instanceof TextView)((TextView)view).setText(t(((TextView)view).getText().toString()));
+        if(view instanceof android.view.ViewGroup){android.view.ViewGroup group=(android.view.ViewGroup)view;for(int i=0;i<group.getChildCount();i++)localize(group.getChildAt(i));}
+    }
+    private void language(){
+        heading("Language","Choose your language here. English is the default, regardless of your phone language.");
+        LinearLayout c=card();String[] codes={"en","es","it","fr"};
+        String[] labels={"English","Español","Italiano","Français"};
+        String current=UiLanguage.normalize(getSharedPreferences("language",0).getString("code","en"));
+        int selected=0;for(int i=0;i<codes.length;i++)if(codes[i].equals(current))selected=i;
+        final int checked=selected;
+        Button choose=button(t("Game language")+"\n"+labels[selected]+"  ›",false);c.addView(choose);
+        choose.setOnClickListener(v->{
+            if(busy||DethraceActivity.isGameRunning()){
+                new AlertDialog.Builder(this).setMessage(t("Exit the current game before changing language.")).setPositiveButton(t("OK"),null).show();return;
+            }
+            new AlertDialog.Builder(this).setTitle(t("Game language")).setSingleChoiceItems(UiLanguage.labels(labels),checked,(dialog,index)->{
+                getSharedPreferences("language",0).edit().putString("code",codes[index]).apply();
+                UiLanguage.set(codes[index]);dialog.dismiss();showPage("Language");
+            }).setNegativeButton(t("Cancel"),null).show();
+        });
+        note(c,"Launcher changes immediately. Game text changes on the next Play. Original voices and videos are preserved. Some artwork and untranslated text remain in English.");
     }
     private void openWebsite(){
         try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://androgaming.com")));}
-        catch(android.content.ActivityNotFoundException e){Toast.makeText(this,"No web browser is available.",Toast.LENGTH_SHORT).show();}
+        catch(android.content.ActivityNotFoundException e){Toast.makeText(this,t("No web browser is available."),Toast.LENGTH_SHORT).show();}
     }
     private String pref(String key,String fallback){return getSharedPreferences("graphics",0).getString(key,fallback);}
     private void home(){
@@ -133,26 +159,26 @@ public class LauncherActivity extends Activity {
         status=text("",14,TEXT,true);launch.addView(status);
         String cap=pref("fps_cap","60");String quality=pref("quality","standard");String distance=pref("distance","original");
         String aspect=getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3";
-        note(launch,aspect+"  •  "+capitalize(quality)+"  •  "+capitalize(distance)+" distance  •  "+("0".equals(cap)?"Uncapped":cap+" FPS"));
+        note(launch,aspect+"  •  "+t(capitalize(quality))+"  •  "+t("Draw distance")+": "+t(capitalize(distance))+"  •  "+("0".equals(cap)?t("Uncapped"):cap+" FPS"));
         play=button("PLAY  ›",true);play.setTextSize(20);play.setOnClickListener(v->startActivity(new Intent(this,DethraceActivity.class)));launch.addView(play);
-        importButton=button("Import game data ZIP",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
-        note(launch,"Choose Carmageddon or Splat Pack. Import each game’s own DATA/ ZIP, with optional MUSIC/. Installs and saves stay separate; game content is not included.");
-        TextView about=text("Powered by Dethrace  •  Version 0.9",11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
+        importButton=button("Import game ZIP or GOG installer",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
+        note(launch,"Choose Carmageddon or Splat Pack, then select your game ZIP or supported GOG offline installer EXE. DATA, MUSIC and matching support files are found automatically. Game content is not included.");
+        TextView about=text("Powered by Dethrace  •  Version "+BuildConfig.VERSION_NAME,11,MUTED,false);about.setPadding(0,dp(15),0,0);body.addView(about);
         update();
     }
     private String selectedGame(){return GameContent.normalize(getSharedPreferences("game",0).getString("edition",GameContent.ORIGINAL));}
     private boolean canChangeGame(){
         if(busy||DethraceActivity.isGameRunning()){
-            new AlertDialog.Builder(this).setMessage(busy?"Wait for the import to finish.":"Exit the current game before switching or importing game data.").setPositiveButton("OK",null).show();return false;
+            new AlertDialog.Builder(this).setMessage(t(busy?"Wait for the import to finish.":"Exit the current game before switching or importing game data.")).setPositiveButton(t("OK"),null).show();return false;
         }return true;
     }
     private void chooseGame(){
         if(!canChangeGame())return;
         String[] ids={GameContent.ORIGINAL,GameContent.SPLAT};String[] labels=new String[2];
         for(int i=0;i<2;i++)labels[i]=GameContent.label(ids[i])+(root!=null&&GameDataZip.isReady(GameContent.directory(root,ids[i]),ids[i])?" — Installed":" — Import needed");
-        new AlertDialog.Builder(this).setTitle("Choose game").setSingleChoiceItems(labels,GameContent.SPLAT.equals(selectedGame())?1:0,(dialog,index)->{
+        new AlertDialog.Builder(this).setTitle(t("Choose game")).setSingleChoiceItems(UiLanguage.labels(labels),GameContent.SPLAT.equals(selectedGame())?1:0,(dialog,index)->{
             getSharedPreferences("game",0).edit().putString("edition",ids[index]).apply();dialog.dismiss();update();
-        }).setNegativeButton("Cancel",null).show();
+        }).setNegativeButton(t("Cancel"),null).show();
     }
     private String capitalize(String s){return s.isEmpty()?s:Character.toUpperCase(s.charAt(0))+s.substring(1);}
     private void graphics(){
@@ -165,6 +191,15 @@ public class LauncherActivity extends Activity {
         choice(c,"Draw distance","graphics","distance",new String[]{"Original","Extended (1.5×)","Far (2×)"},new String[]{"original","extended","far"},false);
         choice(c,"Frame-rate cap","graphics","fps_cap",new String[]{"60 FPS","120 FPS","144 FPS","Uncapped"},new String[]{"60","120","144","0"},false);
         note(c,"The cap covers menus and races. Higher settings may reduce performance. A higher cap does not change your display’s refresh rate.");
+    }
+    private void cheats(){
+        heading("Cheats","Optional single-player race helpers.");LinearLayout c=card();
+        toggle(c,"Enable cheats","cheats","enabled",false);
+        toggle(c,"Invulnerability","cheats","invulnerable",false);
+        toggle(c,"Free repairs","cheats","free_repairs",false);
+        toggle(c,"Freeze race timer","cheats","freeze_timer",false);
+        note(c,"Enable the master switch and choose your cheats. Changes apply on the next Play and last throughout each single-player race, including Splat Pack. Free repairs still require holding Repair.");
+        note(c,"Switch off Enable cheats for normal gameplay; your selections are remembered. Races still save progress and rewards.");
     }
     private void controls(){
         heading("Controls","Make it feel right.");LinearLayout c=card();
@@ -188,10 +223,10 @@ public class LauncherActivity extends Activity {
             row.setOnClickListener(v->{
                 String now=prefs.getString("bind_"+action,ControllerBindings.DEFAULTS[action]);int checked=0;
                 for(int n=0;n<ControllerBindings.VALUES.length;n++)if(ControllerBindings.VALUES[n].equals(now))checked=n;
-                new AlertDialog.Builder(this).setTitle(ControllerBindings.ACTIONS[action]).setSingleChoiceItems(ControllerBindings.LABELS,checked,(dialog,index)->{
+                new AlertDialog.Builder(this).setTitle(t(ControllerBindings.ACTIONS[action])).setSingleChoiceItems(UiLanguage.labels(ControllerBindings.LABELS),checked,(dialog,index)->{
                     prefs.edit().putString("bind_"+action,ControllerBindings.VALUES[index]).apply();
-                    row.setText(ControllerBindings.ACTIONS[action]+"\n"+ControllerBindings.LABELS[index]+"  ›");dialog.dismiss();
-                }).setNegativeButton("Cancel",null).show();
+                    row.setText(t(ControllerBindings.ACTIONS[action]+"\n"+ControllerBindings.LABELS[index]+"  ›"));dialog.dismiss();
+                }).setNegativeButton(t("Cancel"),null).show();
             });c.addView(row);
         }
         note(c,"Shared inputs trigger every assigned action. Avoid assigning gears or camera to your steering axis. Automatic shifting remains active after manual gear overrides.");
@@ -206,7 +241,7 @@ public class LauncherActivity extends Activity {
         Button export=button("Export diagnostics ZIP  ↑",false);export.setOnClickListener(v->exportDiagnostics());c.addView(export);
         note(c,"Includes the latest 12 sessions, graphics settings and battery/thermal readings. No game data. Nothing is uploaded automatically.");
         LinearLayout errors=card();
-        Switch errorSwitch=new Switch(this);errorSwitch.setText("Record error logs");errorSwitch.setTextColor(TEXT);errorSwitch.setTextSize(14);errorSwitch.setMinHeight(dp(52));
+        Switch errorSwitch=new Switch(this);errorSwitch.setText(t("Record error logs"));errorSwitch.setTextColor(TEXT);errorSwitch.setTextSize(14);errorSwitch.setMinHeight(dp(52));
         errorSwitch.setChecked(getSharedPreferences("diagnostics",0).getBoolean("error_logging",false));
         errorSwitch.setOnCheckedChangeListener((button,checked)->ErrorLogs.setEnabled(this,checked));errors.addView(errorSwitch);
         note(errors,"Off by default. Enable before Play. After an unexpected exit, return here and export the error ZIP. Recording is separate from performance diagnostics.");
@@ -222,30 +257,30 @@ public class LauncherActivity extends Activity {
         row.setOnClickListener(v->{
             String now=bool?String.valueOf(prefs.getBoolean(key,false)):prefs.getString(key,values[0]);
             int checked=initial;for(int i=0;i<values.length;i++)if(values[i].equals(now))checked=i;
-            new AlertDialog.Builder(this).setTitle(title).setSingleChoiceItems(labels,checked,(dialog,index)->{
+            new AlertDialog.Builder(this).setTitle(t(title)).setSingleChoiceItems(UiLanguage.labels(labels),checked,(dialog,index)->{
                 if(bool)prefs.edit().putBoolean(key,Boolean.parseBoolean(values[index])).apply();else prefs.edit().putString(key,values[index]).apply();
-                row.setText(title+"\n"+labels[index]+"  ›");dialog.dismiss();
-            }).setNegativeButton("Cancel",null).show();
+                row.setText(t(title+"\n"+labels[index]+"  ›"));dialog.dismiss();
+            }).setNegativeButton(t("Cancel"),null).show();
         });c.addView(row);
     }
     private void toggle(LinearLayout c,String title,String store,String key,boolean fallback){
-        Switch v=new Switch(this);v.setText(title);v.setTextColor(TEXT);v.setTextSize(14);v.setPadding(0,dp(12),0,dp(12));v.setMinHeight(dp(52));
+        Switch v=new Switch(this);v.setText(t(title));v.setTextColor(TEXT);v.setTextSize(14);v.setPadding(0,dp(12),0,dp(12));v.setMinHeight(dp(52));
         v.setChecked(getSharedPreferences(store,0).getBoolean(key,fallback));v.setOnCheckedChangeListener((button,checked)->getSharedPreferences(store,0).edit().putBoolean(key,checked).apply());c.addView(v);
     }
     private void pickData(){
         if(!canChangeGame())return;
         pendingImportEdition=selectedGame();
         Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream"});startActivityForResult(intent,PICK_ZIP);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,new String[]{"application/zip","application/x-zip-compressed","application/octet-stream","application/x-msdownload","application/vnd.microsoft.portable-executable","application/x-ms-dos-executable"});startActivityForResult(intent,PICK_ZIP);
     }
     private void exportErrors(){
-        if(ErrorLogStore.sessions(ErrorLogs.root(this)).length==0){new AlertDialog.Builder(this).setMessage("No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.").setPositiveButton("OK",null).show();return;}
+        if(ErrorLogStore.sessions(ErrorLogs.root(this)).length==0){new AlertDialog.Builder(this).setMessage(t("No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.")).setPositiveButton(t("OK"),null).show();return;}
         Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("application/zip");
         intent.putExtra(Intent.EXTRA_TITLE,"carma-errors-"+new java.text.SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.US).format(new java.util.Date())+".zip");startActivityForResult(intent,EXPORT_ERRORS);
     }
     private void exportDiagnostics(){
         exportSessions=Diagnostics.sessions(this);
-        if(exportSessions.length==0){new AlertDialog.Builder(this).setMessage("No profiling sessions yet. Enable recording and start a race first.").setPositiveButton("OK",null).show();return;}
+        if(exportSessions.length==0){new AlertDialog.Builder(this).setMessage(t("No profiling sessions yet. Enable recording and start a race first.")).setPositiveButton(t("OK"),null).show();return;}
         Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("application/zip");
         intent.putExtra(Intent.EXTRA_TITLE,"carma-profiling-"+new java.text.SimpleDateFormat("yyyyMMdd-HHmmss",java.util.Locale.US).format(new java.util.Date())+".zip");startActivityForResult(intent,EXPORT_PROFILE);
     }
@@ -257,11 +292,12 @@ public class LauncherActivity extends Activity {
         boolean ready=root!=null&&GameDataZip.isReady(GameContent.directory(root,edition),edition);
         if(gameButton!=null){gameButton.setText("Game: "+GameContent.label(edition)+"  ›");gameButton.setEnabled(!busy);}
         play.setText("PLAY "+GameContent.label(edition).toUpperCase(java.util.Locale.ROOT)+"  ›");
-        importButton.setText("Import "+GameContent.label(edition)+" data ZIP");
+        importButton.setText("Import "+GameContent.label(edition)+" ZIP or GOG installer");
         play.setEnabled(ready&&!busy);play.setAlpha(ready&&!busy?1f:.45f);
         importButton.setEnabled(root!=null&&!busy&&!ready);importButton.setVisibility(ready?View.GONE:View.VISIBLE);
-        status.setText(busy?"Importing game data…":ready?"●  Ready to race":root==null?"Storage unavailable":"Import "+GameContent.label(edition)+" data to begin");
+        status.setText(busy?"Importing game data… Please wait; large files can take a few minutes.":ready?"●  Ready to race":root==null?"Storage unavailable":"Import "+GameContent.label(edition)+" data to begin");
         status.setTextColor(ready?0xff72d3aa:MUTED);
+        localize(body);
     }
 
     @Override protected void onActivityResult(int request, int result, Intent data) {
@@ -272,7 +308,7 @@ public class LauncherActivity extends Activity {
                 String message="Error logs exported. Share the ZIP for investigation.";
                 try{ErrorLogs.export(this,destination);}catch(Exception e){message="Error export failed: "+e.getMessage();}
                 final String text=message;
-                runOnUiThread(()->{if(!isFinishing()&&!isDestroyed())new AlertDialog.Builder(this).setMessage(text).setPositiveButton("OK",null).show();});
+                runOnUiThread(()->{if(!isFinishing()&&!isDestroyed())new AlertDialog.Builder(this).setMessage(t(text)).setPositiveButton(t("OK"),null).show();});
             },"error-export").start();return;
         }
         if (request == EXPORT_PROFILE && result == RESULT_OK && data != null && data.getData() != null) {
@@ -282,7 +318,7 @@ public class LauncherActivity extends Activity {
                 String message="Diagnostics exported. Send the ZIP for analysis.";
                 try { Diagnostics.export(this,destination,sessions); } catch(Exception e) { message="Export failed: "+e.getMessage(); }
                 final String text=message;
-                runOnUiThread(() -> { if(!isFinishing()&&!isDestroyed()) new AlertDialog.Builder(this).setMessage(text).setPositiveButton("OK",null).show(); });
+                runOnUiThread(() -> { if(!isFinishing()&&!isDestroyed()) new AlertDialog.Builder(this).setMessage(t(text)).setPositiveButton(t("OK"),null).show(); });
             },"profile-export").start();
             return;
         }
@@ -296,16 +332,16 @@ public class LauncherActivity extends Activity {
         new Thread(() -> {
             String failure = null;
             try(InputStream stream=getContentResolver().openInputStream(uri)){
-                if(stream==null)throw new IOException("Cannot open ZIP");
-                GameContent.install(stream,root,importEdition);
+                if(stream==null)throw new IOException("Cannot open game file");
+                GameContent.install(stream,root,importEdition,new File(getApplicationInfo().nativeLibraryDir,"libinnoextract.so"));
             }catch(Exception e){failure=e.getMessage();}
             final String message = failure;
             runOnUiThread(() -> {
                 busy = false;
                 if (isFinishing() || isDestroyed()) return;
                 update();
-                if (message != null) new AlertDialog.Builder(this).setTitle("Import failed")
-                    .setMessage(message).setPositiveButton("OK", null).show();
+                if (message != null) new AlertDialog.Builder(this).setTitle(t("Import failed"))
+                    .setMessage(message).setPositiveButton(t("OK"), null).show();
             });
         }, "game-data-import").start();
     }

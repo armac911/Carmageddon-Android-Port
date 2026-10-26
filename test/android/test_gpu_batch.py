@@ -25,7 +25,7 @@ static int measured_reads;
 typedef struct {void*pixels;int width,height,row_bytes,base_x,base_y;void*stored;} br_pixelmap;
 typedef struct {GLuint id;} tStored_pixelmap;
 typedef enum {eFlush_color_buffer,eFlush_all} tRenderer_flush_type;
-static int super_width,super_height,dirty_buffers,shadow_batch;
+static int super_width,super_height,dirty_buffers,shadow_batch,mirror_scene;
 static unsigned flush_counter=1,colourbuffer_upload_counter;
 static GLuint current_colourbuffer_texture;
 static unsigned char cpu_pixels[33*25],snapshot_data[33*25];

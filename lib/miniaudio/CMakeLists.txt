@@ -9,7 +9,7 @@ target_include_directories(miniaudio
 )
 
 target_sources(miniaudio PRIVATE
-    miniaudio.c
+    miniaudio_with_vorbis.c
     
 )
 

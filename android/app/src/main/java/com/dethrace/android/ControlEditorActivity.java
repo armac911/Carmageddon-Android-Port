@@ -16,6 +16,7 @@ public class ControlEditorActivity extends Activity {
     private int dp(int n) { return Math.round(n*getResources().getDisplayMetrics().density); }
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
+        UiLanguage.set(getSharedPreferences("language",0).getString("code","en"));
         getWindow().getDecorView().setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
@@ -37,12 +38,12 @@ public class ControlEditorActivity extends Activity {
         button(actions,"Reset",()->{preview.restoreDefaults();size.setProgress(30);});
         button(actions,"Cancel",this::finish);
         button(actions,"Save",()->{
-            if(preview.saveLayout()) {Toast.makeText(this,"Controls saved",Toast.LENGTH_SHORT).show();finish();}
-            else hint.setText(preview.getEditMessage());
+            if(preview.saveLayout()) {Toast.makeText(this,UiLanguage.text("Controls saved"),Toast.LENGTH_SHORT).show();finish();}
+            else hint.setText(UiLanguage.text(preview.getEditMessage()));
         });
         root.addView(actions);
         hint=new TextView(this);hint.setTextColor(Color.LTGRAY);hint.setTextSize(12);hint.setGravity(Gravity.CENTER);
-        hint.setText("Drag controls to move. Tap an icon for its name. Recovery needs a 0.6 second hold.");
+        hint.setText(UiLanguage.text("Drag controls to move. Tap an icon for its name. Recovery needs a 0.6 second hold."));
         root.addView(hint);
         FrameLayout area=new FrameLayout(this);
         root.addView(area,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,1));
@@ -61,12 +62,12 @@ public class ControlEditorActivity extends Activity {
             int width=Math.round(height*aspect);
             preview.setLayoutParams(new FrameLayout.LayoutParams(width,height,Gravity.CENTER));
         });
-        preview.setOnTouchListener((v,event)->{v.post(()->hint.setText(preview.getEditMessage()));return false;});
+        preview.setOnTouchListener((v,event)->{v.post(()->hint.setText(UiLanguage.text(preview.getEditMessage())));return false;});
         size.setProgress(preview.getSizePercent()-70);
-        sizeLabel.setText("Size: "+preview.getSizePercent()+"%");
+        sizeLabel.setText(UiLanguage.text("Size: "+preview.getSizePercent()+"%"));
         size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             public void onProgressChanged(SeekBar s,int value,boolean user){
-                preview.setSizePercent(value+70);sizeLabel.setText("Size: "+(value+70)+"%");
+                preview.setSizePercent(value+70);sizeLabel.setText(UiLanguage.text("Size: "+(value+70)+"%"));
             }
             public void onStartTrackingTouch(SeekBar s){}
             public void onStopTrackingTouch(SeekBar s){}
@@ -74,8 +75,8 @@ public class ControlEditorActivity extends Activity {
         setContentView(root);
     }
     private void button(LinearLayout row,String label,Runnable action){
-        Button button=new Button(this);button.setText(label);button.setTextSize(12);button.setAllCaps(false);
-        button.setOnClickListener(v->{action.run();hint.setText(preview.getEditMessage());});
+        Button button=new Button(this);button.setText(UiLanguage.text(label));button.setTextSize(12);button.setAllCaps(false);
+        button.setOnClickListener(v->{action.run();hint.setText(UiLanguage.text(preview.getEditMessage()));});
         row.addView(button,new LinearLayout.LayoutParams(0,dp(44),1));
     }
 }

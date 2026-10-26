@@ -8,6 +8,7 @@ if [[ -z "$sdk" ]]; then
 fi
 command -v java >/dev/null
 ./android/scripts/setup-sdl.sh
+./android/scripts/setup-importer.sh
 printf 'sdk.dir=%s\n' "$sdk" > android/local.properties
 cd android
 ./gradlew assembleDebug --no-daemon --console=plain "$@"

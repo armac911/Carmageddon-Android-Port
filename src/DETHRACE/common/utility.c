@@ -11,6 +11,7 @@
 #include "harness/trace.h"
 #include "input.h"
 #include "loading.h"
+#include "localization.h"
 #include "loadsave.h"
 #include "mainmenu.h"
 #include "network.h"
@@ -766,7 +767,7 @@ void TimerString(tU32 pTime, char* pStr, int pFudge_colon, int pForce_colon) {
 // IDA: char* __usercall GetMiscString@<EAX>(int pIndex@<EAX>)
 char* GetMiscString(int pIndex) {
 
-    return gMisc_strings[pIndex];
+    return DRLocalizeMisc(pIndex, gMisc_strings[pIndex]);
 }
 
 // IDA: void __usercall GetCopyOfMiscString(int pIndex@<EAX>, char *pStr@<EDX>)

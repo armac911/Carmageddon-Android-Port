@@ -1,0 +1,1022 @@
+{
+  "languages": [
+    "en",
+    "es",
+    "it",
+    "fr"
+  ],
+  "strings": {
+    "Home": {
+      "es": "Inicio",
+      "it": "Home",
+      "fr": "Accueil"
+    },
+    "Graphics": {
+      "es": "Gráficos",
+      "it": "Grafica",
+      "fr": "Graphismes"
+    },
+    "Controls": {
+      "es": "Controles",
+      "it": "Comandi",
+      "fr": "Commandes"
+    },
+    "Cheats": {
+      "es": "Trucos",
+      "it": "Trucchi",
+      "fr": "Codes de triche"
+    },
+    "Diagnostics": {
+      "es": "Diagnóstico",
+      "it": "Diagnostica",
+      "fr": "Diagnostic"
+    },
+    "Language": {
+      "es": "Idioma",
+      "it": "Lingua",
+      "fr": "Langue"
+    },
+    "Game language": {
+      "es": "Idioma del juego",
+      "it": "Lingua del gioco",
+      "fr": "Langue du jeu"
+    },
+    "Choose your language here. English is the default, regardless of your phone language.": {
+      "es": "Elige el idioma aquí. El inglés es el predeterminado, independientemente del idioma del teléfono.",
+      "it": "Scegli qui la lingua. L'inglese è la lingua predefinita, indipendentemente dalla lingua del telefono.",
+      "fr": "Choisissez la langue ici. L'anglais est utilisé par défaut, quelle que soit la langue du téléphone."
+    },
+    "Launcher changes immediately. Game text changes on the next Play. Original voices and videos are preserved. Some artwork and untranslated text remain in English.": {
+      "es": "El lanzador cambia inmediatamente. El texto del juego cambia al pulsar Jugar. Se conservan las voces y los vídeos originales. Algunas imágenes y textos siguen en inglés.",
+      "it": "Il launcher cambia subito. Il testo del gioco cambia al prossimo Avvio. Voci e video originali vengono conservati. Alcune immagini e testi restano in inglese.",
+      "fr": "Le lanceur change immédiatement. Le texte du jeu change au prochain lancement. Les voix et vidéos originales sont conservées. Certains textes et images restent en anglais."
+    },
+    "Exit the current game before changing language.": {
+      "es": "Sal del juego antes de cambiar el idioma.",
+      "it": "Esci dal gioco prima di cambiare lingua.",
+      "fr": "Quittez la partie avant de changer de langue."
+    },
+    "Your next race starts here.": {
+      "es": "Tu próxima carrera empieza aquí.",
+      "it": "La tua prossima gara inizia qui.",
+      "fr": "Votre prochaine course commence ici."
+    },
+    "CLASSIC CHAOS. BACK ON THE ROAD.": {
+      "es": "CAOS CLÁSICO. DE VUELTA A LA CARRETERA.",
+      "it": "IL CAOS CLASSICO TORNA IN STRADA.",
+      "fr": "LE CHAOS CLASSIQUE REPREND LA ROUTE."
+    },
+    "PLAY  ›": {
+      "es": "JUGAR  ›",
+      "it": "AVVIA  ›",
+      "fr": "JOUER  ›"
+    },
+    "PLAY {game}  ›": {
+      "es": "JUGAR {game}  ›",
+      "it": "AVVIA {game}  ›",
+      "fr": "JOUER {game}  ›"
+    },
+    "Game: {game}  ›": {
+      "es": "Juego: {game}  ›",
+      "it": "Gioco: {game}  ›",
+      "fr": "Jeu : {game}  ›"
+    },
+    "Import game ZIP or GOG installer": {
+      "es": "Importar ZIP o instalador de GOG",
+      "it": "Importa ZIP o installer GOG",
+      "fr": "Importer un ZIP ou un installateur GOG"
+    },
+    "Import {game} ZIP or GOG installer": {
+      "es": "Importar ZIP o instalador de GOG de {game}",
+      "it": "Importa ZIP o installer GOG di {game}",
+      "fr": "Importer le ZIP ou l'installateur GOG de {game}"
+    },
+    "Import {game} data to begin": {
+      "es": "Importa los datos de {game} para empezar",
+      "it": "Importa i dati di {game} per iniziare",
+      "fr": "Importez les données de {game} pour commencer"
+    },
+    "Choose Carmageddon or Splat Pack, then select your game ZIP or supported GOG offline installer EXE. DATA, MUSIC and matching support files are found automatically. Game content is not included.": {
+      "es": "Elige Carmageddon o Splat Pack y selecciona un ZIP del juego o un instalador EXE sin conexión de GOG compatible. DATA, MUSIC y los archivos de soporte se detectan automáticamente. El contenido del juego no está incluido.",
+      "it": "Scegli Carmageddon o Splat Pack, poi seleziona lo ZIP del gioco o un installer EXE offline GOG compatibile. DATA, MUSIC e i file di supporto vengono trovati automaticamente. I contenuti del gioco non sono inclusi.",
+      "fr": "Choisissez Carmageddon ou Splat Pack, puis un ZIP du jeu ou un installateur EXE hors ligne GOG compatible. DATA, MUSIC et les fichiers complémentaires sont détectés automatiquement. Les données du jeu ne sont pas incluses."
+    },
+    "Choose game": {
+      "es": "Elegir juego",
+      "it": "Scegli gioco",
+      "fr": "Choisir le jeu"
+    },
+    " — Installed": {
+      "es": " — Instalado",
+      "it": " — Installato",
+      "fr": " — Installé"
+    },
+    " — Import needed": {
+      "es": " — Importación necesaria",
+      "it": " — Importazione necessaria",
+      "fr": " — Importation requise"
+    },
+    "Importing game data… Please wait; large files can take a few minutes.": {
+      "es": "Importando datos… Espera; los archivos grandes pueden tardar unos minutos.",
+      "it": "Importazione dei dati… Attendi; i file grandi possono richiedere alcuni minuti.",
+      "fr": "Importation des données… Patientez ; les gros fichiers peuvent prendre quelques minutes."
+    },
+    "●  Ready to race": {
+      "es": "●  Listo para correr",
+      "it": "●  Pronto per la gara",
+      "fr": "●  Prêt pour la course"
+    },
+    "Storage unavailable": {
+      "es": "Almacenamiento no disponible",
+      "it": "Memoria non disponibile",
+      "fr": "Stockage indisponible"
+    },
+    "Import failed": {
+      "es": "Error de importación",
+      "it": "Importazione non riuscita",
+      "fr": "Échec de l'importation"
+    },
+    "Wait for the import to finish.": {
+      "es": "Espera a que termine la importación.",
+      "it": "Attendi il completamento dell'importazione.",
+      "fr": "Attendez la fin de l'importation."
+    },
+    "Exit the current game before switching or importing game data.": {
+      "es": "Sal del juego antes de cambiar o importar datos.",
+      "it": "Esci dal gioco prima di cambiare o importare i dati.",
+      "fr": "Quittez la partie avant de changer de jeu ou d'importer des données."
+    },
+    "No web browser is available.": {
+      "es": "No hay navegador disponible.",
+      "it": "Nessun browser disponibile.",
+      "fr": "Aucun navigateur disponible."
+    },
+    "Cancel": {
+      "es": "Cancelar",
+      "it": "Annulla",
+      "fr": "Annuler"
+    },
+    "Done": {
+      "es": "Listo",
+      "it": "Fine",
+      "fr": "Terminé"
+    },
+    "Back": {
+      "es": "Atrás",
+      "it": "Indietro",
+      "fr": "Retour"
+    },
+    "Yes": {
+      "es": "Sí",
+      "it": "Sì",
+      "fr": "Oui"
+    },
+    "No": {
+      "es": "No",
+      "it": "No",
+      "fr": "Non"
+    },
+    "On": {
+      "es": "Activado",
+      "it": "Attivo",
+      "fr": "Activé"
+    },
+    "Off": {
+      "es": "Desactivado",
+      "it": "Disattivo",
+      "fr": "Désactivé"
+    },
+    "OK": {
+      "es": "Aceptar",
+      "it": "OK",
+      "fr": "OK"
+    },
+    "Set up your next run. Changes apply when you press Play.": {
+      "es": "Prepara tu próxima partida. Los cambios se aplican al pulsar Jugar.",
+      "it": "Prepara la prossima partita. Le modifiche si applicano premendo Avvia.",
+      "fr": "Préparez votre prochaine partie. Les changements s'appliquent au lancement."
+    },
+    "Aspect ratio": {
+      "es": "Relación de aspecto",
+      "it": "Formato dello schermo",
+      "fr": "Format d'image"
+    },
+    "4:3 — Classic": {
+      "es": "4:3 — Clásico",
+      "it": "4:3 — Classico",
+      "fr": "4:3 — Classique"
+    },
+    "16:9 — Widescreen": {
+      "es": "16:9 — Panorámico",
+      "it": "16:9 — Panoramico",
+      "fr": "16:9 — Écran large"
+    },
+    "3D resolution": {
+      "es": "Resolución 3D",
+      "it": "Risoluzione 3D",
+      "fr": "Résolution 3D"
+    },
+    "Standard": {
+      "es": "Estándar",
+      "it": "Standard",
+      "fr": "Standard"
+    },
+    "High — sharper edges": {
+      "es": "Alta — bordes más definidos",
+      "it": "Alta — bordi più nitidi",
+      "fr": "Élevée — contours plus nets"
+    },
+    "Performance — lower resolution": {
+      "es": "Rendimiento — menor resolución",
+      "it": "Prestazioni — risoluzione ridotta",
+      "fr": "Performances — résolution réduite"
+    },
+    "3D texture filtering": {
+      "es": "Filtrado de texturas 3D",
+      "it": "Filtro texture 3D",
+      "fr": "Filtrage des textures 3D"
+    },
+    "Sharp — original textures": {
+      "es": "Nítido — texturas originales",
+      "it": "Nitido — texture originali",
+      "fr": "Net — textures originales"
+    },
+    "Smooth — bilinear textures": {
+      "es": "Suave — texturas bilineales",
+      "it": "Uniforme — texture bilineari",
+      "fr": "Lissé — textures bilinéaires"
+    },
+    "Smooth blends 3D texture colors within the game palette. Menus and HUD stay sharp. Changes apply on the next Play.": {
+      "es": "Suave mezcla los colores de las texturas 3D dentro de la paleta del juego. Los menús y el HUD siguen nítidos. Se aplica al próximo inicio.",
+      "it": "Il filtro uniforme mescola i colori delle texture 3D nella tavolozza del gioco. Menu e HUD restano nitidi. Si applica al prossimo avvio.",
+      "fr": "Le lissage mélange les couleurs des textures 3D dans la palette du jeu. Les menus et le HUD restent nets. Il s'applique au prochain lancement."
+    },
+    "Draw distance": {
+      "es": "Distancia de dibujado",
+      "it": "Distanza di visualizzazione",
+      "fr": "Distance d'affichage"
+    },
+    "Original": {
+      "es": "Original",
+      "it": "Originale",
+      "fr": "D'origine"
+    },
+    "Extended (1.5×)": {
+      "es": "Ampliada (1.5×)",
+      "it": "Estesa (1.5×)",
+      "fr": "Étendue (1.5×)"
+    },
+    "Far (2×)": {
+      "es": "Lejana (2×)",
+      "it": "Lontana (2×)",
+      "fr": "Lointaine (2×)"
+    },
+    "Frame-rate cap": {
+      "es": "Límite de FPS",
+      "it": "Limite FPS",
+      "fr": "Limite d'images par seconde"
+    },
+    "Uncapped": {
+      "es": "Sin límite",
+      "it": "Senza limite",
+      "fr": "Sans limite"
+    },
+    "The cap covers menus and races. Higher settings may reduce performance. A higher cap does not change your display’s refresh rate.": {
+      "es": "El límite afecta a menús y carreras. Los ajustes más altos pueden reducir el rendimiento. No cambia la frecuencia de actualización de la pantalla.",
+      "it": "Il limite vale per menu e gare. Impostazioni più alte possono ridurre le prestazioni. Non cambia la frequenza di aggiornamento dello schermo.",
+      "fr": "La limite s'applique aux menus et aux courses. Des réglages plus élevés peuvent réduire les performances. Elle ne modifie pas la fréquence de l'écran."
+    },
+    "Make it feel right.": {
+      "es": "Ajusta los controles a tu gusto.",
+      "it": "Adatta i comandi al tuo stile.",
+      "fr": "Adaptez les commandes à votre style."
+    },
+    "Steering · touch & left stick": {
+      "es": "Dirección · táctil y stick izquierdo",
+      "it": "Sterzo · touch e levetta sinistra",
+      "fr": "Direction · tactile et stick gauche"
+    },
+    "Analog": {
+      "es": "Analógica",
+      "it": "Analogico",
+      "fr": "Analogique"
+    },
+    "Digital": {
+      "es": "Digital",
+      "it": "Digitale",
+      "fr": "Numérique"
+    },
+    "Haptic feedback": {
+      "es": "Respuesta háptica",
+      "it": "Feedback aptico",
+      "fr": "Retour haptique"
+    },
+    "Customize touch layout  ›": {
+      "es": "Personalizar controles táctiles  ›",
+      "it": "Personalizza comandi touch  ›",
+      "fr": "Personnaliser les commandes tactiles  ›"
+    },
+    "Remap controller  ›": {
+      "es": "Reasignar mando  ›",
+      "it": "Rimappa controller  ›",
+      "fr": "Configurer la manette  ›"
+    },
+    "Move and resize touch controls in the layout editor.": {
+      "es": "Mueve y redimensiona los controles en el editor.",
+      "it": "Sposta e ridimensiona i comandi nell'editor.",
+      "fr": "Déplacez et redimensionnez les commandes dans l'éditeur."
+    },
+    "Controller mapping": {
+      "es": "Asignación del mando",
+      "it": "Mappatura controller",
+      "fr": "Configuration de la manette"
+    },
+    "Changes apply on the next Play. Return the gear stick to centre between shifts.": {
+      "es": "Los cambios se aplican al próximo inicio. Centra el stick entre cambios de marcha.",
+      "it": "Le modifiche si applicano al prossimo avvio. Riporta la levetta al centro tra un cambio e l'altro.",
+      "fr": "Les changements s'appliquent au prochain lancement. Recentrez le stick entre les changements de rapport."
+    },
+    "Steering input": {
+      "es": "Entrada de dirección",
+      "it": "Comando dello sterzo",
+      "fr": "Commande de direction"
+    },
+    "Left stick + D-pad": {
+      "es": "Stick izquierdo y cruceta",
+      "it": "Levetta sinistra e croce direzionale",
+      "fr": "Stick gauche et croix directionnelle"
+    },
+    "Left stick only": {
+      "es": "Solo stick izquierdo",
+      "it": "Solo levetta sinistra",
+      "fr": "Stick gauche uniquement"
+    },
+    "Right stick only": {
+      "es": "Solo stick derecho",
+      "it": "Solo levetta destra",
+      "fr": "Stick droit uniquement"
+    },
+    "D-pad only": {
+      "es": "Solo cruceta",
+      "it": "Solo croce direzionale",
+      "fr": "Croix directionnelle uniquement"
+    },
+    "Restore controller defaults": {
+      "es": "Restaurar mando predeterminado",
+      "it": "Ripristina comandi predefiniti",
+      "fr": "Rétablir les commandes par défaut"
+    },
+    "Back to Controls": {
+      "es": "Volver a Controles",
+      "it": "Torna ai Comandi",
+      "fr": "Retour aux Commandes"
+    },
+    "Optional single-player race helpers.": {
+      "es": "Ayudas opcionales para un jugador.",
+      "it": "Aiuti opzionali per giocatore singolo.",
+      "fr": "Aides facultatives en solo."
+    },
+    "Enable cheats": {
+      "es": "Activar trucos",
+      "it": "Attiva trucchi",
+      "fr": "Activer les codes"
+    },
+    "Invulnerability": {
+      "es": "Invulnerabilidad",
+      "it": "Invulnerabilità",
+      "fr": "Invulnérabilité"
+    },
+    "Free repairs": {
+      "es": "Reparaciones gratis",
+      "it": "Riparazioni gratuite",
+      "fr": "Réparations gratuites"
+    },
+    "Freeze race timer": {
+      "es": "Congelar tiempo de carrera",
+      "it": "Blocca il tempo di gara",
+      "fr": "Figer le chronomètre"
+    },
+    "Enable the master switch and choose your cheats. Changes apply on the next Play and last throughout each single-player race, including Splat Pack. Free repairs still require holding Repair.": {
+      "es": "Activa el interruptor principal y elige los trucos. Se aplican al próximo inicio durante cada carrera individual, también en Splat Pack. Para reparar gratis debes mantener Reparar.",
+      "it": "Attiva l'interruttore principale e scegli i trucchi. Si applicano al prossimo avvio per tutta la gara in singolo, anche in Splat Pack. Per riparare gratis tieni premuto Ripara.",
+      "fr": "Activez l'interrupteur principal et choisissez les codes. Ils s'appliquent au prochain lancement pendant chaque course solo, y compris Splat Pack. Maintenez Réparer pour les réparations gratuites."
+    },
+    "Switch off Enable cheats for normal gameplay; your selections are remembered. Races still save progress and rewards.": {
+      "es": "Desactiva Activar trucos para jugar normalmente; tus selecciones se conservan. El progreso y las recompensas se siguen guardando.",
+      "it": "Disattiva Attiva trucchi per giocare normalmente; le scelte vengono conservate. Progressi e ricompense vengono comunque salvati.",
+      "fr": "Désactivez Activer les codes pour jouer normalement ; vos choix sont conservés. La progression et les récompenses sont toujours sauvegardées."
+    },
+    "Optional tools for testing and troubleshooting.": {
+      "es": "Herramientas opcionales de prueba y diagnóstico.",
+      "it": "Strumenti opzionali per test e diagnosi.",
+      "fr": "Outils facultatifs de test et de diagnostic."
+    },
+    "Record performance diagnostics": {
+      "es": "Registrar diagnóstico de rendimiento",
+      "it": "Registra diagnostica prestazioni",
+      "fr": "Enregistrer le diagnostic de performances"
+    },
+    "Record error logs": {
+      "es": "Registrar errores",
+      "it": "Registra errori",
+      "fr": "Enregistrer les erreurs"
+    },
+    "Export diagnostics ZIP  ↑": {
+      "es": "Exportar diagnóstico ZIP  ↑",
+      "it": "Esporta diagnostica ZIP  ↑",
+      "fr": "Exporter le diagnostic ZIP  ↑"
+    },
+    "Export error logs ZIP  ↑": {
+      "es": "Exportar errores ZIP  ↑",
+      "it": "Esporta errori ZIP  ↑",
+      "fr": "Exporter les erreurs ZIP  ↑"
+    },
+    "Monitor overlay": {
+      "es": "Monitor en pantalla",
+      "it": "Monitor su schermo",
+      "fr": "Moniteur à l'écran"
+    },
+    "FPS only": {
+      "es": "Solo FPS",
+      "it": "Solo FPS",
+      "fr": "FPS uniquement"
+    },
+    "FPS + temperature": {
+      "es": "FPS y temperatura",
+      "it": "FPS e temperatura",
+      "fr": "FPS et température"
+    },
+    "No profiling sessions yet. Enable recording and start a race first.": {
+      "es": "No hay sesiones de rendimiento. Activa la grabación y empieza una carrera.",
+      "it": "Nessuna sessione di prestazioni. Attiva la registrazione e avvia una gara.",
+      "fr": "Aucune session de performances. Activez l'enregistrement et lancez une course."
+    },
+    "Diagnostics exported. Send the ZIP for analysis.": {
+      "es": "Diagnóstico exportado. Envía el ZIP para analizarlo.",
+      "it": "Diagnostica esportata. Invia lo ZIP per l'analisi.",
+      "fr": "Diagnostic exporté. Envoyez le ZIP pour analyse."
+    },
+    "Error logs exported. Share the ZIP for investigation.": {
+      "es": "Errores exportados. Comparte el ZIP para investigarlos.",
+      "it": "Errori esportati. Condividi lo ZIP per l'analisi.",
+      "fr": "Erreurs exportées. Partagez le ZIP pour analyse."
+    },
+    "Continue": {
+      "es": "Continuar",
+      "it": "Continua",
+      "fr": "Continuer"
+    },
+    "Recover car": {
+      "es": "Recuperar coche",
+      "it": "Recupera auto",
+      "fr": "Replacer la voiture"
+    },
+    "Abandon race": {
+      "es": "Abandonar carrera",
+      "it": "Abbandona gara",
+      "fr": "Abandonner la course"
+    },
+    "End game": {
+      "es": "Terminar partida",
+      "it": "Termina partita",
+      "fr": "Terminer la partie"
+    },
+    "Quit": {
+      "es": "Salir",
+      "it": "Esci",
+      "fr": "Quitter"
+    },
+    "New game": {
+      "es": "Nueva partida",
+      "it": "Nuova partita",
+      "fr": "Nouvelle partie"
+    },
+    "Network game": {
+      "es": "Partida en red",
+      "it": "Partita in rete",
+      "fr": "Partie en réseau"
+    },
+    "Load game": {
+      "es": "Cargar partida",
+      "it": "Carica partita",
+      "fr": "Charger une partie"
+    },
+    "Save game": {
+      "es": "Guardar partida",
+      "it": "Salva partita",
+      "fr": "Sauvegarder la partie"
+    },
+    "Options": {
+      "es": "Opciones",
+      "it": "Opzioni",
+      "fr": "Options"
+    },
+    "Easy": {
+      "es": "Fácil",
+      "it": "Facile",
+      "fr": "Facile"
+    },
+    "Normal": {
+      "es": "Normal",
+      "it": "Normale",
+      "fr": "Normal"
+    },
+    "Hard": {
+      "es": "Difícil",
+      "it": "Difficile",
+      "fr": "Difficile"
+    },
+    "Sound": {
+      "es": "Sonido",
+      "it": "Audio",
+      "fr": "Son"
+    },
+    "Music": {
+      "es": "Música",
+      "it": "Musica",
+      "fr": "Musique"
+    },
+    "Repair": {
+      "es": "Reparar",
+      "it": "Ripara",
+      "fr": "Réparer"
+    },
+    "Recover": {
+      "es": "Recuperar",
+      "it": "Recupera",
+      "fr": "Replacer"
+    },
+    "Accelerate": {
+      "es": "Acelerar",
+      "it": "Accelera",
+      "fr": "Accélérer"
+    },
+    "Brake / reverse": {
+      "es": "Frenar / marcha atrás",
+      "it": "Frena / retromarcia",
+      "fr": "Freiner / marche arrière"
+    },
+    "Handbrake": {
+      "es": "Freno de mano",
+      "it": "Freno a mano",
+      "fr": "Frein à main"
+    },
+    "Map": {
+      "es": "Mapa",
+      "it": "Mappa",
+      "fr": "Carte"
+    },
+    "Camera": {
+      "es": "Cámara",
+      "it": "Visuale",
+      "fr": "Caméra"
+    },
+    "Gear up": {
+      "es": "Subir marcha",
+      "it": "Marcia superiore",
+      "fr": "Rapport supérieur"
+    },
+    "Gear down": {
+      "es": "Bajar marcha",
+      "it": "Marcia inferiore",
+      "fr": "Rapport inférieur"
+    },
+    "Pause": {
+      "es": "Pausa",
+      "it": "Pausa",
+      "fr": "Pause"
+    },
+    "Restore defaults": {
+      "es": "Restaurar valores",
+      "it": "Ripristina predefiniti",
+      "fr": "Rétablir les réglages"
+    },
+    "Invulnerability on": {
+      "es": "Invulnerabilidad activada",
+      "it": "Invulnerabilità attiva",
+      "fr": "Invulnérabilité activée"
+    },
+    "Timer frozen": {
+      "es": "Tiempo congelado",
+      "it": "Tempo bloccato",
+      "fr": "Chronomètre figé"
+    },
+    "Mirror on": {
+      "es": "Retrovisor activado",
+      "it": "Specchietto attivo",
+      "fr": "Rétroviseur activé"
+    },
+    "Mirror off": {
+      "es": "Retrovisor desactivado",
+      "it": "Specchietto disattivo",
+      "fr": "Rétroviseur désactivé"
+    },
+    "Repair cost:": {
+      "es": "Coste de reparación:",
+      "it": "Costo riparazione:",
+      "fr": "Coût de réparation :"
+    },
+    "Recovery cost:": {
+      "es": "Coste de recuperación:",
+      "it": "Costo recupero:",
+      "fr": "Coût de replacement :"
+    },
+    "Recovery voucher used": {
+      "es": "Vale de recuperación usado",
+      "it": "Buono recupero utilizzato",
+      "fr": "Bon de replacement utilisé"
+    },
+    "Not enough credits": {
+      "es": "Créditos insuficientes",
+      "it": "Crediti insufficienti",
+      "fr": "Crédits insuffisants"
+    },
+    "credit": {
+      "es": "crédito",
+      "it": "credito",
+      "fr": "crédit"
+    },
+    "credits": {
+      "es": "créditos",
+      "it": "crediti",
+      "fr": "crédits"
+    },
+    "Penalty": {
+      "es": "Penalización",
+      "it": "Penalità",
+      "fr": "Pénalité"
+    },
+    "Empty slot": {
+      "es": "LIBRE",
+      "it": "VUOTO",
+      "fr": "CASE VIDE"
+    },
+    "Pedestrians": {
+      "es": "Peatones",
+      "it": "Pedoni",
+      "fr": "Piétons"
+    },
+    "Opponents": {
+      "es": "Rivales",
+      "it": "Avversari",
+      "fr": "Adversaires"
+    },
+    "Lap": {
+      "es": "Vuelta",
+      "it": "Giro",
+      "fr": "Tour"
+    },
+    "Checkpoint": {
+      "es": "Punto de control",
+      "it": "Checkpoint",
+      "fr": "Point de contrôle"
+    },
+    "Bonus": {
+      "es": "Bonificación",
+      "it": "Bonus",
+      "fr": "Bonus"
+    },
+    "Time bonus": {
+      "es": "Bonificación de tiempo",
+      "it": "Bonus tempo",
+      "fr": "Bonus de temps"
+    },
+    "Wasted!": {
+      "es": "¡Destrozado!",
+      "it": "Distrutto!",
+      "fr": "Détruit !"
+    },
+    "Vulnerability returns!": {
+      "es": "¡Vuelves a ser vulnerable!",
+      "it": "Sei di nuovo vulnerabile!",
+      "fr": "Vous êtes de nouveau vulnérable !"
+    },
+    "Timer thawed out": {
+      "es": "El tiempo vuelve a correr",
+      "it": "Il tempo riprende",
+      "fr": "Le chronomètre repart"
+    },
+    "You Cheat!": {
+      "es": "¡Tramposo!",
+      "it": "Hai barato!",
+      "fr": "Tricheur !"
+    },
+    "Race completed": {
+      "es": "Carrera completada",
+      "it": "Gara completata",
+      "fr": "Course terminée"
+    },
+    "Race over": {
+      "es": "Fin de carrera",
+      "it": "Fine gara",
+      "fr": "Fin de course"
+    },
+    "Checkpoint missed": {
+      "es": "Punto de control perdido",
+      "it": "Checkpoint mancato",
+      "fr": "Point de contrôle manqué"
+    },
+    "Time added": {
+      "es": "Tiempo añadido",
+      "it": "Tempo aggiunto",
+      "fr": "Temps ajouté"
+    },
+    "Race start": {
+      "es": "Iniciar carrera",
+      "it": "Inizia gara",
+      "fr": "Démarrer la course"
+    },
+    "Change car": {
+      "es": "Cambiar coche",
+      "it": "Cambia auto",
+      "fr": "Changer de voiture"
+    },
+    "Change race": {
+      "es": "Cambiar carrera",
+      "it": "Cambia gara",
+      "fr": "Changer de course"
+    },
+    "Parts shop": {
+      "es": "Tienda de mejoras",
+      "it": "Negozio ricambi",
+      "fr": "Boutique de pièces"
+    },
+    "Start race": {
+      "es": "Empezar carrera",
+      "it": "Avvia gara",
+      "fr": "Lancer la course"
+    },
+    "Armor": {
+      "es": "Blindaje",
+      "it": "Corazza",
+      "fr": "Blindage"
+    },
+    "Power": {
+      "es": "Potencia",
+      "it": "Potenza",
+      "fr": "Puissance"
+    },
+    "Offensive": {
+      "es": "Ataque",
+      "it": "Attacco",
+      "fr": "Attaque"
+    },
+    "More options": {
+      "es": "Más opciones",
+      "it": "Altre opzioni",
+      "fr": "Plus d'options"
+    },
+    "Recover / respawn": {
+      "es": "Recuperar / reaparecer",
+      "it": "Recupera / ricomincia",
+      "fr": "Replacer / réapparaître"
+    },
+    "Camera view": {
+      "es": "Vista de cámara",
+      "it": "Visuale telecamera",
+      "fr": "Vue caméra"
+    },
+    "Accelerate · second input": {
+      "es": "Acelerar · segunda entrada",
+      "it": "Accelera · secondo comando",
+      "fr": "Accélérer · deuxième commande"
+    },
+    "Menu confirm": {
+      "es": "Confirmar en menú",
+      "it": "Conferma nel menu",
+      "fr": "Confirmer dans le menu"
+    },
+    "Menu back": {
+      "es": "Volver en menú",
+      "it": "Indietro nel menu",
+      "fr": "Retour dans le menu"
+    },
+    "Unassigned": {
+      "es": "Sin asignar",
+      "it": "Non assegnato",
+      "fr": "Non attribué"
+    },
+    "Select / Back": {
+      "es": "Select / Atrás",
+      "it": "Select / Indietro",
+      "fr": "Select / Retour"
+    },
+    "D-pad up": {
+      "es": "Cruceta arriba",
+      "it": "Croce su",
+      "fr": "Croix haut"
+    },
+    "D-pad down": {
+      "es": "Cruceta abajo",
+      "it": "Croce giù",
+      "fr": "Croix bas"
+    },
+    "D-pad left": {
+      "es": "Cruceta izquierda",
+      "it": "Croce sinistra",
+      "fr": "Croix gauche"
+    },
+    "D-pad right": {
+      "es": "Cruceta derecha",
+      "it": "Croce destra",
+      "fr": "Croix droite"
+    },
+    "Left stick left": {
+      "es": "Stick izquierdo hacia la izquierda",
+      "it": "Levetta sinistra a sinistra",
+      "fr": "Stick gauche vers la gauche"
+    },
+    "Left stick right": {
+      "es": "Stick izquierdo hacia la derecha",
+      "it": "Levetta sinistra a destra",
+      "fr": "Stick gauche vers la droite"
+    },
+    "Left stick up": {
+      "es": "Stick izquierdo arriba",
+      "it": "Levetta sinistra su",
+      "fr": "Stick gauche vers le haut"
+    },
+    "Left stick down": {
+      "es": "Stick izquierdo abajo",
+      "it": "Levetta sinistra giù",
+      "fr": "Stick gauche vers le bas"
+    },
+    "Right stick left": {
+      "es": "Stick derecho hacia la izquierda",
+      "it": "Levetta destra a sinistra",
+      "fr": "Stick droit vers la gauche"
+    },
+    "Right stick right": {
+      "es": "Stick derecho hacia la derecha",
+      "it": "Levetta destra a destra",
+      "fr": "Stick droit vers la droite"
+    },
+    "Right stick up": {
+      "es": "Stick derecho arriba",
+      "it": "Levetta destra su",
+      "fr": "Stick droit vers le haut"
+    },
+    "Right stick down": {
+      "es": "Stick derecho abajo",
+      "it": "Levetta destra giù",
+      "fr": "Stick droit vers le bas"
+    },
+    "In-game performance overlay": {
+      "es": "Monitor de rendimiento en el juego",
+      "it": "Monitor prestazioni nel gioco",
+      "fr": "Moniteur de performances en jeu"
+    },
+    "Battery temperature": {
+      "es": "Temperatura de batería",
+      "it": "Temperatura batteria",
+      "fr": "Température de la batterie"
+    },
+    "FPS + battery temperature": {
+      "es": "FPS y temperatura de batería",
+      "it": "FPS e temperatura batteria",
+      "fr": "FPS et température de la batterie"
+    },
+    "Includes the latest 12 sessions, graphics settings and battery/thermal readings. No game data. Nothing is uploaded automatically.": {
+      "es": "Incluye las últimas 12 sesiones, ajustes gráficos y lecturas de batería y temperatura. No incluye datos del juego. Nada se sube automáticamente.",
+      "it": "Include le ultime 12 sessioni, impostazioni grafiche e dati di batteria e temperatura. Nessun dato del gioco. Nulla viene caricato automaticamente.",
+      "fr": "Inclut les 12 dernières sessions, les réglages graphiques et les mesures de batterie et de température. Aucune donnée du jeu. Aucun envoi automatique."
+    },
+    "Off by default. Enable before Play. After an unexpected exit, return here and export the error ZIP. Recording is separate from performance diagnostics.": {
+      "es": "Desactivado por defecto. Actívalo antes de Jugar. Tras una salida inesperada, vuelve aquí y exporta el ZIP de errores. El registro es independiente del diagnóstico de rendimiento.",
+      "it": "Disattivo per impostazione predefinita. Attivalo prima di Avvia. Dopo un'uscita imprevista, torna qui ed esporta lo ZIP degli errori. La registrazione è separata dalla diagnostica prestazioni.",
+      "fr": "Désactivé par défaut. Activez-le avant de jouer. Après une fermeture inattendue, revenez ici et exportez le ZIP d'erreurs. Cet enregistrement est indépendant du diagnostic de performances."
+    },
+    "Keeps up to 12 bounded sessions: app errors, lifecycle events and available Android exit reports. Reports vary by Android/device. Logs may contain app messages and file paths. Nothing is uploaded automatically.": {
+      "es": "Conserva hasta 12 sesiones limitadas: errores, eventos y los informes de cierre de Android disponibles. Los informes varían según el dispositivo. Los registros pueden contener mensajes y rutas de archivos. Nada se sube automáticamente.",
+      "it": "Conserva fino a 12 sessioni limitate: errori, eventi e rapporti di chiusura Android disponibili. I rapporti variano secondo il dispositivo. I log possono contenere messaggi e percorsi di file. Nulla viene caricato automaticamente.",
+      "fr": "Conserve jusqu'à 12 sessions limitées : erreurs, événements et rapports de fermeture Android disponibles. Les rapports varient selon l'appareil. Les journaux peuvent contenir des messages et des chemins de fichiers. Aucun envoi automatique."
+    },
+    "Shared inputs trigger every assigned action. Avoid assigning gears or camera to your steering axis. Automatic shifting remains active after manual gear overrides.": {
+      "es": "Las entradas compartidas activan todas sus acciones. Evita asignar marchas o cámara al eje de dirección. El cambio automático sigue activo tras los cambios manuales.",
+      "it": "I comandi condivisi attivano tutte le azioni assegnate. Evita di assegnare marce o visuale all'asse dello sterzo. Il cambio automatico resta attivo dopo i cambi manuali.",
+      "fr": "Une entrée partagée déclenche toutes les actions attribuées. Évitez d'affecter les rapports ou la caméra à l'axe de direction. La boîte automatique reste active après les changements manuels."
+    },
+    "Defaults: left stick / D-pad steer · RT or X accelerate · LT brake/reverse · LB handbrake · Y recover · RB repair (hold) · Select map · right stick up/down gears · R3 camera · Start pause. Menus: A confirm, B back.": {
+      "es": "Por defecto: stick izquierdo / cruceta dirección · RT o X acelerar · LT frenar/reversa · LB freno de mano · Y recuperar · RB reparar (mantener) · Select mapa · stick derecho arriba/abajo marchas · R3 cámara · Start pausa. Menús: A aceptar, B volver.",
+      "it": "Predefiniti: levetta sinistra / croce sterzo · RT o X accelera · LT freno/retromarcia · LB freno a mano · Y recupera · RB ripara (tieni premuto) · Select mappa · levetta destra su/giù marce · R3 visuale · Start pausa. Menu: A conferma, B indietro.",
+      "fr": "Par défaut : stick gauche / croix direction · RT ou X accélérer · LT freiner/reculer · LB frein à main · Y replacer · RB réparer (maintenir) · Select carte · stick droit haut/bas rapports · R3 caméra · Start pause. Menus : A confirmer, B retour."
+    },
+    "No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.": {
+      "es": "No hay sesiones de errores. Activa Registrar errores y pulsa Jugar. Tras una salida inesperada, abre el lanzador y exporta aquí.",
+      "it": "Nessuna sessione di errori. Attiva Registra errori e premi Avvia. Dopo un'uscita imprevista, riapri il launcher ed esporta qui.",
+      "fr": "Aucune session d'erreurs. Activez Enregistrer les erreurs puis lancez le jeu. Après une fermeture inattendue, rouvrez le lanceur et exportez ici."
+    },
+    "Mirror": {
+      "es": "Retrovisor",
+      "it": "Specchietto",
+      "fr": "Rétroviseur"
+    },
+    "Choose a car": {
+      "es": "Elegir coche",
+      "it": "Scegli un'auto",
+      "fr": "Choisir une voiture"
+    },
+    "Enter your name": {
+      "es": "Introduce tu nombre",
+      "it": "Inserisci il nome",
+      "fr": "Entrez votre nom"
+    },
+    "Drag controls to move. Tap an icon for its name. Recovery needs a 0.6 second hold.": {
+      "es": "Arrastra los controles para moverlos. Toca un icono para ver su nombre. Para recuperar, mantén pulsado 0.6 segundos.",
+      "it": "Trascina i comandi per spostarli. Tocca un'icona per vederne il nome. Il recupero richiede una pressione di 0.6 secondi.",
+      "fr": "Faites glisser les commandes pour les déplacer. Touchez une icône pour voir son nom. Maintenez 0.6 seconde pour replacer la voiture."
+    },
+    "Save": {
+      "es": "Guardar",
+      "it": "Salva",
+      "fr": "Enregistrer"
+    },
+    "Reset": {
+      "es": "Restablecer",
+      "it": "Ripristina",
+      "fr": "Réinitialiser"
+    },
+    "Size: {game}%": {
+      "es": "Tamaño: {game}%",
+      "it": "Dimensione: {game}%",
+      "fr": "Taille : {game}%"
+    },
+    "Mirrored": {
+      "es": "Invertido",
+      "it": "Speculare",
+      "fr": "Inversé"
+    },
+    "Controls saved": {
+      "es": "Controles guardados",
+      "it": "Comandi salvati",
+      "fr": "Commandes enregistrées"
+    },
+    "Steering": {
+      "es": "Dirección",
+      "it": "Sterzo",
+      "fr": "Direction"
+    },
+    "Drag any control": {
+      "es": "Arrastra un control",
+      "it": "Trascina un comando",
+      "fr": "Faites glisser une commande"
+    },
+    "Keep controls apart": {
+      "es": "Separa los controles",
+      "it": "Tieni separati i comandi",
+      "fr": "Écartez les commandes"
+    },
+    "Separate the overlapping controls before saving": {
+      "es": "Separa los controles superpuestos antes de guardar",
+      "it": "Separa i comandi sovrapposti prima di salvare",
+      "fr": "Séparez les commandes superposées avant de sauvegarder"
+    },
+    "High": {
+      "es": "Alta",
+      "it": "Alta",
+      "fr": "Élevée"
+    },
+    "Performance": {
+      "es": "Rendimiento",
+      "it": "Prestazioni",
+      "fr": "Performances"
+    },
+    "Extended": {
+      "es": "Ampliada",
+      "it": "Estesa",
+      "fr": "Étendue"
+    },
+    "Far": {
+      "es": "Lejana",
+      "it": "Lontana",
+      "fr": "Lointaine"
+    }
+  },
+  "misc_indices": {
+    "0": "Invulnerability on",
+    "1": "Timer frozen",
+    "2": "Mirror on",
+    "3": "Mirror off",
+    "4": "Free repairs",
+    "5": "Repair cost:",
+    "7": "Recovery cost:",
+    "12": "credits",
+    "13": "credit",
+    "14": "Penalty",
+    "15": "Empty slot",
+    "16": "credits",
+    "17": "Penalty",
+    "18": "Pedestrians",
+    "19": "Opponents",
+    "20": "Lap",
+    "21": "Checkpoint",
+    "22": "Bonus",
+    "23": "Time bonus",
+    "46": "Wasted!",
+    "47": "credits",
+    "48": "Recovery voucher used",
+    "95": "Not enough credits",
+    "96": "Not enough credits",
+    "191": "Enter your name"
+  }
+}
