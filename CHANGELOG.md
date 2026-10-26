@@ -23,6 +23,8 @@ Versions group related work rather than documenting every intermediate tweak.
   repeated races, pickup expiry, cleanup and master-off/network isolation.
   These cheats are now included in the 0.9.2 APK. The prior 0.9.1 APK predates them.
 
+- Known issue: Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in 0.9.2. Use the external view as the current workaround.
+
 ## 0.9.1 — import, music and cockpit mirror (test candidate)
 
 - Automatically locate the selected game's DATA and MUSIC inside wrapped ZIPs,

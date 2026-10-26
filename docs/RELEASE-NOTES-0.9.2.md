@@ -46,3 +46,7 @@ holding Repair. Normal progress/rewards still save. Network games ignore these h
 
 Native/Java regression tests and ARM64 build/signature/alignment checks pass.
 No physical-device or native-speaker validation is claimed for this build.
+
+## Known performance issue
+
+Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in 0.9.2. Use the external view as the current workaround.

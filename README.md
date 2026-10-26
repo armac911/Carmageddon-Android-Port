@@ -260,6 +260,7 @@ controls, importing and saves remain part of preparing the 1.0 milestone.
 ## Known limitations
 
 - Network multiplayer is unavailable and disabled on Android.
+- Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in 0.9.2. Use the external view as the current workaround.
 - Gear overrides do not provide a selectable fully manual transmission mode.
 - Compatibility across all controllers, Android versions and game-data editions
   is not established. TV-only navigation and other architectures are unverified.
