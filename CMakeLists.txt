@@ -13,6 +13,10 @@ if(DETHRACE_MIYOO)
     enable_testing()
     set(IO_PLATFORM "SDL_Software" CACHE STRING "Platform" FORCE)
     add_definitions(-DDETHRACE_MIYOO)
+    if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+        # Keep Release optimization and line tables for on-device crash addresses.
+        add_compile_options(-g)
+    endif()
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")

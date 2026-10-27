@@ -3,7 +3,7 @@
 The engine's existing LICENSE (GPL-3.0) and THIRD-PARTY-NOTICES.md apply.
 No original Carmageddon assets may be packaged.
 
-## Versions used for experimental 0.1.1
+## Versions used for experimental 0.1.2
 
 | Component | Version/source |
 | --- | --- |
@@ -66,7 +66,7 @@ python3 onionos/package.py \
 ```
 
 The packager archives `HEAD`: commit changes before packaging. Output is
-`onionos/dist/Carmageddon-OnionOS-experimental-0.1.1.zip`. Packaging uses an explicit
+`onionos/dist/Carmageddon-OnionOS-experimental-0.1.2.zip`. Packaging uses an explicit
 allowlist and does not read your DATA/MUSIC. Never add these directories to Git.
 `SHA256SUMS.json` covers all payload files except itself.
 

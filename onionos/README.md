@@ -1,4 +1,4 @@
-# Carmageddon for OnionOS — experimental 0.1.1
+# Carmageddon for OnionOS — experimental 0.1.2
 
 This is an initial ARMv7 CPU-rendering experiment for **Miyoo Mini Plus**. It is
 based on the Android port at `c4fadaca8aea901ee93d854a806a44334e2674da` (0.9.2).
@@ -110,3 +110,16 @@ now produces a clear error rather than silently choosing an invisible fallback.
 Extract the new App folder over the existing installation, replacing files.
 Keep `game/DATA` and saves. Re-run Diagnostics and return the new latest.log.
 Actual visible output with this fix still requires device confirmation.
+
+## 0.1.2 crash diagnosis
+
+The first real-data run reached 3D drawing, reported about 6–8 FPS in its later
+windows and peak process RSS of 9,144 KiB, then exited with SIGSEGV (139). It did
+not exhaust the logged available memory or use swap. This does not establish
+correct rendering, playable speed or the exact cause of the crash.
+
+0.1.2 enables a minimal signal recorder on an alternate stack and retains debug
+line tables in optimized ARM binaries. A crash now logs `MIYOO_CRASH` with signal,
+fault address, PC/LR/SP/registers and mappings. It does not guess at a fix or
+disable game behaviour based on the final warning. Repeat the same race and
+send latest.log plus a short description or video of the visible result.

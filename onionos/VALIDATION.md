@@ -1,4 +1,4 @@
-# Validation — experimental OnionOS 0.1.1
+# Validation — experimental OnionOS 0.1.2
 
 Performed in Linux build environment, 2026-10-27. No Miyoo was connected and no
 commercial game data was supplied or used.
@@ -81,3 +81,21 @@ change. A third injected-driver regression test lists software before Mini and
 sets SDL_RENDER_DRIVER=software, then verifies the real platform requests the
 explicit Mini renderer index and disables batching. All three sanitizer tests
 pass. Visible hardware output remains to be confirmed.
+
+## 0.1.2 real-data crash capture
+
+A subsequent device log detects Carmageddon DATA and reaches 3D drawing. Its
+later sampled windows report 7.80 and 6.14 FPS, peak process RSS 9,144 KiB, no
+swap use and roughly 73,900 KiB available system RAM. The process exits with
+139. A final stub warning is not sufficient to identify the faulting function.
+
+This build adds an alternate-stack signal handler using async-signal-safe I/O
+and local formatting, recording ARM register context and `/proc/self/maps`.
+Release optimization is retained, with debug line tables for symbolization.
+No crash-cause fix or gameplay performance improvement is claimed.
+
+Checks for 0.1.2: native and ARM-under-qemu controlled SIGSEGV tests both
+recorded registers and mappings and returned terminal status 139. The three
+existing host raster/input/presenter tests passed. Optimized ARM binaries were
+checked for `.debug_info` and `.debug_line`; launcher shell syntax passed.
+Neither qemu testing nor a controlled signal reproduces the real game crash.

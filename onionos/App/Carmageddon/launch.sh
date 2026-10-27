@@ -7,7 +7,7 @@ mkdir -p logs game || exit 1
 mv -f logs/previous.log logs/older.log 2>/dev/null
 mv -f logs/latest.log logs/previous.log 2>/dev/null
 exec >logs/latest.log 2>&1
-printf 'Carmageddon OnionOS experimental 0.1.1\n'
+printf 'Carmageddon OnionOS experimental 0.1.2\n'
 date -u
 uname -a
 cat BUILD-INFO.txt 2>/dev/null
@@ -71,5 +71,5 @@ if [ ! -d game/DATA ] || [ ! -f game/DATA/GENERAL.TXT ]; then
 fi
 # First device build: low resolution, no cutscenes/audio/replay and less geometry.
 # Own DATA may be modified by the original settings/save routines; use a copy.
-run ./dethrace --debug=3 --fps=30 --no-signal-handler -lomem -nosound -nocutscenes -noreplay -yon 0.35 -simple 4
+run ./dethrace --debug=3 --fps=30 -lomem -nosound -nocutscenes -noreplay -yon 0.35 -simple 4
 exit $?

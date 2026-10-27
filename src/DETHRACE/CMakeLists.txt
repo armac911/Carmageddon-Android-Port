@@ -184,6 +184,8 @@ if(ANDROID)
 endif()
 
 if(DETHRACE_MIYOO)
+    add_executable(miyoo-crash-test ../../onionos/tests/crash.c)
+    target_link_libraries(miyoo-crash-test PRIVATE dethrace_obj)
     add_executable(miyoo-probe ../../onionos/probe.c)
     target_link_libraries(miyoo-probe PRIVATE dethrace_obj)
     add_executable(miyoo-raster-test ../../onionos/tests/raster.c)
