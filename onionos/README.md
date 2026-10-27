@@ -1,4 +1,4 @@
-# Carmageddon for OnionOS — experimental 0.1.3
+# Carmageddon for OnionOS — experimental 0.1.4
 
 This is an initial ARMv7 CPU-rendering experiment for **Miyoo Mini Plus**. It is
 based on the Android port at `c4fadaca8aea901ee93d854a806a44334e2674da` (0.9.2).
@@ -144,3 +144,22 @@ whether it completely removes that device artifact still needs a fresh test.
 Overwrite the App files, keep your DATA, and repeat the same race. Send latest.log
 and a new picture, especially if the white part remains. No FPS improvement is
 claimed in this build.
+
+## 0.1.4 confirmed half-screen fix
+
+Using privately supplied PC DATA, the 0.1.3 software build reproduced the exact
+vertical half-screen white region locally. The cause is the legacy public
+`BrPixelmapRectangleFill` shortcut: it writes one byte per pixel even for a
+16-bit depth pixelmap. A 320-pixel-wide depth clear therefore updates only
+160 depth samples per row. The uncleared right half rejects the 3D fragments,
+while the separate 8-bit HUD continues to render across the screen.
+
+0.1.4 adds a Miyoo-specific 16-bit depth rectangle path with row-stride,
+origin, clipping and base-coordinate handling. Android's existing path remains
+unchanged. After rebuilding, the same real-data race renders the full road and
+car locally, without the vertical white half. Confirmation on Miyoo remains
+the next device check; this does not claim a measured device FPS improvement.
+
+Overwrite App files, retain game/DATA, start the same race and send latest.log.
+All original DATA and local reproduction captures stay outside the repository
+and the distributed package.

@@ -1,4 +1,4 @@
-# Validation — experimental OnionOS 0.1.3
+# Validation — experimental OnionOS 0.1.4
 
 Performed in Linux build environment, 2026-10-27. No Miyoo was connected and no
 commercial game data was supplied or used.
@@ -123,3 +123,30 @@ The four host tests pass with ASan/UBSan. ARM regression executables also pass
 under qemu with test assertions retained. Full device graphics and gameplay
 stability remain unverified after these changes. Android has no unconditional
 behaviour changes.
+
+## 0.1.4 real-data reproduction and verification
+
+Privately supplied DATA was extracted outside the Git checkout. A desktop build
+of the same CPU platform was driven through the game menus with injected SDL
+input, and final CPU frames were captured before SDL presentation. The 0.1.3
+build reproduces the half-screen white region seen on Miyoo. This establishes
+that it is present in the CPU canvas, independently of device display scaling.
+
+The public BrPixelmapRectangleFill implementation performs byte writes for
+all types. Its depth clear writes only half the required bytes per row of a
+BR_PMT_DEPTH_16 buffer. The new Miyoo-specific path fills complete 16-bit samples,
+respecting stride, clipping, origin and sub-pixelmap bases. A real-function test
+checks all 320 samples of all 200 rows, row padding, nonuniform 0x1234 colour,
+clipped subviews and out-of-bounds rectangles.
+
+The rebuilt game with the same DATA reaches the real race and displays both
+halves of the road and the complete car. No new visual code other than this
+depth clear is needed to remove the vertical half-screen region. The existing
+pratcam and blend fixes remain. No original assets or local capture images are
+committed or packaged. Device visual confirmation and device performance
+measurements for 0.1.4 are pending.
+
+All five sanitizer-enabled host tests pass. The new depth-clear test also passes
+in the ARM executable under qemu with assertions enabled. Launcher syntax and
+git whitespace checks pass. Full package payload hashes are verified during
+assembly.

@@ -190,6 +190,25 @@ void BrPixelmapRectangleFill(br_pixelmap* dst, br_int_32 x, br_int_32 y, br_int_
     LOG_TRACE("(%p, %d, %d, %d, %d, %d)", dst, x, y, w, h, colour);
     br_uint_8* dst_pix = (br_uint_8*)dst->pixels;
 
+#ifdef DETHRACE_MIYOO
+    /* The legacy shortcut below writes one byte per pixel. A software Z buffer
+     * has TWO bytes per pixel: that shortcut clears only half of each row,
+     * leaving the other half at near depth and rejecting the right half of 3D.
+     * Keep Android's existing route unchanged; handle Miyoo CPU depth explicitly. */
+    if (dst->type == BR_PMT_DEPTH_16) {
+        int left=x+dst->origin_x, top=y+dst->origin_y;
+        int right=left+w, bottom=top+h;
+        if(left<0)left=0;
+        if(top<0)top=0;
+        if(right>dst->width)right=dst->width;
+        if(bottom>dst->height)bottom=dst->height;
+        for(int row=top;row<bottom;row++) {
+            br_uint_16* pixels=(br_uint_16*)(dst_pix+(row+dst->base_y)*dst->row_bytes);
+            for(int col=left;col<right;col++)pixels[col+dst->base_x]=(br_uint_16)colour;
+        }
+        return;
+    }
+#endif
     x += dst->origin_x;
     y += dst->origin_y;
     for (int i = 0; i < w; i++) {
