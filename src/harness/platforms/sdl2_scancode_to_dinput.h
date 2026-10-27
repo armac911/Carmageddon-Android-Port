@@ -20,7 +20,9 @@
  *
  */
 
+#ifndef DETHRACE_MIYOO
 #include <glad/glad.h>
+#endif
 
 #include <SDL.h>
 

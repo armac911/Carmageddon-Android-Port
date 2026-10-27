@@ -113,7 +113,11 @@ if (IO_PLATFORM STREQUAL "SDL_OpenGL")
     target_link_libraries(harness PRIVATE SDL2::SDL2 glad)
 endif()
 
-if(WIN32)
+if(DETHRACE_MIYOO)
+    target_sources(harness PRIVATE platforms/sdl_software.c renderers/software/software.c os/miyoo.c)
+    target_include_directories(harness PRIVATE "${dethrace_SOURCE_DIR}/src/DETHRACE/common")
+    target_link_libraries(harness PRIVATE SDL2::SDL2)
+elseif(WIN32)
     target_sources(harness PRIVATE
         os/windows.c
     )

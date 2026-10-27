@@ -417,3 +417,11 @@ branding and game-art icon; inclusion does not grant rights to original game
 artwork. No commercial game data is distributed here. This unofficial project
 is provided without warranty; see the applicable licenses.
 
+
+## Experimental OnionOS / Miyoo Mini Plus
+
+A separate CPU-rendered ARMv7 prototype lives on the
+[`experimental/onionos-miyoo`](https://github.com/armac911/Carmageddon-Android-Port/tree/experimental/onionos-miyoo)
+branch. Its [installation and diagnostic instructions](onionos/README.md) describe
+the current hardware-test gates and limitations. It is not yet verified playable
+on Miyoo. Android remains the primary release target; no PC game assets included.

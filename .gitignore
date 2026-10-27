@@ -36,3 +36,9 @@ __pycache__/
 
 # Native installer helper dependency/build cache
 android/.installer-build/
+
+# OnionOS local builds, own assets, diagnostics and runtime libraries
+/onionos/dist/
+/onionos/App/Carmageddon/game/
+/onionos/App/Carmageddon/logs/
+/onionos/App/Carmageddon/lib/

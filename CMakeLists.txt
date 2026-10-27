@@ -5,6 +5,15 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
 endif()
 
 project(dethrace C)
+option(DETHRACE_MIYOO "Experimental Miyoo Mini Plus software backend" OFF)
+if(DETHRACE_MIYOO)
+    if(ANDROID)
+        message(FATAL_ERROR "Miyoo and Android targets are mutually exclusive")
+    endif()
+    enable_testing()
+    set(IO_PLATFORM "SDL_Software" CACHE STRING "Platform" FORCE)
+    add_definitions(-DDETHRACE_MIYOO)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 
@@ -53,7 +62,9 @@ if(NOT TARGET SDL2::SDL2)
 endif()
 
 add_subdirectory(lib/libsmacker)
-add_subdirectory(lib/glad)
+if(NOT DETHRACE_MIYOO)
+    add_subdirectory(lib/glad)
+endif()
 add_subdirectory(lib/miniaudio)
 
 add_library(compile_with_werror INTERFACE)

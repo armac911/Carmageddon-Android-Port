@@ -139,7 +139,7 @@ void StartMainMenu(void) {
     ReilluminateFlics();
 }
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(DETHRACE_MIYOO)
 static void AndroidDisableNetworkGame(void) {
     /* The Android multiplayer path is not implemented. Disable selection
      * before the menu loop and visibly mute the existing Network Game label. */
@@ -375,7 +375,7 @@ int DoMainMenuInterface(tU32 pTime_out, int pContinue_allowed) {
     } else {
         interface_spec2.time_out = pTime_out;
         gMain_menu_spec = &interface_spec2;
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(DETHRACE_MIYOO)
         interface_spec2.start_proc2 = AndroidDisableNetworkGame;
         /* Disabled selection alone can let a mouse click activate the
          * previous item. A dead hit area must have neither choice nor mode. */
