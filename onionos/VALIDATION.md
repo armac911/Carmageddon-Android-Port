@@ -1,4 +1,4 @@
-# Validation — experimental OnionOS 0.1.4
+# Validation — experimental OnionOS 0.1.5
 
 Performed in Linux build environment, 2026-10-27. No Miyoo was connected and no
 commercial game data was supplied or used.
@@ -150,3 +150,38 @@ All five sanitizer-enabled host tests pass. The new depth-clear test also passes
 in the ARM executable under qemu with assertions enabled. Launcher syntax and
 git whitespace checks pass. Full package payload hashes are verified during
 assembly.
+
+## 0.1.5 performance and fidelity checks
+
+A frozen 0.1.4 renderer is compiled separately for differential tests. The
+procedural comparison covers shared vertices, inside/outside/near-plane
+geometry, degenerate faces, invalid coordinates, indexed transparent textures,
+non-power-of-two textures, padded rows, subviews, shading and blend tables.
+The optimized path preserves the existing clipping and depth conventions.
+
+128-scene desktop comparisons showed about 1.6× lower equal-work time. The
+ARM-under-qemu comparison reported reference 8,631 ms vs optimized 6,258 ms
+(1.38×), 3 colour differences out of 786,432 scene pixels and no depth
+differences above two 16-bit units. Isolated texture-boundary differences from
+reciprocal rounding are explicitly permitted by the test's small per-scene
+budget; this is not claimed bit-for-bit identity. Hardware timing may differ.
+
+Race-only profiling was checked with private DATA and scripted desktop input.
+Raw local model times went from roughly 10.5–11.8 ms to 6.6–7.2 ms in comparable
+windows. These are diagnostic observations, not a controlled gameplay speedup:
+AI/scenes vary with time and the initial diagnostic baseline had additional
+per-triangle timing overhead. The equal-work reference test is the controlled
+comparison. No local timing is presented as device FPS. The captured real-data
+scene remains full-width with road, car and HUD; captures and DATA stay private.
+
+Profiling uses two phase boundaries per group rather than clock reads in the
+pixel or triangle loop. Shared-vertex scratch storage grows on demand and is
+reused, bounded by the prepared group's 16-bit vertex count. Menus do not emit
+race-profile summaries; interrupted menu/pause frames are excluded.
+
+All six sanitizer-enabled host tests pass, including the new reference
+comparison. The ARM reference comparison passes under qemu with assertions
+enabled. ARM optimized game/probe/benchmark compile, and shell syntax/whitespace
+checks pass. Android preprocessor output retains the original enum layout and
+profiler path; new phases and counters are Miyoo-only. No Android APK or main
+branch/release is replaced. On-device performance remains to be measured.

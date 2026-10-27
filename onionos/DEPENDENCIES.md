@@ -3,7 +3,7 @@
 The engine's existing LICENSE (GPL-3.0) and THIRD-PARTY-NOTICES.md apply.
 No original Carmageddon assets may be packaged.
 
-## Versions used for experimental 0.1.4
+## Versions used for experimental 0.1.5
 
 | Component | Version/source |
 | --- | --- |
@@ -66,7 +66,7 @@ python3 onionos/package.py \
 ```
 
 The packager archives `HEAD`: commit changes before packaging. Output is
-`onionos/dist/Carmageddon-OnionOS-experimental-0.1.4.zip`. Packaging uses an explicit
+`onionos/dist/Carmageddon-OnionOS-experimental-0.1.5.zip`. Packaging uses an explicit
 allowlist and does not read your DATA/MUSIC. Never add these directories to Git.
 `SHA256SUMS.json` covers all payload files except itself.
 
@@ -74,3 +74,7 @@ To verify linking, use `readelf -d` on the engine and SDL2. Neither may depend o
 libEGL/libGLES/libGL. MI vendor libraries are resolved at link time through
 `MIYOO_SDK_LIB_DIR` and at run time through the launcher's app-local / firmware
 library paths. The app-local libraries must be ARM, not desktop x86 libraries.
+
+The 0.1.5 package also carries `miyoo-renderer-bench`, built from procedural
+fixtures and a namespaced frozen 0.1.4 renderer. It needs no DATA and does not
+contain any original game assets. Its source is in onionos/tests.

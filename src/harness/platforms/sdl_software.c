@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/resource.h>
 #include "harness/hooks.h"
+#include "harness/profiler.h"
 #include "harness/trace.h"
 #include "../renderers/software/software.h"
 #include "sdl2_scancode_to_dinput.h"
@@ -122,16 +123,22 @@ static void keyboard(unsigned n,uint8_t* dst){
 static void set_palette(PALETTEENTRY_* p){for(int i=0;i<256;i++)palette[i]=0xff000000u|((uint32_t)p[i].peRed<<16)|((uint32_t)p[i].peGreen<<8)|p[i].peBlue;}
 static void present_indexed(uint8_t* src){
     /* Full-screen hook receives tightly packed main canvas pixels. */
+    uint64_t copy_start=DRProfileClock();
     for(int i=0;i<width*height;i++)pixels[i]=palette[src[i]];
+    DRProfileTime(DRP_COPY,copy_start);
+    uint64_t present_start=DRProfileClock();
     if(SDL_UpdateTexture(texture,NULL,pixels,width*4))fail("SDL_UpdateTexture");
     SDL_SetRenderDrawColor(renderer,0,0,0,255);SDL_RenderClear(renderer);
     int ow,oh;SDL_GetRendererOutputSize(renderer,&ow,&oh);
     SDL_Rect dst={0,0,ow,ow*3/4};
     if(dst.h>oh){dst.h=oh;dst.w=oh*4/3;}dst.x=(ow-dst.w)/2;dst.y=(oh-dst.h)/2;
     if(SDL_RenderCopy(renderer,texture,NULL,&dst))fail("SDL_RenderCopy");
+    DRProfileTime(DRP_PRESENT,present_start);
 }
 static void swap(void){
+    uint64_t swap_start=DRProfileClock();
     SDL_RenderPresent(renderer);frames++;
+    DRProfileTime(DRP_SWAP,swap_start);
     unsigned now=SDL_GetTicks();if(now-report_time>=5000){
         struct rusage usage;getrusage(RUSAGE_SELF,&usage);
         printf("metrics fps=%.2f peak_rss_kib=%ld triangles_total=%lu ticks=%u\n",frames*1000.0/(now-report_time),usage.ru_maxrss,SWTriangleCount(),now);

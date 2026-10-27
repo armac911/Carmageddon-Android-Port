@@ -1,4 +1,4 @@
-# Carmageddon for OnionOS — experimental 0.1.4
+# Carmageddon for OnionOS — experimental 0.1.5
 
 This is an initial ARMv7 CPU-rendering experiment for **Miyoo Mini Plus**. It is
 based on the Android port at `c4fadaca8aea901ee93d854a806a44334e2674da` (0.9.2).
@@ -163,3 +163,31 @@ the next device check; this does not claim a measured device FPS improvement.
 Overwrite App files, retain game/DATA, start the same race and send latest.log.
 All original DATA and local reproduction captures stay outside the repository
 and the distributed package.
+
+## 0.1.5 first performance pass
+
+Canvas remains 320×200, with the same view distance, car detail, textures and
+effects. No overclock or swap change is made. The renderer now transforms each
+shared vertex once per prepared group, rejects triangles wholly outside one
+clip plane, skips clipping for fully inside triangles, limits pixel work to
+conservative scanline spans, hoists material values out of pixel loops and
+uses shared reciprocals / cheaper texture wrapping. Back-face culling is not
+enabled in this pass; both original windings remain accepted.
+
+The race log now includes `MIYOO_PROFILE` summaries every five seconds: frame,
+update, render, model, geometry, raster, palette conversion, SDL presentation,
+swap and limiter times, plus geometry counters. Render includes model/copy/
+present/swap/limiter, and model includes vertex work plus clipping/raster work.
+These fields are nested; do not sum them. Geometry means shared vertex transforms;
+raster includes per-face clip classification, clipping and pixel work.
+
+For the device comparison, drive the first race as before with external camera
+for about one minute and return to Onion, then send latest.log. Diagnostics
+also runs the 30-second probe followed by an equal-work renderer benchmark with
+no game assets. It compares frozen 0.1.4 code against current code and reports
+its own timings into the same log. This benchmark is not a gameplay FPS claim.
+
+An optimized desktop build's 128-scene benchmark showed about 1.6× renderer
+speedup; ARM-under-qemu measured about 1.38×. Neither is a measured Miyoo gain.
+A real-data desktop run was also visually checked and remained full-screen.
+Actual Miyoo FPS and phase timings are the next measurement.

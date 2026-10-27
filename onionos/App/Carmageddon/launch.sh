@@ -7,7 +7,7 @@ mkdir -p logs game || exit 1
 mv -f logs/previous.log logs/older.log 2>/dev/null
 mv -f logs/latest.log logs/previous.log 2>/dev/null
 exec >logs/latest.log 2>&1
-printf 'Carmageddon OnionOS experimental 0.1.4\n'
+printf 'Carmageddon OnionOS experimental 0.1.5\n'
 date -u
 uname -a
 cat BUILD-INFO.txt 2>/dev/null
@@ -61,7 +61,9 @@ run() {
     return "$RESULT"
 }
 if [ "${1:-}" = --probe ]; then
-    run ./miyoo-probe 30
+    run ./miyoo-probe 30 || exit $?
+    printf '\nComparing 0.1.4 reference and optimized CPU renderer on identical procedural scenes\n'
+    run ./miyoo-renderer-bench 32
     exit $?
 fi
 if [ ! -d game/DATA ] || [ ! -f game/DATA/GENERAL.TXT ]; then
