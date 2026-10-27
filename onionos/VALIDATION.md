@@ -1,4 +1,4 @@
-# Validation — experimental OnionOS 0.1.2
+# Validation — experimental OnionOS 0.1.3
 
 Performed in Linux build environment, 2026-10-27. No Miyoo was connected and no
 commercial game data was supplied or used.
@@ -59,7 +59,8 @@ ASAN_OPTIONS=detect_leaks=0 ctest --output-on-failure
 SDL_VIDEODRIVER=dummy ASAN_OPTIONS=detect_leaks=0 ./miyoo-probe 1
 ```
 
-Tests use `assert`: use Debug for host checks. ARM Release builds are for device
+Tests use `assert`; GCC/Clang test targets retain assertions in Release too.
+Use Debug plus sanitizers for host checks. ARM Release builds are for device
 execution. See README for the device sequence and logs to return. A useful first
 report includes Onion version, whether the triangle appears and is upright,
 which button failed, whether the main menu/track appears, and latest.log after
@@ -99,3 +100,26 @@ recorded registers and mappings and returned terminal status 139. The three
 existing host raster/input/presenter tests passed. Optimized ARM binaries were
 checked for `.debug_info` and `.debug_line`; launcher shell syntax passed.
 Neither qemu testing nor a controlled signal reproduces the real game crash.
+
+## 0.1.3 targeted fixes
+
+The 0.1.2 log's PC 0x005533b4 minus mapping base 0x00480000 gives ELF address
+0x000d33b4. addr2line against the exact packaged executable identifies
+PratcamEvent, pratcam.c:297. LR minus base minus ARM return-instruction offset
+identifies CheckPedestrianDeathScenario, pedestrn.c:1955. The fault address
+0x0000c7d8 matches access through an unloaded/null sequence array for event 29.
+Low-memory LoadPratcam returns before allocating this array.
+
+Miyoo guards now check low-memory state, array availability and sequence bounds
+before lookup. A real engine-function regression calls event 29 with no loaded
+data, tests null and invalid indices, and checks the normal precedence guard.
+
+A renderer regression creates the same destination-preserving blend table as
+the horizon, draws an invisible near triangle and an opaque farther triangle,
+and verifies that the invisible triangle leaves depth unchanged and the farther
+triangle remains visible. Opaque depth testing still blocks farther blend draws.
+
+The four host tests pass with ASan/UBSan. ARM regression executables also pass
+under qemu with test assertions retained. Full device graphics and gameplay
+stability remain unverified after these changes. Android has no unconditional
+behaviour changes.

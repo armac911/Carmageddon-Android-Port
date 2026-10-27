@@ -42,6 +42,22 @@ int main(void){
     c.width=c.height=d.width=d.height=32;c.base_x=8;c.base_y=4;
     v[0].p.v[2]=-3;SWBegin(&actor,&c,&d);SWModel(&actor,&m,&mat,BRT_TRIANGLE,matrix);
     assert(colour[(4+16)*80+8+16]==80);assert(colour[0]==7);
+    /* Invisible horizon blending must not occlude later opaque geometry. */
+    static unsigned char blend_pixels[256*256];
+    for(int y=0;y<256;y++)for(int x=0;x<256;x++)blend_pixels[y*256+x]=(unsigned char)y;
+    br_pixelmap blend={0};blend.width=blend.height=256;blend.row_bytes=256;blend.pixels=blend_pixels;
+    c.width=c.height=d.width=d.height=64;c.base_x=c.base_y=0;
+    memset(colour,7,sizeof(colour));memset(depth,255,sizeof(depth));
+    mat.colour_map=NULL;mat.index_blend=&blend;mat.index_base=120;
+    BrMatrix34Identity(&matrix);SWBegin(&actor,&c,&d);SWModel(&actor,&m,&mat,BRT_TRIANGLE,matrix);
+    assert(colour[32*80+32]==7);assert(depth[32*80+32]==65535);
+    mat.index_blend=NULL;mat.index_base=100;matrix.m[3][2]=-1;
+    SWModel(&actor,&m,&mat,BRT_TRIANGLE,matrix);
+    assert(colour[32*80+32]==100);assert(depth[32*80+32]<65535);
+    /* A blend behind an opaque triangle must still fail the depth test. */
+    mat.index_blend=&blend;matrix.m[3][2]=-2;
+    unsigned short saved_depth=depth[32*80+32];SWModel(&actor,&m,&mat,BRT_TRIANGLE,matrix);
+    assert(colour[32*80+32]==100);assert(depth[32*80+32]==saved_depth);
     puts("PASS software raster: projection, depth, row stride, transparency, behind-camera and near clipping");
     return 0;
 }

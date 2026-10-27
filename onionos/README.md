@@ -1,4 +1,4 @@
-# Carmageddon for OnionOS — experimental 0.1.2
+# Carmageddon for OnionOS — experimental 0.1.3
 
 This is an initial ARMv7 CPU-rendering experiment for **Miyoo Mini Plus**. It is
 based on the Android port at `c4fadaca8aea901ee93d854a806a44334e2674da` (0.9.2).
@@ -123,3 +123,24 @@ line tables in optimized ARM binaries. A crash now logs `MIYOO_CRASH` with signa
 fault address, PC/LR/SP/registers and mappings. It does not guess at a fix or
 disable game behaviour based on the final warning. Repeat the same race and
 send latest.log plus a short description or video of the visible result.
+
+## 0.1.3 low-memory crash and blend-depth fixes
+
+The device crash PC 0x005533b4, with executable mapping base 0x00480000,
+symbolizes to `PratcamEvent` at pratcam.c:297 in the exact 0.1.2 executable.
+The return address resolves to `CheckPedestrianDeathScenario`. Low-memory mode
+skips loading the driver-camera sequences, but the event code read sequence
+precedence before checking camera availability. Miyoo now skips missing/disabled
+sequences and invalid indices before that lookup, including direct sequence
+starts. Android code paths are unchanged.
+
+The CPU renderer also now keeps depth writes disabled for blend-table materials,
+matching the existing GL renderer. The horizon uses a destination-preserving
+blend table: it is invisible and must not block opaque track/car triangles.
+A procedural regression reproduces that occlusion and checks the corrected
+result. This is a concrete rendering fix relevant to the reported white region;
+whether it completely removes that device artifact still needs a fresh test.
+
+Overwrite the App files, keep your DATA, and repeat the same race. Send latest.log
+and a new picture, especially if the white part remains. No FPS improvement is
+claimed in this build.

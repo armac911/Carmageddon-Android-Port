@@ -237,6 +237,11 @@ void NextPratcamChunk(void) {
 void NewPratcamSequence(int pSequence_index, int pStart_chunk) {
     LOG_TRACE("(%d, %d)", pSequence_index, pStart_chunk);
 
+#ifdef DETHRACE_MIYOO
+    /* -lomem deliberately skips LoadPratcam. Event callers remain active. */
+    if (gAusterity_mode || !gPratcam_sequences || pSequence_index < 0
+        || pSequence_index >= gNumber_of_prat_sequences) return;
+#endif
     gCurrent_pratcam_precedence = gPratcam_sequences[pSequence_index].precedence;
     gCurrent_pratcam_index = pSequence_index;
     gCurrent_pratcam_chunk = pStart_chunk - 1;
@@ -294,6 +299,11 @@ void PratcamEvent(int pIndex) {
     if (gInterface_within_race_mode) {
         return;
     }
+#ifdef DETHRACE_MIYOO
+    /* Check availability before the precedence lookup (device SIGSEGV). */
+    if (gAusterity_mode || !gProgram_state.prat_cam_on || !gPratcam_sequences
+        || pIndex < 0 || pIndex >= gNumber_of_prat_sequences) return;
+#endif
     if (gPratcam_sequences[pIndex].precedence <= gCurrent_pratcam_precedence) {
         return;
     }

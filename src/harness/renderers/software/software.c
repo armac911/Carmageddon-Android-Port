@@ -70,6 +70,7 @@ static void raster(Vertex* v, br_material* mat) {
     if(maxx>=colour->width)maxx=colour->width-1;
     if(maxy>=colour->height)maxy=colour->height-1;
     br_pixelmap *texture=mat->colour_map,*shade=mat->index_shade,*blend=mat->index_blend;
+    int blended=blend && blend->pixels && blend->width>=256 && blend->height>=256;
     for(int y=miny;y<=maxy;y++) for(int x=minx;x<=maxx;x++) {
         float a=edge(s[1],s[2],x+.5f,y+.5f)/area;
         float b=edge(s[2],s[0],x+.5f,y+.5f)/area,c=1-a-b;
@@ -103,10 +104,13 @@ static void raster(Vertex* v, br_material* mat) {
             }
         }
         uint8_t* dst=(uint8_t*)colour->pixels+(y+colour->base_y)*colour->row_bytes+x+colour->base_x;
-        if(blend && blend->pixels && blend->width>=256 && blend->height>=256)
+        if(blended)
             index=texel(blend,index,*dst);
         *dst=(uint8_t)index;
-        if(dp)*dp=iz;
+        /* Like the GL backend: blend materials test depth but never write it.
+         * The horizon's identity blend is invisible; writing its depth would
+         * hide subsequently drawn track/car geometry behind a blank plane. */
+        if(dp && !blended)*dp=iz;
     }
     triangles++;
 }
