@@ -37,7 +37,7 @@ with zipfile.ZipFile(out/'sdl-corresponding-source.zip','w',zipfile.ZIP_DEFLATED
         if file.is_file():z.write(file,rel)
 manifest={str(f.relative_to(out)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(out.rglob('*')) if f.is_file()}
 (out/'SHA256SUMS.json').write_text(json.dumps(manifest,indent=2)+'\n')
-zipname=out.with_suffix('.zip')
+zipname=out.parent/(out.name+'.zip')
 with zipfile.ZipFile(zipname,'w',zipfile.ZIP_DEFLATED) as z:
     for file in sorted(out.rglob('*')):
         if file.is_file():z.write(file,file.relative_to(out))
