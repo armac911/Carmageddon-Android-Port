@@ -9,7 +9,7 @@ p.add_argument('--sysroot',required=True,type=Path)
 p.add_argument('--sdl-source',required=True,type=Path)
 a=p.parse_args()
 root=Path(__file__).resolve().parent.parent
-out=root/'onionos/dist/Carmageddon-OnionOS-experimental-0.1'
+out=root/'onionos/dist/Carmageddon-OnionOS-experimental-0.1.1'
 if out.exists():shutil.rmtree(out)
 shutil.copytree(root/'onionos/App',out/'App',ignore=shutil.ignore_patterns('game','logs','lib'))
 app=out/'App/Carmageddon';(app/'lib').mkdir()
@@ -24,7 +24,7 @@ shutil.copy2(a.sdl_source/'sdl2/LICENSE.txt',licenses/'SDL2-zlib.txt')
 shutil.copy2(root/'onionos/JSON-C-LICENSE.txt',licenses/'json-c-MIT.txt')
 source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 sdl_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.sdl_source,text=True).strip()
-(app/'BUILD-INFO.txt').write_text(f'Experimental OnionOS 0.1\nEngine commit: {source}\nSDL base commit: {sdl_revision}\nCPU-only Mini patch: onionos/prepare-sdl.py\nHardware test: pending\n')
+(app/'BUILD-INFO.txt').write_text(f'Experimental OnionOS 0.1.1\nEngine commit: {source}\nSDL base commit: {sdl_revision}\nCPU-only Mini patch: onionos/prepare-sdl.py\nHardware test: pending\n')
 # Include corresponding engine source and the exact modified LGPL SDL sources.
 # This makes the test ZIP independently auditable; neither tree has game data.
 subprocess.run(['git','archive','--format=tar','--output='+str(out/'engine-source.tar'),'HEAD'],cwd=root,check=True)

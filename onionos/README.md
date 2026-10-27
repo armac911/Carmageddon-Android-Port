@@ -1,4 +1,4 @@
-# Carmageddon for OnionOS — experimental 0.1
+# Carmageddon for OnionOS — experimental 0.1.1
 
 This is an initial ARMv7 CPU-rendering experiment for **Miyoo Mini Plus**. It is
 based on the Android port at `c4fadaca8aea901ee93d854a806a44334e2674da` (0.9.2).
@@ -95,3 +95,18 @@ the app immediately returns to Onion. A black screen alone is not a diagnosis.
 
 For design reasoning, builds and actual checks see [FEASIBILITY.md](FEASIBILITY.md),
 [DEPENDENCIES.md](DEPENDENCIES.md), and [VALIDATION.md](VALIDATION.md).
+
+## 0.1.1 display fix
+
+The first hardware log showed the 0.1 probe ran for 30 seconds, passed the CPU
+triangle check and exited with status 0, but selected SDL's `software` presenter.
+In the pinned Mini fork, `Mini_UpdateWindowFramebuffer` returns success without
+copying pixels to the display. SDL lists this invisible software route before
+its working `Miyoo Mini` renderer. Version 0.1.1 selects the latter by explicit
+index on Mini video and disables batching. This only uses the MI_GFX 2D blitter
+to display finished frames; 3D remains CPU-rendered. A missing Mini presenter
+now produces a clear error rather than silently choosing an invisible fallback.
+
+Extract the new App folder over the existing installation, replacing files.
+Keep `game/DATA` and saves. Re-run Diagnostics and return the new latest.log.
+Actual visible output with this fix still requires device confirmation.

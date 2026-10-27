@@ -1,4 +1,4 @@
-# Validation — experimental OnionOS 0.1
+# Validation — experimental OnionOS 0.1.1
 
 Performed in Linux build environment, 2026-10-27. No Miyoo was connected and no
 commercial game data was supplied or used.
@@ -64,3 +64,20 @@ execution. See README for the device sequence and logs to return. A useful first
 report includes Onion version, whether the triangle appears and is upright,
 which button failed, whether the main menu/track appears, and latest.log after
 that precise run.
+
+## First hardware report and 0.1.1 fix
+
+On Onion v4.3.1-1, the 0.1 diagnostic loaded SDL Mini successfully, ran 601
+frames in 30,037 ms, passed its CPU triangle-centre check and exited normally
+(status 0). It selected `renderer=software`, yielding no visible image. The
+reported peak process RSS was 4,944 KiB. These are probe metrics only, not
+gameplay performance or memory figures. No game-data load is established.
+
+Source inspection confirms the pinned Mini software framebuffer update returns
+without copying the surface. 0.1.1 explicitly selects `Miyoo Mini` by renderer
+index, logs available renderers, disables batching and refuses the invisible
+fallback on Mini. Native SDL dummy tests and the ARM build are rerun for this
+change. A third injected-driver regression test lists software before Mini and
+sets SDL_RENDER_DRIVER=software, then verifies the real platform requests the
+explicit Mini renderer index and disables batching. All three sanitizer tests
+pass. Visible hardware output remains to be confirmed.

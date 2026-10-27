@@ -80,8 +80,8 @@ safe ceiling can be asserted without the device measurement.
   firmware satisfies these requirements is a device-test gate. No private
   glibc/loader is installed over the OS.
 - The SDL fork has an unconditional Mini EGL adapter even with GL disabled;
-  `prepare-sdl.py` removes it and the EGL/GLES link dependencies, and permits
-  a genuine SDL software-presenter fallback.
+  `prepare-sdl.py` removes it and the EGL/GLES link dependencies, and removes the forced renderer flags. The Mini generic software
+  framebuffer updater is a no-op, so 0.1.1 explicitly selects its MI_GFX presenter.
 - The initial build skips audio initialization via `-nosound`. Enabling SDL
   audio alone would not adapt miniaudio's output to the MI_AO backend.
 

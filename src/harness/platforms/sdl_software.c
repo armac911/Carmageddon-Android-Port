@@ -40,9 +40,28 @@ static void* create(char* title,int x,int y,int w,int h){
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"0");
     window=SDL_CreateWindow(title,0,0,640,480,SDL_WINDOW_SHOWN);
     if(!window)fail("SDL_CreateWindow");
-    /* The Mini driver uses the 2D blitter. Neither route requests GL. */
-    renderer=SDL_CreateRenderer(window,-1,0);
-    if(!renderer)renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
+    /* Mini's generic software framebuffer update is a no-op in this SDL fork.
+     * Its software renderer precedes Mini in SDL's default driver list, so flags
+     * 0 silently selects an invisible surface. Select the MI_GFX 2D presenter
+     * explicitly; CPU 3D rasterization is independent of this SDL flag. */
+    const char* video=SDL_GetCurrentVideoDriver();
+    int is_mini=video && (!SDL_strcasecmp(video,"Mini") || !SDL_strcasecmp(video,"mmiyoo"));
+    int mini_index=-1;
+    for(int i=0;i<SDL_GetNumRenderDrivers();i++) {
+        SDL_RendererInfo available;
+        if(SDL_GetRenderDriverInfo(i,&available))continue;
+        printf("available renderer index=%d name=%s flags=0x%x\n",i,available.name,(unsigned)available.flags);
+        if(!SDL_strcasecmp(available.name,"Miyoo Mini") || !SDL_strcasecmp(available.name,"mmiyoo"))mini_index=i;
+    }
+    SDL_SetHintWithPriority(SDL_HINT_RENDER_BATCHING,"0",SDL_HINT_OVERRIDE);
+    if(is_mini) {
+        if(mini_index<0){fprintf(stderr,"Mini video driver has no MI_GFX presenter; refusing invisible software fallback\n");exit(1);}
+        renderer=SDL_CreateRenderer(window,mini_index,SDL_RENDERER_ACCELERATED);
+    } else {
+        /* Desktop/dummy backends used by procedural tests support software. */
+        renderer=SDL_CreateRenderer(window,-1,0);
+        if(!renderer)renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
+    }
     if(!renderer)fail("SDL_CreateRenderer");
     texture=SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ARGB8888,SDL_TEXTUREACCESS_STREAMING,w,h);
     if(!texture)fail("SDL_CreateTexture");
