@@ -222,6 +222,12 @@ public class DethraceActivity extends SDLActivity {
             android.content.SharedPreferences controller=getSharedPreferences("controller",MODE_PRIVATE);
             android.system.Os.setenv("DETHRACE_CONTROLLER_BINDINGS", ControllerBindings.serialize(controller), true);
             android.system.Os.setenv("DETHRACE_CONTROLLER_STEERING", controller.getString("steering","0"), true);
+            android.content.SharedPreferences tuning = getSharedPreferences("input_tuning", MODE_PRIVATE);
+            for (int i = 0; i < InputTuning.KEYS.length; i++) {
+                int value = InputTuning.clamp(i, tuning.getInt(InputTuning.KEYS[i], InputTuning.DEFAULTS[i]));
+                android.system.Os.setenv("DETHRACE_INPUT_" + InputTuning.KEYS[i].toUpperCase(java.util.Locale.ROOT),
+                    Integer.toString(value), true);
+            }
             android.system.Os.setenv("DETHRACE_DRAW_DISTANCE", distance, true);
             android.system.Os.setenv("DETHRACE_RENDER_QUALITY", quality, true);
             String filtering=getSharedPreferences("graphics",MODE_PRIVATE).getString("filtering","sharp");

@@ -251,6 +251,8 @@ static void dr_close_controllers(void) {
     }
     DRAndroidSetGamepadButtons(0);
     DRAndroidSetGamepadSteering(100000);
+    DRAndroidSetGamepadPedals(-1, -1);
+    DRAndroidSetGamepadDigital(0);
 }
 static void dr_poll_controllers(void) {
     dr_load_bindings();
@@ -281,6 +283,7 @@ static void dr_poll_controllers(void) {
             || !gProgram_state.racing || gInterface_within_race_mode) dr_input_latches[i] = 0;
     int steering = 100000;
     unsigned buttons = 0;
+    int digital = 0, acc = -1, dec = -1;
     for (int i = 0; i < 4; ++i) {
         SDL_GameController* c = dr_controllers[i];
         if (!c || !(SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS)) continue;
@@ -291,7 +294,7 @@ static void dr_poll_controllers(void) {
         int up = y < -8000 || SDL_GameControllerGetButton(c, SDL_CONTROLLER_BUTTON_DPAD_UP);
         int down = y > 8000 || SDL_GameControllerGetButton(c, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
         if (gProgram_state.racing && !gInterface_within_race_mode) {
-            int axis = 0;
+            int axis = 0, is_digital = 0;
             if (dr_controller_steering_mode != 3) {
                 int stick = dr_controller_steering_mode == 2
                     ? SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_RIGHTX) : x;
@@ -300,12 +303,16 @@ static void dr_poll_controllers(void) {
             if (dr_controller_steering_mode == 0 || dr_controller_steering_mode == 3) {
                 int dpad = SDL_GameControllerGetButton(c, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
                          - SDL_GameControllerGetButton(c, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
-                if (dpad) axis = dpad * 65535;
+                if (dpad) { axis = dpad * 65535; is_digital = 1; }
             }
-            if (steering == 100000 || abs(axis) > abs(steering)) steering = axis;
-            for (int action = 0; action < 7; ++action)
+            if (steering == 100000 || abs(axis) > abs(steering)) { steering = axis; digital = is_digital; }
+            int a = dr_bound_pedal(c, 0), secondary = dr_bound_pedal(c, 10);
+            int b = dr_bound_pedal(c, 1);
+            if (secondary > a) a = secondary;
+            if (a > acc) acc = a;
+            if (b > dec) dec = b;
+            for (int action = 2; action < 7; ++action)
                 if (dr_bound_input(c, action, i)) buttons |= 1u << action;
-            if (dr_bound_input(c, 10, i)) buttons |= 1u;
             if (dr_bound_input(c, 8, i)) buttons |= 1u << 8;
             if (dr_bound_input(c, 9, i)) buttons |= 1u << 9;
         } else {
@@ -319,6 +326,8 @@ static void dr_poll_controllers(void) {
         dr_controller_key(SDL_SCANCODE_ESCAPE, dr_bound_input(c, 7, i));
     }
     DRAndroidSetGamepadSteering(steering);
+    DRAndroidSetGamepadDigital(digital);
+    DRAndroidSetGamepadPedals(acc, dec);
     // Polling rebuilds the mask, clearing released/disconnected/background input.
     DRAndroidSetGamepadButtons(buttons);
 }

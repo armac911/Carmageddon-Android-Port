@@ -2014,17 +2014,14 @@ void PollCarControls(tU32 pTime_difference) {
         }
 #ifdef __ANDROID__
         if (!gInterface_within_race_mode) DRAndroidApplyGearChange(c, gear_change);
-        int steering = DRAndroidSteering();
+        int steering = DRAndroidFilterSteering(DRAndroidSteering(), pTime_difference);
         if (steering != 100000 && !gInterface_within_race_mode) {
             keys.left = keys.right = 0;
-            if (DRAndroidDigitalSteering()) {
-                keys.left = steering < 0;
-                keys.right = steering > 0;
-                joystick.left = joystick.right = -1;
-            } else {
-                joystick.left = steering < 0 ? -steering : 0;
-                joystick.right = steering > 0 ? steering : 0;
-            }
+            joystick.left = steering < 0 ? -steering : 0;
+            joystick.right = steering > 0 ? steering : 0;
+        }
+        if (DRAndroidPedals(&joystick.acc, &joystick.dec, pTime_difference)) {
+            keys.acc = keys.dec = 0;
         }
         DRAndroidImpact(c->frame_collision_flag, c->speed);
 #endif

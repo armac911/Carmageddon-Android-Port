@@ -31,6 +31,10 @@ final class Diagnostics {
         String[] keys={"quality","distance","steering","monitor","fps_cap","filtering"};
         String[] defaults={"standard","original","analog","off","60","sharp"};
         for(int i=0;i<keys.length;i++) m.put(keys[i],c.getSharedPreferences("graphics",0).getString(keys[i],defaults[i]));
+        JSONObject inputTuning=new JSONObject();
+        for(int i=0;i<InputTuning.KEYS.length;i++)inputTuning.put(InputTuning.KEYS[i],
+            InputTuning.clamp(i,c.getSharedPreferences("input_tuning",0).getInt(InputTuning.KEYS[i],InputTuning.DEFAULTS[i])));
+        m.put("input_tuning",inputTuning);
         m.put("display_width",c.getResources().getDisplayMetrics().widthPixels);m.put("display_height",c.getResources().getDisplayMetrics().heightPixels);
         m.put("timing_notes","CPU wall-clock ms. Render includes readback/copy/presentation/swap; do not sum nested fields. Readback includes queued GPU work and transfer. No forced GPU sync or GPU timer queries. Draw calls/triangles count model geometry only. Race-loop frames only; exclude rows with excluded=1. Capture stops after 120 seconds of non-excluded race frame time. Sensors stop after 10 minutes. Battery temperature is not CPU/GPU temperature; thermal status -1 means unavailable.");
         try(FileOutputStream out=new FileOutputStream(new File(dir,"metadata.json"))) {out.write(m.toString(2).getBytes(StandardCharsets.UTF_8));}

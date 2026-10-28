@@ -204,11 +204,41 @@ public class LauncherActivity extends Activity {
     private void controls(){
         heading("Controls","Make it feel right.");LinearLayout c=card();
         choice(c,"Steering · touch & left stick","graphics","steering",new String[]{"Analog","Digital"},new String[]{"analog","digital"},false);
+        Button tuning=button("Deadzones & sensitivity  ›",false);tuning.setOnClickListener(v->inputTuning());c.addView(tuning);
         toggle(c,"Haptic feedback","controls","haptics",true);
         Button customize=button("Customize touch layout  ›",false);customize.setOnClickListener(v->startActivity(new Intent(this,ControlEditorActivity.class)));c.addView(customize);
         Button controller=button("Remap controller  ›",false);controller.setOnClickListener(v->controllerMapping());c.addView(controller);
         note(c,"Defaults: left stick / D-pad steer · RT or X accelerate · LT brake/reverse · LB handbrake · Y recover · RB repair (hold) · Select map · right stick up/down gears · R3 camera · Start pause. Menus: A confirm, B back.");
         note(c,"Move and resize touch controls in the layout editor.");
+    }
+    private void inputTuning(){
+        body.removeAllViews();heading("Deadzones & sensitivity","Changes apply on the next Play.");
+        LinearLayout c=card();
+        note(c,"Deadzones ignore small movements. Lower analog sensitivity softens the centre while keeping full travel. Values above 100% make it sharper.");
+        note(c,"Digital steering strength limits D-pad and Digital-mode steering. Build and return times smooth all steering; 0 ms gives immediate response. Times describe centre to full lock, or full lock to centre.");
+        note(c,"Pedal sensitivity adjusts axes mapped to acceleration or brake. Pedal build time also softens touch and button pedals. Releasing a pedal stops its input immediately. Action stick activation controls gear changes and other actions mapped to stick directions.");
+        SharedPreferences prefs=getSharedPreferences("input_tuning",0);
+        for(int i=0;i<InputTuning.KEYS.length;i++){
+            final int index=i;
+            int value=InputTuning.clamp(i,prefs.getInt(InputTuning.KEYS[i],InputTuning.DEFAULTS[i]));
+            TextView label=new TextView(this);label.setTextColor(TEXT);label.setTextSize(14);
+            label.setText(t(InputTuning.LABELS[i])+": "+value+InputTuning.unit(i));c.addView(label);
+            SeekBar slider=new SeekBar(this);slider.setMax(InputTuning.MAX[i]-InputTuning.MIN[i]);slider.setProgress(value-InputTuning.MIN[i]);
+            slider.setContentDescription(t(InputTuning.LABELS[i]));
+            slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+                public void onProgressChanged(SeekBar bar,int progress,boolean fromUser){
+                    int current=progress+InputTuning.MIN[index];
+                    label.setText(t(InputTuning.LABELS[index])+": "+current+InputTuning.unit(index));
+                    if(fromUser)prefs.edit().putInt(InputTuning.KEYS[index],current).apply();
+                }
+                public void onStartTrackingTouch(SeekBar bar){}
+                public void onStopTrackingTouch(SeekBar bar){}
+            });c.addView(slider,new LinearLayout.LayoutParams(-1,dp(48)));
+        }
+        Button reset=button("Restore input tuning defaults",false);
+        reset.setOnClickListener(v->{prefs.edit().clear().apply();inputTuning();});c.addView(reset);
+        note(c,"Camera, map, repair, recover and menu buttons remain single-press actions. Vehicle grip is unchanged. New tuning labels currently use English.");
+        Button back=button("Back to controls",false);back.setOnClickListener(v->{body.removeAllViews();controls();});c.addView(back);
     }
     private void controllerMapping(){
         body.removeAllViews();heading("Controller mapping","Changes apply on the next Play. Return the gear stick to centre between shifts.");

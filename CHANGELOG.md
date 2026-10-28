@@ -4,6 +4,24 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.3 — adjustable input response (unreleased test candidate)
+
+- Smooth stick, D-pad and touch steering with elapsed-time rate limits, including
+  separate steering build/return times. Original vehicle grip is unchanged.
+- Add launcher sliders for stick/touch deadzones and sensitivity, trigger
+  deadzone/pedal sensitivity, digital steering strength and action-stick
+  activation (including gear changes), with one-tap tuning reset.
+- Make acceleration and brake axes proportional, including remapped axes;
+  button/touch pedals build progressively and release immediately.
+- Remove an inherited abort in the unused analog throttle path; fix integer
+  division and accumulation in analog brake pressure. Scale the existing
+  traction limiter by pedal position rather than overriding a small press.
+- Include effective tuning in opt-in diagnostic/error exports. Automated checks
+  cover partial input, reversals, release, reverse selection and remapping.
+- Requires driving validation on physical devices. New tuning labels/help use
+  English; existing language support remains available. Multiplayer and the
+  known cockpit FPS limitation are unchanged.
+
 ## 0.9.2 — optional languages and launcher cheats (test candidate)
 
 - Add explicit English/Spanish/Italian/French selection in the launcher. English

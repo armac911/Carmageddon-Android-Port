@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "android_input.h"
+#include "android_control_tuning.h"
 #include "harness/profiler.h"
 JNIEXPORT void JNICALL Java_com_dethrace_android_DethraceActivity_nativeProfilePause(JNIEnv* env,jobject obj) { DRProfileMarkPause(); }
 #include "common/globvars.h"
@@ -57,13 +58,22 @@ int DRAndroidDigitalSteering(void) {
     return mode && strcmp(mode, "digital") == 0;
 }
 int DRAndroidNormalizeStick(int value) {
-    if (value < -32767) value = -32767;
-    if (value > 32767) value = 32767;
-    int magnitude = abs(value);
-    if (magnitude <= 8000) return 0;
-    int scaled = (magnitude - 8000) * 65535 / (32767 - 8000);
-    return value < 0 ? -scaled : scaled;
+    DRControlTuning* c = dr_control_tuning(0);
+    return dr_control_axis(value, 32767, c->stick_deadzone, c->stick_sensitivity);
 }
+static int gamepad_digital, gamepad_acc = -1, gamepad_dec = -1;
+static float filtered_steer, filtered_acc, filtered_dec;
+static int touch_steer_return;
+void DRAndroidInitControlTuning(void) {
+    dr_control_tuning(1);
+    filtered_steer = filtered_acc = filtered_dec = 0;
+    touch_steer_return = 0;
+    gamepad_acc = gamepad_dec = -1;
+    gamepad_digital = 0;
+    gamepad_steering = 100000;
+}
+void DRAndroidSetGamepadDigital(int digital) { gamepad_digital = digital; }
+void DRAndroidSetGamepadPedals(int acc, int dec) { gamepad_acc = acc; gamepad_dec = dec; }
 void DRAndroidSetGamepadSteering(int value) { gamepad_steering = value; }
 /* Same action bits as touch; both paths are combined on the game thread. */
 static unsigned gamepad_mask;
@@ -107,12 +117,18 @@ Java_com_dethrace_android_DethraceActivity_nativeResetTouch(JNIEnv* env, jobject
     SDL_AtomicSet(&touch_axis_active, 0);
 }
 void DRAndroidUpdateTouch(void) {
-    if (SDL_AtomicSet(&touch_reset, 0)) memset(held_until, 0, sizeof(held_until));
+    if (SDL_AtomicSet(&touch_reset, 0)) {
+        memset(held_until, 0, sizeof(held_until));
+        filtered_steer = filtered_acc = filtered_dec = 0;
+        touch_steer_return = 0;
+    }
     unsigned edges = SDL_AtomicSet(&touch_edges, 0);
     unsigned down = SDL_AtomicGet(&touch_mask);
     Uint32 now = SDL_GetTicks();
     active_mask = 0;
     if (!gProgram_state.racing || gInterface_within_race_mode) {
+        filtered_steer = filtered_acc = filtered_dec = 0;
+        touch_steer_return = 0;
         memset(held_until, 0, sizeof(held_until));
         SDL_AtomicSet(&touch_mask, 0);
         SDL_AtomicSet(&touch_axis_active, 0);
@@ -135,6 +151,43 @@ int DRAndroidTouchKey(int key) {
 }
 int DRAndroidSteering(void) {
     return SDL_AtomicGet(&touch_axis_active) ? SDL_AtomicGet(&touch_axis) : gamepad_steering;
+}
+int DRAndroidFilterSteering(int target, unsigned dt) {
+    DRControlTuning* c = dr_control_tuning(0);
+    int touch = SDL_AtomicGet(&touch_axis_active);
+    if (!gProgram_state.racing || gInterface_within_race_mode) {
+        filtered_steer = 0;
+        touch_steer_return = 0;
+        return 100000;
+    }
+    if (touch) touch_steer_return = 1;
+    else if (target != 100000) touch_steer_return = 0;
+    if (target == 100000 && touch_steer_return) target = 0;
+    if (target == 100000) { filtered_steer = 0; return target; }
+    if (touch) target = dr_control_axis(target, 65535, c->touch_deadzone, c->touch_sensitivity);
+    if ((touch || !gamepad_digital) && DRAndroidDigitalSteering())
+        target = target < 0 ? -65535 : target > 0 ? 65535 : 0;
+    if ((gamepad_digital && !touch) || DRAndroidDigitalSteering())
+        target = target * c->dpad_sensitivity / 100;
+    filtered_steer = dr_control_slew(filtered_steer, target, dt, c->steer_rise, c->steer_return);
+    if (!touch && target == 0 && filtered_steer == 0.f) touch_steer_return = 0;
+    return (int)filtered_steer;
+}
+int DRAndroidPedals(int* acc, int* dec, unsigned dt) {
+    unsigned mask = (unsigned)SDL_AtomicGet(&touch_mask) | gamepad_mask;
+    if (!gProgram_state.racing || gInterface_within_race_mode ||
+        (gamepad_acc < 0 && !((mask | active_mask) & 3u))) {
+        filtered_acc = filtered_dec = 0;
+        return 0;
+    }
+    int a = mask & 1u ? 65535 : gamepad_acc > 0 ? gamepad_acc : 0;
+    int b = mask & 2u ? 65535 : gamepad_dec > 0 ? gamepad_dec : 0;
+    DRControlTuning* c = dr_control_tuning(0);
+    filtered_acc = dr_control_slew(filtered_acc, a, dt, c->pedal_rise, 0);
+    filtered_dec = dr_control_slew(filtered_dec, b, dt, c->pedal_rise, 0);
+    *acc = filtered_acc > 0 ? (int)filtered_acc : -1;
+    *dec = filtered_dec > 0 ? (int)filtered_dec : -1;
+    return 1;
 }
 void DRAndroidImpact(int collision, float speed) {
     static int was_collision;

@@ -24,7 +24,9 @@ static struct {int racing;} gProgram_state={1};
 static int gInterface_within_race_mode;
 static SDL_GameController *dr_controllers[4];
 static Sint16 dr_activity_axes[4][SDL_CONTROLLER_AXIS_MAX];
-static int steering,keys[SDL_NUM_SCANCODES];static unsigned actions;
+static int steering,keys[SDL_NUM_SCANCODES],pedal_acc,pedal_dec;static unsigned actions;
+void DRAndroidSetGamepadDigital(int v){(void)v;}
+void DRAndroidSetGamepadPedals(int a,int b){pedal_acc=a;pedal_dec=b;}
 static Uint8 dr_controller_keys[SDL_NUM_SCANCODES];
 /* BINDINGS */
 void DRAndroidSetGamepadSteering(int s){steering=s;}
@@ -44,12 +46,15 @@ Uint8 SDL_GameControllerGetButton(SDL_GameController *c,SDL_GameControllerButton
 Uint32 SDL_GetWindowFlags(SDL_Window *w){(void)w;return focus?SDL_WINDOW_INPUT_FOCUS:0;}
 /* NORMALIZE */
 /* POLL */
-static void poll(void){memset(keys,0,sizeof(keys));dr_poll_controllers();}
+static void poll(void){memset(keys,0,sizeof(keys));dr_poll_controllers();actions |= (pedal_acc>0?1u:0u)|(pedal_dec>0?2u:0u);}
 static void clear(void){memset(fake[0].axes,0,sizeof(fake[0].axes));memset(fake[0].buttons,0,sizeof(fake[0].buttons));}
 int main(void){
  unsetenv("DETHRACE_CONTROLLER_BINDINGS");unsetenv("DETHRACE_CONTROLLER_STEERING");
  poll();assert(actions==0&&steering==0);
- fake[0].axes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]=4001;poll();assert(actions==1);
+ fake[0].axes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]=3000;poll();assert(pedal_acc==0&&actions==0);
+ fake[0].axes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]=4001;poll();assert(actions==1&&pedal_acc>0&&pedal_acc<4000);
+ fake[0].axes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]=18000;poll();assert(pedal_acc>30000&&pedal_acc<35000);
+ fake[0].axes[SDL_CONTROLLER_AXIS_TRIGGERRIGHT]=32767;poll();assert(pedal_acc==65535);
  clear();fake[0].buttons[SDL_CONTROLLER_BUTTON_X]=1;poll();assert(actions==1);
  clear();fake[0].axes[SDL_CONTROLLER_AXIS_TRIGGERLEFT]=4001;poll();assert(actions==2);
  clear();fake[0].buttons[SDL_CONTROLLER_BUTTON_LEFTSHOULDER]=1;poll();assert(actions==4);
@@ -89,5 +94,5 @@ int main(void){
 '''
 with tempfile.TemporaryDirectory() as d:
  p=Path(d);(p/'test.c').write_text(fixture.replace('/* BINDINGS */',(root/'src/harness/platforms/android_controller.h').read_text()).replace('/* NORMALIZE */',normal).replace('/* POLL */',poll))
- subprocess.run(['cc','-D_POSIX_C_SOURCE=200809L','-std=c99','-Wall','-Wextra','-Werror','-I'+str(root/'android/app/jni/SDL/include'),str(p/'test.c'),'-o',str(p/'test')],check=True)
+ subprocess.run(['cc','-D_POSIX_C_SOURCE=200809L','-std=c99','-Wall','-Wextra','-Werror','-I'+str(root/'android/app/jni/SDL/include'),'-I'+str(root/'src/harness/platforms'),str(p/'test.c'),'-lm','-o',str(p/'test')],check=True)
  subprocess.run([str(p/'test')],check=True)

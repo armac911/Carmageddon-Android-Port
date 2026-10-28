@@ -1,5 +1,6 @@
 #include "../android_graphics.h"
 #include "init.h"
+#include "../android_input.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -387,6 +388,9 @@ void InitialiseApplication(int pArgc, char** pArgv) {
     InitializeBRenderEnvironment();
     InitDRFonts();
     InitBRFonts();
+#ifdef __ANDROID__
+    DRAndroidInitControlTuning();
+#endif
     DRLanguageInit(getenv("DETHRACE_LANGUAGE"));
     LoadMiscStrings();
     LoadInRegistees();

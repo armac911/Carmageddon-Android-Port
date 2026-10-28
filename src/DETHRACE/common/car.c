@@ -827,7 +827,6 @@ void CalcEngineForce(tCar_spec* c, br_scalar dt) {
     br_scalar torque;
     br_scalar ts;
     br_scalar ts2;
-    br_scalar brake_temp;
     int sign;
     tS32 temp_for_swap;
     LOG_TRACE("(%p, %f)", c, dt);
@@ -858,12 +857,12 @@ void CalcEngineForce(tCar_spec* c, br_scalar dt) {
     c->torque = -(c->revs * c->revs / 100000000.0f) - 0.2f;
     if (c->keys.acc || c->joystick.acc >= 0) {
         if (fabsf(c->curvature) > c->maxcurve / 2.0f && c->gear < 2 && c->gear && c->traction_control) {
-            ts = 0.7f;
+            ts = 0.7f * (c->joystick.acc >= 0 ? c->joystick.acc / 65535.f : 1.f);
         } else if (c->joystick.acc < 0) {
             ts = 1.2;
         } else {
             ts = c->joystick.acc / 54613.0;
-            LOG_PANIC("ooo");
+            /* Proportional Android/controller throttle uses this path. */
         }
 
         torque = c->engine_power_multiplier * ts * gEngine_powerup_factor[c->power_up_levels[1]];
@@ -878,9 +877,9 @@ void CalcEngineForce(tCar_spec* c, br_scalar dt) {
         c->brake_force = 0.0f;
     } else {
         if (c->joystick.dec > 0) {
-            c->brake_force = (double)(c->joystick.dec / 0x10000) * c->brake_increase + c->initial_brake;
-        }
-        if (c->brake_force == 0.0f) {
+            c->brake_force = (c->joystick.dec / 65535.f) * (c->brake_increase + c->initial_brake);
+            /* Absolute pedal pressure must not accumulate like a held key. */
+        } else if (c->brake_force == 0.0f) {
             c->brake_force = c->initial_brake;
         } else {
             c->brake_force += c->brake_increase * dt;

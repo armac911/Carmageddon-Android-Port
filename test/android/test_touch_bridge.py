@@ -8,7 +8,7 @@ a=s.index('static SDL_atomic_t'); b=s.index('static SDL_SpinLock')
 source=s[a:b]
 names=['Java_com_dethrace_android_DethraceActivity_nativeTouch',
        'Java_com_dethrace_android_DethraceActivity_nativeResetTouch',
-       'DRAndroidUpdateTouch', 'DRAndroidTouchKey', 'DRAndroidSteering', 'DRAndroidImpact']
+       'DRAndroidUpdateTouch', 'DRAndroidTouchKey', 'DRAndroidSteering', 'DRAndroidFilterSteering', 'DRAndroidPedals', 'DRAndroidImpact']
 for name in names:
     start=s.index(name+'('); start=s.rfind('\n',0,start)+1
     if name.startswith('Java_'): start=s.rfind('JNIEXPORT',0,start)
@@ -24,6 +24,7 @@ prefix='''
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "android_control_tuning.h"
 typedef int SDL_atomic_t;
 typedef uint32_t Uint32;
 typedef int32_t Sint32;
@@ -50,12 +51,61 @@ test='''
 #define touch(mask,axis,on) Java_com_dethrace_android_DethraceActivity_nativeTouch(NULL,NULL,mask,axis,on)
 #define reset() Java_com_dethrace_android_DethraceActivity_nativeResetTouch(NULL,NULL)
 int main(void) {
+ // Production smoothing: equal held input gives equal results at 30/60/120 FPS.
+ float result[3];
+ for(int rate=0;rate<3;rate++) {
+   int frames=rate==0?6:rate==1?12:24;
+   float value=0;
+   for(int i=0;i<frames;i++)value=dr_control_slew(value,65535,(i+1)*200/frames-i*200/frames,250,180);
+   result[rate]=value;
+ }
+ assert(fabsf(result[0]-52428)<.1f&&fabsf(result[0]-result[1])<.1f&&fabsf(result[1]-result[2])<.1f);
+ float one=dr_control_slew(50000,-65535,150,250,180), many=50000;
+ for(int i=0;i<15;i++)many=dr_control_slew(many,-65535,10,250,180);
+ assert(fabsf(one-many)<.1f);
+ assert(dr_control_slew(65535,0,180,250,180)==0);
+ assert(dr_control_slew(0,65535,0,250,180)==0);
+ assert(dr_control_slew(0,65535,1,0,0)==65535);
+ assert(dr_control_axis(-32768,32767,50,25)==-65535);
+ assert(dr_control_axis(16000,32767,50,25)==0);
+ setenv("DETHRACE_INPUT_STICK_DEADZONE","invalid",1);dr_control_tuning(1);
+ assert(dr_control_tuning(0)->stick_deadzone==24);
+ unsetenv("DETHRACE_INPUT_STICK_DEADZONE");
+ DRAndroidInitControlTuning();
+ int a,b;
+ DRAndroidSetGamepadSteering(65535);
+ assert(DRAndroidFilterSteering(65535,25)>0&&DRAndroidFilterSteering(65535,25)<20000);
+ assert(DRAndroidFilterSteering(100000,16)==100000);
+ assert(DRAndroidFilterSteering(65535,25)<7000); // no old lock after disconnect
+ DRAndroidFilterSteering(100000,16);
+ touch(0,4000,1);assert(DRAndroidFilterSteering(DRAndroidSteering(),16)==0);
+ reset();DRAndroidUpdateTouch();
+ DRAndroidSetGamepadPedals(32768,0);
+ assert(DRAndroidPedals(&a,&b,60)&&a>30000&&a<32769&&b==-1);
+ DRAndroidSetGamepadPedals(0,32768);
+ assert(DRAndroidPedals(&a,&b,60)&&a==-1&&b>30000); // throttle releases immediately
+ DRAndroidSetGamepadPedals(-1,-1);assert(!DRAndroidPedals(&a,&b,60));
+ touch(1,0,0);DRAndroidUpdateTouch();
+ assert(DRAndroidPedals(&a,&b,30)&&a>16000&&a<17000); // touch/button ramp
+ touch(0,0,0);DRAndroidUpdateTouch();
+ assert(DRAndroidPedals(&a,&b,30)&&a==-1&&b==-1); // release bypasses action minimum-hold
+ ticks+=100;DRAndroidUpdateTouch();assert(!DRAndroidPedals(&a,&b,30));
+ touch(1,0,0);DRAndroidUpdateTouch();gInterface_within_race_mode=1;DRAndroidUpdateTouch();
+ assert(!DRAndroidPedals(&a,&b,30));gInterface_within_race_mode=0;
+ // Releasing touch steering returns smoothly even with no controller attached.
+ DRAndroidInitControlTuning();
+ touch(0,65535,1);assert(DRAndroidFilterSteering(DRAndroidSteering(),250)==65535);
+ touch(0,0,0);int released=DRAndroidFilterSteering(DRAndroidSteering(),90);
+ assert(released>32000&&released<33000);
+ assert(DRAndroidFilterSteering(DRAndroidSteering(),90)==0);
+ assert(DRAndroidFilterSteering(DRAndroidSteering(),16)==100000);
+ DRAndroidInitControlTuning();
  // Stick range, deadzone, asymmetric signed limits, and touch priority.
  assert(DRAndroidNormalizeStick(-32768)==-65535);
  assert(DRAndroidNormalizeStick(32767)==65535);
- assert(DRAndroidNormalizeStick(8000)==0 && DRAndroidNormalizeStick(-8000)==0);
+ assert(DRAndroidNormalizeStick(7864)==0 && DRAndroidNormalizeStick(-7864)==0);
  int partial=DRAndroidNormalizeStick(20000);
- assert(partial>30000 && partial<33000);
+ assert(partial>27000 && partial<29000);
  assert(DRAndroidNormalizeStick(-20000)==-partial);
  DRAndroidSetGamepadSteering(partial); assert(DRAndroidSteering()==partial);
  touch(0,-12000,1); assert(DRAndroidSteering()==-12000);
@@ -122,5 +172,5 @@ int main(void) {
 '''
 with tempfile.TemporaryDirectory() as d:
     c=Path(d)/'test.c'; exe=Path(d)/'test'; c.write_text(prefix+source+test)
-    subprocess.run(['gcc','-std=c99','-Wall','-Wextra','-Wno-unused-parameter',str(c),'-o',str(exe)],check=True)
+    subprocess.run(['gcc','-std=c99','-Wall','-Wextra','-Wno-unused-parameter','-I'+str(root/'src/DETHRACE'),str(c),'-lm','-o',str(exe)],check=True)
     subprocess.run([str(exe)],check=True)

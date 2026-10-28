@@ -148,7 +148,7 @@ public class TouchOverlayView extends View {
     }
     private void updateAxis(float x) {
         float raw = Math.max(-1, Math.min(1, (x - steer.centerX()) / (steer.width() * .40f)));
-        axis = Math.abs(raw) < .08f ? 0 : digitalSteering ? Math.signum(raw) : Math.signum(raw) * (Math.abs(raw) - .08f) / .92f;
+        axis = raw; // Native tuning applies the selected deadzone and response.
     }
     private void send() {
         mask = 0;
