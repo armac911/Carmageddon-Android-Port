@@ -47,6 +47,8 @@ final class UiLanguage {
         STRINGS.put("Aspect ratio",new String[]{"Relación de aspecto","Formato dello schermo","Format d'image"});
         STRINGS.put("4:3 — Classic",new String[]{"4:3 — Clásico","4:3 — Classico","4:3 — Classique"});
         STRINGS.put("16:9 — Widescreen",new String[]{"16:9 — Panorámico","16:9 — Panoramico","16:9 — Écran large"});
+        STRINGS.put("Full screen — fit device",new String[]{"Pantalla completa — ajustar al dispositivo","Schermo intero — adatta al dispositivo","Plein écran — adapté à l'appareil"});
+        STRINGS.put("Full screen",new String[]{"Pantalla completa","Schermo intero","Plein écran"});
         STRINGS.put("3D resolution",new String[]{"Resolución 3D","Risoluzione 3D","Résolution 3D"});
         STRINGS.put("Standard",new String[]{"Estándar","Standard","Standard"});
         STRINGS.put("High — sharper edges",new String[]{"Alta — bordes más definidos","Alta — bordi più nitidi","Élevée — contours plus nets"});

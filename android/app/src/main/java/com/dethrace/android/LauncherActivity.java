@@ -158,7 +158,8 @@ public class LauncherActivity extends Activity {
         gameButton=button("",false);gameButton.setOnClickListener(v->chooseGame());launch.addView(gameButton);
         status=text("",14,TEXT,true);launch.addView(status);
         String cap=pref("fps_cap","60");String quality=pref("quality","standard");String distance=pref("distance","original");
-        String aspect=getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3";
+        String aspectPref=DethraceActivity.aspectPreference(this);
+        String aspect="fill".equals(aspectPref)?t("Full screen"):"wide".equals(aspectPref)?"16:9":"4:3";
         note(launch,aspect+"  •  "+t(capitalize(quality))+"  •  "+t("Draw distance")+": "+t(capitalize(distance))+"  •  "+("0".equals(cap)?t("Uncapped"):cap+" FPS"));
         play=button("PLAY  ›",true);play.setTextSize(20);play.setOnClickListener(v->startActivity(new Intent(this,DethraceActivity.class)));launch.addView(play);
         importButton=button("Import game ZIP or GOG installer",false);importButton.setOnClickListener(v->pickData());launch.addView(importButton);
@@ -184,7 +185,8 @@ public class LauncherActivity extends Activity {
     private void graphics(){
         heading("Graphics","Set up your next run. Changes apply when you press Play.");
         LinearLayout c=card();
-        choice(c,"Aspect ratio","display","widescreen_16_9",new String[]{"4:3 — Classic","16:9 — Widescreen"},new String[]{"false","true"},true);
+        DethraceActivity.aspectPreference(this); // migrate the old 16:9 switch before showing the choice
+        choice(c,"Aspect ratio","display","aspect",new String[]{"4:3 — Classic","16:9 — Widescreen","Full screen — fit device"},new String[]{"classic","wide","fill"},false);
         choice(c,"3D resolution","graphics","quality",new String[]{"Standard","High — sharper edges","Performance — lower resolution"},new String[]{"standard","high","performance"},false);
         choice(c,"3D texture filtering","graphics","filtering",new String[]{"Sharp — original textures","Smooth — bilinear textures"},new String[]{"sharp","smooth"},false);
         note(c,"Smooth blends 3D texture colors within the game palette. Menus and HUD stay sharp. Changes apply on the next Play.");
