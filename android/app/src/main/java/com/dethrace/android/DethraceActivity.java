@@ -186,6 +186,18 @@ public class DethraceActivity extends SDLActivity {
         super.setOrientationBis(0, 0, resizable, "LandscapeRight LandscapeLeft");
     }
 
+    /** Race canvas aspect: "classic" (4:3), "wide" (16:9) or "fill" (device).
+     *  Migrates the original boolean widescreen_16_9 preference once. */
+    static String aspectPreference(android.content.Context c) {
+        android.content.SharedPreferences display = c.getSharedPreferences("display", MODE_PRIVATE);
+        String aspect = display.getString("aspect", null);
+        if (!"classic".equals(aspect) && !"wide".equals(aspect) && !"fill".equals(aspect)) {
+            aspect = display.getBoolean("widescreen_16_9", false) ? "wide" : "classic";
+            display.edit().putString("aspect", aspect).apply();
+        }
+        return aspect;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiLanguage.set(getSharedPreferences("language",0).getString("code","en"));
@@ -213,8 +225,10 @@ public class DethraceActivity extends SDLActivity {
                 android.system.Os.setenv("DETHRACE_CHEAT_" + key.toUpperCase(java.util.Locale.ROOT),
                     cheats.getBoolean(key, false) ? "1" : "0", true);
             }
-            boolean wide = getSharedPreferences("display", MODE_PRIVATE).getBoolean("widescreen_16_9", false);
-            android.system.Os.setenv("DETHRACE_WIDESCREEN_16_9", wide ? "1" : "0", true);
+            String aspect = aspectPreference(this);
+            android.system.Os.setenv("DETHRACE_ASPECT", aspect, true);
+            // Legacy flag for native builds that predate DETHRACE_ASPECT.
+            android.system.Os.setenv("DETHRACE_WIDESCREEN_16_9", "classic".equals(aspect) ? "0" : "1", true);
             String distance = getSharedPreferences("graphics", MODE_PRIVATE).getString("distance", "original");
             String quality = getSharedPreferences("graphics", MODE_PRIVATE).getString("quality", "standard");
             String steering = getSharedPreferences("graphics", MODE_PRIVATE).getString("steering", "analog");
