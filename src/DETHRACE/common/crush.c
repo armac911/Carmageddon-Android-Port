@@ -29,7 +29,11 @@ float gWobble_spam_y[8] = { 0.0f, -0.15f, 0.4f, 0.15f, -0.4f, 0.25f, 0.0f, -0.25
 float gWobble_spam_z[8] = { 0.4f, -0.25f, 0.0f, 0.25f, 0.0f, 0.15f, -0.4f, -0.15f };
 br_scalar gWheel_circ_to_width = 0.16f;
 tU8 gSmoke_damage_step[12] = { 20u, 20u, 0u, 10u, 10u, 10u, 10u, 10u, 10u, 10u, 10u, 10u };
-int gSteal_ranks[5] = { 0, 89, 72, 55, 38 };
+/* Rank needed to steal an opponent's car, by strength_rating 1..5 (index
+ * strength - 1). The old { 0, 89, 72, 55, 38 } table indexed by strength
+ * read past the end for strength 5, so the strongest cars depended on
+ * whatever global followed (gLast_demo_end_anim). */
+int gSteal_ranks[5] = { 89, 72, 55, 38, 21 };
 
 // IDA: int __usercall ReadCrushData@<EAX>(FILE *pF@<EAX>, tCrush_data *pCrush_data@<EDX>)
 int ReadCrushData(FILE* pF, tCrush_data* pCrush_data) {
@@ -1158,7 +1162,13 @@ int DoCrashEarnings(tCar_spec* pCar1, tCar_spec* pCar2) {
                     credits = 100 * (int)(credits_squared / 100.0);
                     AwardTime(gWasted_time[gProgram_state.skill_level]);
                     EarnCredits(credits);
-                    if (victim->can_be_stolen && !gOpponents[victim->index].dead && ((PercentageChance(50) && gSteal_ranks[gOpponents[victim->index].strength_rating] >= gProgram_state.rank) || victim->index == 4)) {
+                    int strength = gOpponents[victim->index].strength_rating;
+                    if (strength < 1) {
+                        strength = 1;
+                    } else if (strength > (int)COUNT_OF(gSteal_ranks)) {
+                        strength = (int)COUNT_OF(gSteal_ranks);
+                    }
+                    if (victim->can_be_stolen && !gOpponents[victim->index].dead && ((PercentageChance(50) && gProgram_state.rank <= gSteal_ranks[strength - 1]) || victim->index == 4)) {
                         StealCar(victim);
                     }
                 }
