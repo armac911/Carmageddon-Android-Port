@@ -1082,7 +1082,17 @@ void GLRenderer_FlushBuffer(tRenderer_flush_type flush_type) {
     // base_x/base_y to the framebuffer source coords. Writing the full pixmap
     // size into the sub-pixmap's pointer would overflow into adjacent rows
     // and produce ghost copies of the 3D scene elsewhere on the back buffer.
+    //
+    // BRender sub-pixmaps share the parent's `pixels` pointer and encode their
+    // offset only in base_x/base_y (see _M_br_device_pixelmap_mem_allocateSub;
+    // DethRace's gRender_screen also resets `pixels` to gBack_screen->pixels
+    // every frame). The destination must therefore apply base_x/base_y too,
+    // like every CPU pixelmap op and DepthEffect do. Without it, any non-zero
+    // render offset (ScreenSize/gRender_indent > 0 from OPTIONS.TXT or the
+    // screen-smaller key, the map-mode inset, cockpit render_top) lands the 3D
+    // scene in the top-left corner while the CPU sky/borders stay centred.
     {
+        pm_pixels += last_colour_buffer->base_y * last_colour_buffer->row_bytes + last_colour_buffer->base_x;
         int dest_y = last_colour_buffer->height;
         int src_y_pix = render_height - last_colour_buffer->base_y - last_colour_buffer->height;
         uint8_t new_pixel;
