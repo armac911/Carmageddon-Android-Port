@@ -27,7 +27,7 @@ final class Diagnostics {
         m.put("api",Build.VERSION.SDK_INT);m.put("hardware",Build.HARDWARE);
         java.text.SimpleDateFormat utc=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.US);utc.setTimeZone(TimeZone.getTimeZone("UTC"));
         m.put("started_utc",utc.format(new Date()));m.put("started_elapsed_ms",SystemClock.elapsedRealtime());
-        m.put("aspect",c.getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3");
+        m.put("aspect",DethraceActivity.aspectPreference(c));
         String[] keys={"quality","distance","steering","monitor","fps_cap","filtering"};
         String[] defaults={"standard","original","analog","off","60","sharp"};
         for(int i=0;i<keys.length;i++) m.put(keys[i],c.getSharedPreferences("graphics",0).getString(keys[i],defaults[i]));

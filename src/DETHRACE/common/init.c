@@ -148,6 +148,13 @@ void ReinitialiseForwardCamera(void) {
         w = (float)(gRender_screen->base_y
             + (gRender_screen->height / 2)
             - (gProgram_state.current_car.render_bottom[0] + gProgram_state.current_car.render_top[0]) / 2);
+#ifdef __ANDROID__
+        if (gGraf_specs[gGraf_spec_index].total_height == 486 && gGraf_specs[gGraf_spec_index].total_width > 640) {
+            /* The car rect is in 640x480 cockpit coordinates, but the cockpit
+             * art sits 3 rows down in the 486-high wide canvas. */
+            w -= 3;
+        }
+#endif
 
         gCamera->t.t.mat.m[2][1] = tandeg(d / 2.0) * w * 2.0 / (float)gRender_screen->height;
         camera_ptr->aspect = (float)gWidth / gHeight;
@@ -233,13 +240,19 @@ void ReinitialiseRenderStuff(void) {
         gProgram_state.current_render_right = gProgram_state.current_car.render_right[gProgram_state.cockpit_image_index];
         gProgram_state.current_render_bottom = gProgram_state.current_car.render_bottom[gProgram_state.cockpit_image_index];
 #ifdef __ANDROID__
-        if (gGraf_specs[gGraf_spec_index].total_width == 864) {
-            /* Keep cockpit artwork at native size in the center while the
-             * world extends into both side areas. */
+        if (gGraf_specs[gGraf_spec_index].total_height == 486 && gGraf_specs[gGraf_spec_index].total_width > 640) {
+            /* Wide canvas (16:9 or device-fill): keep cockpit artwork at
+             * native size in the center while the world fills the whole
+             * canvas around it. Outside the 640-wide art nothing covers the
+             * rows above render_top / below render_bottom, so a car-sized
+             * rect left stale pixels at the top and a black band at the
+             * bottom of both sides. ReinitialiseForwardCamera derives FOV
+             * and the projection centre from the car's own rect, so the
+             * view through the windscreen is unchanged. */
             gProgram_state.current_render_left = 0;
-            gProgram_state.current_render_right = 864;
-            gProgram_state.current_render_top += 3;
-            gProgram_state.current_render_bottom += 3;
+            gProgram_state.current_render_right = gGraf_specs[gGraf_spec_index].total_width;
+            gProgram_state.current_render_top = 0;
+            gProgram_state.current_render_bottom = gGraf_specs[gGraf_spec_index].total_height;
         }
 #endif
     } else {

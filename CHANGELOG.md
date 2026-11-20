@@ -4,6 +4,22 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.4 — PR #5 and control improvements (combined test candidate)
+
+- Integrate Cianid's PR #5 on top of the 0.9.3 input changes, preserving
+  controller remapping, all tuning sliders and proportional pedals.
+- Apply BRender sub-pixmap destination offsets during GPU readback, fixing
+  off-centre views when the render rectangle is inset.
+- Add an optional device-fit aspect mode, migrate existing aspect preferences,
+  and retain centred menus/HUD. Wider rendering may increase GPU cost.
+- Improve wide cockpit composition, projection offset and opaque edge extension
+  while preserving transparent window rows.
+- Restore original strength 1–5 car-stealing thresholds and clamp the strength
+  before indexing, removing the strength-5 out-of-bounds access.
+- Credit: Cianid authored these fixes with disclosed Claude Code assistance;
+  AndroGaming's integration/build/regression work used ChatGPT/Codex assistance.
+- Device testing of this combined APK is pending; PR #5 remains open for review.
+
 ## 0.9.3 — adjustable input response (unreleased test candidate)
 
 - Smooth stick, D-pad and touch steering with elapsed-time rate limits, including

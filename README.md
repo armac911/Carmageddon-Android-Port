@@ -2,7 +2,7 @@
 
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.2 test build · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.4 test build · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -26,11 +26,13 @@ See the
 
 ## What to expect
 
-**0.9.2 is a test candidate** adding an explicit language selector (English by
-default, Spanish, Italian and French) and optional launcher cheats. It also
-includes the 0.9.1 automatic import, streamed music and cockpit mirror changes.
-The public 0.9 release remains available. See [candidate notes](docs/RELEASE-NOTES-0.9.2.md)
-for coverage and device checks.
+**0.9.4 is a combined test candidate** with the 0.9.3 steering/deadzone and
+proportional-pedal improvements plus [Cianid's PR #5](https://github.com/armac911/Carmageddon-Android-Port/pull/5):
+offset-view rendering, optional device-fit full screen, wide cockpit fixes and
+strength-5 car-stealing thresholds. This integration awaits maintainer device
+testing and is not a new public release. See [test notes](docs/RELEASE-NOTES-0.9.4.md).
+The language selector, launcher cheats, automatic imports, streamed music and
+cockpit mirror from the previous candidates remain included.
 
 Version **0.9 adds Splat Pack launcher/import support**. The planned 1.0 milestone
 is on hold after an unexpected mid-race exit was reported. Its cause is not yet
@@ -54,10 +56,10 @@ Splat Pack integration in 0.9 still requires testing with your own expansion dat
   normal progress and rewards still save.
 - Separate Carmageddon and Splat Pack installs/saves using the existing Dethrace expansion support.
 - Automatic game-file selection, streamed MUSIC playback and a cockpit rear-view mirror.
-- Native 4:3 or 16:9 rendering, three 3D resolution levels and adjustable distance.
+- Native 4:3, 16:9 or device-fit rendering, three 3D resolution levels and adjustable distance.
 - Sharp textures or palette-aware bilinear smoothing; menus and HUD stay sharp.
 - 60, 120, 144 FPS or uncapped, with 60 FPS selected by default.
-- Customizable touch layout, analog/digital steering and optional haptics.
+- Customizable touch layout, analog/digital steering, deadzone/sensitivity and response sliders, proportional pedals and optional haptics.
 - Controller driving controls, map, camera, gear overrides and launcher remapping.
 - Separate optional error-log ZIP export and performance recording/overlays,
   **off by default**.
@@ -384,6 +386,10 @@ libraries were not authored by this AI-assisted iteration. Their contributors
 retain credit. OpenAI ChatGPT/Codex is credited as an AI development assistant,
 not as the owner of the project or an endorsement by OpenAI.
 
+Cianid's PR #5 contributions are included in this test integration. The contributor
+disclosed Claude Code assistance in the PR; ChatGPT/Codex assisted with integration,
+regression checks and packaging. Credit for those fixes belongs to Cianid.
+
 ## Credits and licenses
 
 This is an **AndroGaming.com project**, directed and tested by Dejan / AndroGaming.
@@ -402,6 +408,7 @@ It builds on substantial prior work:
 | [Boost](https://www.boost.org/) contributors | Installer reader dependencies | [Boost Software License](docs/licenses/Boost-LICENSE.txt) |
 | XZ/liblzma and bzip2 contributors | Installer decompression | [XZ notices](docs/licenses/XZ-COPYING.txt), [bzip2 license](docs/licenses/bzip2-LICENSE.txt) |
 | [stb_vorbis](https://github.com/nothings/stb), Sean Barrett and contributors | OGG/Vorbis music decoding | [Pinned source](lib/miniaudio/STB-SOURCE.txt), dual MIT/public-domain notice retained in [source](lib/miniaudio/stb_vorbis.c) |
+| [Cianid](https://github.com/Cianid) | Offset rendering, device-fit aspect, wide cockpit and strength-5 car-stealing fixes ([PR #5](https://github.com/armac911/Carmageddon-Android-Port/pull/5)); contributor disclosed Claude Code assistance | Retained project license and Git attribution |
 | OpenAI ChatGPT/Codex | AI development assistance | Full disclosure above |
 
 The codebase carries [GNU GPL version 3](LICENSE); dependency notices retain their

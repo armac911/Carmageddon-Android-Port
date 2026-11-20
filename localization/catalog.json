@@ -211,6 +211,16 @@
       "it": "16:9 — Panoramico",
       "fr": "16:9 — Écran large"
     },
+    "Full screen — fit device": {
+      "es": "Pantalla completa — ajustar al dispositivo",
+      "it": "Schermo intero — adatta al dispositivo",
+      "fr": "Plein écran — adapté à l'appareil"
+    },
+    "Full screen": {
+      "es": "Pantalla completa",
+      "it": "Schermo intero",
+      "fr": "Plein écran"
+    },
     "3D resolution": {
       "es": "Resolución 3D",
       "it": "Risoluzione 3D",

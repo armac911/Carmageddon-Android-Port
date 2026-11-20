@@ -53,7 +53,7 @@ final class ErrorLogs {
             for(int i=0;i<InputTuning.KEYS.length;i++)inputTuning.put(InputTuning.KEYS[i],
                 InputTuning.clamp(i,c.getSharedPreferences("input_tuning",0).getInt(InputTuning.KEYS[i],InputTuning.DEFAULTS[i])));
             m.put("input_tuning",inputTuning);
-            m.put("aspect",c.getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3");
+            m.put("aspect",DethraceActivity.aspectPreference(c));
             m.put("limits","Engine 2 MiB x2; logcat 1 MiB x2; Java exception 256 KiB; at most two 1 MiB system traces per session; latest 12 sessions retained. Traces are best effort, not guaranteed.");
             writeJson(new File(dir,"metadata.json"),m);active=dir;event("game.start");
             android.system.Os.setenv("DETHRACE_ERROR_DIRECTORY",dir.getAbsolutePath(),true);
