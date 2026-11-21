@@ -22,18 +22,20 @@ extra=r'''
 static int measured_reads;
 #define DRProfileCount(a,b) do {if((a)==DRP_READS) measured_reads+=(b);}while(0)
 #define CHECK_GL_ERROR(x) assert(glGetError()==GL_NO_ERROR)
-typedef struct {void*pixels;int width,height,row_bytes,base_x,base_y;void*stored;} br_pixelmap;
-typedef struct {GLuint id;} tStored_pixelmap;
+typedef struct {GLuint id;} tStored_pixelmap; /* br_pixelmap comes from test_gpu_readback */
 typedef enum {eFlush_color_buffer,eFlush_all} tRenderer_flush_type;
-static int super_width,super_height,dirty_buffers,shadow_batch,mirror_scene;
+static int super_width,super_height,dirty_buffers,shadow_batch;
+static int snapshot_dirty,snapshot_nonzero,scene_viewport[4];
 static unsigned flush_counter=1,colourbuffer_upload_counter;
 static GLuint current_colourbuffer_texture;
 static unsigned char cpu_pixels[33*25],snapshot_data[33*25];
 static unsigned short depth_data[33*25];
 static uint8_t *snapshot_pixels=snapshot_data;
-static br_pixelmap colour,depth,*last_colour_buffer=&colour,*last_depth_buffer=&depth;
+static br_pixelmap colour,depth,*last_depth_buffer=&depth;
 br_pixelmap *gBack_screen=&colour;
 void GLRenderer_FlushBuffer(tRenderer_flush_type flush_type);
+/* Production lazily re-uploads released tables; the test's tables are always resident. */
+static tStored_pixelmap* EnsureTexture(br_pixelmap* pm) { return pm->stored; }
 '''
 extra+='\n'+(root/'src/harness/renderers/gl/indexed_copy.h').read_text()+'\n'+func('GLRenderer_SetBlendTable')+'\n'+func('GLRenderer_FlushBuffer')+'\n'+func('GLRenderer_FlushBuffers')+'\n'+func('DRBeginShadowBatch')+'\n'+func('DREndShadowBatch')+'\n'+func('DRDeferShadowBatch')
 extra+=r'''
@@ -50,6 +52,7 @@ static void prepare_scene(int factor) {
  pending_shadow=0;
  glUseProgram(readback_program);glUniform1i(glGetUniformLocation(readback_program,"sample_factor"),factor);
  colour=(br_pixelmap){cpu_pixels,33,25,33,0,0,NULL};depth=(br_pixelmap){depth_data,33,25,66,0,0,NULL};
+ last_colour_buffer=&colour;
  memset(cpu_pixels,5,sizeof(cpu_pixels));memset(snapshot_data,0,sizeof(snapshot_data));
  glActiveTexture(GL_TEXTURE0);glUseProgram(scene_program);glBindVertexArray(screen_buffer_vao);
  glBindFramebuffer(GL_FRAMEBUFFER,framebuffer_id);glDisable(GL_SCISSOR_TEST);glEnable(GL_DEPTH_TEST);glDepthFunc(GL_LEQUAL);glDepthMask(GL_TRUE);glClearDepthf(1);glClear(GL_DEPTH_BUFFER_BIT);glDisable(GL_CULL_FACE);

@@ -9,987 +9,1634 @@
     "Home": {
       "es": "Inicio",
       "it": "Home",
-      "fr": "Accueil"
+      "fr": "Accueil",
+      "uk": "Головна"
     },
     "Graphics": {
       "es": "Gráficos",
       "it": "Grafica",
-      "fr": "Graphismes"
+      "fr": "Graphismes",
+      "uk": "Графіка"
     },
     "Controls": {
       "es": "Controles",
       "it": "Comandi",
-      "fr": "Commandes"
+      "fr": "Commandes",
+      "uk": "Керування"
     },
     "Cheats": {
       "es": "Trucos",
       "it": "Trucchi",
-      "fr": "Codes de triche"
+      "fr": "Codes de triche",
+      "uk": "Чити"
     },
     "Diagnostics": {
       "es": "Diagnóstico",
       "it": "Diagnostica",
-      "fr": "Diagnostic"
+      "fr": "Diagnostic",
+      "uk": "Діагностика"
     },
     "Language": {
       "es": "Idioma",
       "it": "Lingua",
-      "fr": "Langue"
+      "fr": "Langue",
+      "uk": "Мова"
     },
     "Game language": {
       "es": "Idioma del juego",
       "it": "Lingua del gioco",
-      "fr": "Langue du jeu"
+      "fr": "Langue du jeu",
+      "uk": "Мова гри"
     },
     "Choose your language here. English is the default, regardless of your phone language.": {
       "es": "Elige el idioma aquí. El inglés es el predeterminado, independientemente del idioma del teléfono.",
       "it": "Scegli qui la lingua. L'inglese è la lingua predefinita, indipendentemente dalla lingua del telefono.",
-      "fr": "Choisissez la langue ici. L'anglais est utilisé par défaut, quelle que soit la langue du téléphone."
+      "fr": "Choisissez la langue ici. L'anglais est utilisé par défaut, quelle que soit la langue du téléphone.",
+      "uk": "Виберіть мову тут. За замовчуванням використовується англійська, незалежно від мови телефона."
     },
     "Launcher changes immediately. Game text changes on the next Play. Original voices and videos are preserved. Some artwork and untranslated text remain in English.": {
       "es": "El lanzador cambia inmediatamente. El texto del juego cambia al pulsar Jugar. Se conservan las voces y los vídeos originales. Algunas imágenes y textos siguen en inglés.",
       "it": "Il launcher cambia subito. Il testo del gioco cambia al prossimo Avvio. Voci e video originali vengono conservati. Alcune immagini e testi restano in inglese.",
-      "fr": "Le lanceur change immédiatement. Le texte du jeu change au prochain lancement. Les voix et vidéos originales sont conservées. Certains textes et images restent en anglais."
+      "fr": "Le lanceur change immédiatement. Le texte du jeu change au prochain lancement. Les voix et vidéos originales sont conservées. Certains textes et images restent en anglais.",
+      "uk": "Лаунчер змінюється одразу. Текст у грі зміниться після наступного запуску. Оригінальні голоси й відео зберігаються. Частина графіки та неперекладений текст залишаються англійською."
     },
     "Exit the current game before changing language.": {
       "es": "Sal del juego antes de cambiar el idioma.",
       "it": "Esci dal gioco prima di cambiare lingua.",
-      "fr": "Quittez la partie avant de changer de langue."
+      "fr": "Quittez la partie avant de changer de langue.",
+      "uk": "Вийдіть із поточної гри, перш ніж змінювати мову."
     },
     "Your next race starts here.": {
       "es": "Tu próxima carrera empieza aquí.",
       "it": "La tua prossima gara inizia qui.",
-      "fr": "Votre prochaine course commence ici."
+      "fr": "Votre prochaine course commence ici.",
+      "uk": "Ваша наступна гонка починається тут."
     },
     "CLASSIC CHAOS. BACK ON THE ROAD.": {
       "es": "CAOS CLÁSICO. DE VUELTA A LA CARRETERA.",
       "it": "IL CAOS CLASSICO TORNA IN STRADA.",
-      "fr": "LE CHAOS CLASSIQUE REPREND LA ROUTE."
+      "fr": "LE CHAOS CLASSIQUE REPREND LA ROUTE.",
+      "uk": "КЛАСИЧНИЙ ХАОС. ЗНОВУ НА ДОРОЗІ."
     },
     "PLAY  ›": {
       "es": "JUGAR  ›",
       "it": "AVVIA  ›",
-      "fr": "JOUER  ›"
+      "fr": "JOUER  ›",
+      "uk": "ГРАТИ  ›"
     },
     "PLAY {game}  ›": {
       "es": "JUGAR {game}  ›",
       "it": "AVVIA {game}  ›",
-      "fr": "JOUER {game}  ›"
+      "fr": "JOUER {game}  ›",
+      "uk": "ГРАТИ В {game}  ›"
     },
     "Game: {game}  ›": {
       "es": "Juego: {game}  ›",
       "it": "Gioco: {game}  ›",
-      "fr": "Jeu : {game}  ›"
+      "fr": "Jeu : {game}  ›",
+      "uk": "Гра: {game}  ›"
     },
     "Import game ZIP or GOG installer": {
       "es": "Importar ZIP o instalador de GOG",
       "it": "Importa ZIP o installer GOG",
-      "fr": "Importer un ZIP ou un installateur GOG"
+      "fr": "Importer un ZIP ou un installateur GOG",
+      "uk": "Імпортувати ZIP гри або інсталятор GOG"
     },
     "Import {game} ZIP or GOG installer": {
       "es": "Importar ZIP o instalador de GOG de {game}",
       "it": "Importa ZIP o installer GOG di {game}",
-      "fr": "Importer le ZIP ou l'installateur GOG de {game}"
+      "fr": "Importer le ZIP ou l'installateur GOG de {game}",
+      "uk": "Імпортувати ZIP {game} або інсталятор GOG"
     },
     "Import {game} data to begin": {
       "es": "Importa los datos de {game} para empezar",
       "it": "Importa i dati di {game} per iniziare",
-      "fr": "Importez les données de {game} pour commencer"
+      "fr": "Importez les données de {game} pour commencer",
+      "uk": "Імпортуйте дані {game}, щоб почати"
     },
     "Choose Carmageddon or Splat Pack, then select your game ZIP or supported GOG offline installer EXE. DATA, MUSIC and matching support files are found automatically. Game content is not included.": {
       "es": "Elige Carmageddon o Splat Pack y selecciona un ZIP del juego o un instalador EXE sin conexión de GOG compatible. DATA, MUSIC y los archivos de soporte se detectan automáticamente. El contenido del juego no está incluido.",
       "it": "Scegli Carmageddon o Splat Pack, poi seleziona lo ZIP del gioco o un installer EXE offline GOG compatibile. DATA, MUSIC e i file di supporto vengono trovati automaticamente. I contenuti del gioco non sono inclusi.",
-      "fr": "Choisissez Carmageddon ou Splat Pack, puis un ZIP du jeu ou un installateur EXE hors ligne GOG compatible. DATA, MUSIC et les fichiers complémentaires sont détectés automatiquement. Les données du jeu ne sont pas incluses."
+      "fr": "Choisissez Carmageddon ou Splat Pack, puis un ZIP du jeu ou un installateur EXE hors ligne GOG compatible. DATA, MUSIC et les fichiers complémentaires sont détectés automatiquement. Les données du jeu ne sont pas incluses.",
+      "uk": "Виберіть Carmageddon або Splat Pack, потім ZIP-архів гри чи підтримуваний офлайн-інсталятор GOG (EXE). Папки DATA, MUSIC і потрібні допоміжні файли знаходяться автоматично. Ігровий вміст не входить до комплекту."
     },
     "Choose game": {
       "es": "Elegir juego",
       "it": "Scegli gioco",
-      "fr": "Choisir le jeu"
+      "fr": "Choisir le jeu",
+      "uk": "Виберіть гру"
     },
     " — Installed": {
       "es": " — Instalado",
       "it": " — Installato",
-      "fr": " — Installé"
+      "fr": " — Installé",
+      "uk": " — встановлено"
     },
     " — Import needed": {
       "es": " — Importación necesaria",
       "it": " — Importazione necessaria",
-      "fr": " — Importation requise"
+      "fr": " — Importation requise",
+      "uk": " — потрібен імпорт"
     },
     "Importing game data… Please wait; large files can take a few minutes.": {
       "es": "Importando datos… Espera; los archivos grandes pueden tardar unos minutos.",
       "it": "Importazione dei dati… Attendi; i file grandi possono richiedere alcuni minuti.",
-      "fr": "Importation des données… Patientez ; les gros fichiers peuvent prendre quelques minutes."
+      "fr": "Importation des données… Patientez ; les gros fichiers peuvent prendre quelques minutes.",
+      "uk": "Імпорт даних гри… Зачекайте: великі файли можуть оброблятися кілька хвилин."
     },
     "●  Ready to race": {
       "es": "●  Listo para correr",
       "it": "●  Pronto per la gara",
-      "fr": "●  Prêt pour la course"
+      "fr": "●  Prêt pour la course",
+      "uk": "●  Готово до гонки"
     },
     "Storage unavailable": {
       "es": "Almacenamiento no disponible",
       "it": "Memoria non disponibile",
-      "fr": "Stockage indisponible"
+      "fr": "Stockage indisponible",
+      "uk": "Сховище недоступне"
     },
     "Import failed": {
       "es": "Error de importación",
       "it": "Importazione non riuscita",
-      "fr": "Échec de l'importation"
+      "fr": "Échec de l'importation",
+      "uk": "Помилка імпорту"
     },
     "Wait for the import to finish.": {
       "es": "Espera a que termine la importación.",
       "it": "Attendi il completamento dell'importazione.",
-      "fr": "Attendez la fin de l'importation."
+      "fr": "Attendez la fin de l'importation.",
+      "uk": "Дочекайтеся завершення імпорту."
     },
     "Exit the current game before switching or importing game data.": {
       "es": "Sal del juego antes de cambiar o importar datos.",
       "it": "Esci dal gioco prima di cambiare o importare i dati.",
-      "fr": "Quittez la partie avant de changer de jeu ou d'importer des données."
+      "fr": "Quittez la partie avant de changer de jeu ou d'importer des données.",
+      "uk": "Вийдіть із поточної гри, перш ніж перемикати або імпортувати дані гри."
     },
     "No web browser is available.": {
       "es": "No hay navegador disponible.",
       "it": "Nessun browser disponibile.",
-      "fr": "Aucun navigateur disponible."
+      "fr": "Aucun navigateur disponible.",
+      "uk": "Немає доступного веббраузера."
     },
     "Cancel": {
       "es": "Cancelar",
       "it": "Annulla",
-      "fr": "Annuler"
+      "fr": "Annuler",
+      "uk": "Скасувати"
     },
     "Done": {
       "es": "Listo",
       "it": "Fine",
-      "fr": "Terminé"
+      "fr": "Terminé",
+      "uk": "Готово"
     },
     "Back": {
       "es": "Atrás",
       "it": "Indietro",
-      "fr": "Retour"
+      "fr": "Retour",
+      "uk": "Назад"
     },
     "Yes": {
       "es": "Sí",
       "it": "Sì",
-      "fr": "Oui"
+      "fr": "Oui",
+      "uk": "Так"
     },
     "No": {
       "es": "No",
       "it": "No",
-      "fr": "Non"
+      "fr": "Non",
+      "uk": "Ні"
     },
     "On": {
       "es": "Activado",
       "it": "Attivo",
-      "fr": "Activé"
+      "fr": "Activé",
+      "uk": "Увімкнено"
     },
     "Off": {
       "es": "Desactivado",
       "it": "Disattivo",
-      "fr": "Désactivé"
+      "fr": "Désactivé",
+      "uk": "Вимкнено"
     },
     "OK": {
       "es": "Aceptar",
       "it": "OK",
-      "fr": "OK"
+      "fr": "OK",
+      "uk": "OK"
     },
     "Set up your next run. Changes apply when you press Play.": {
       "es": "Prepara tu próxima partida. Los cambios se aplican al pulsar Jugar.",
       "it": "Prepara la prossima partita. Le modifiche si applicano premendo Avvia.",
-      "fr": "Préparez votre prochaine partie. Les changements s'appliquent au lancement."
+      "fr": "Préparez votre prochaine partie. Les changements s'appliquent au lancement.",
+      "uk": "Налаштуйте наступний заїзд. Зміни застосуються після натискання «Грати»."
     },
     "Aspect ratio": {
       "es": "Relación de aspecto",
       "it": "Formato dello schermo",
-      "fr": "Format d'image"
+      "fr": "Format d'image",
+      "uk": "Співвідношення сторін"
     },
     "4:3 — Classic": {
       "es": "4:3 — Clásico",
       "it": "4:3 — Classico",
-      "fr": "4:3 — Classique"
+      "fr": "4:3 — Classique",
+      "uk": "4:3 — класичне"
     },
     "16:9 — Widescreen": {
       "es": "16:9 — Panorámico",
       "it": "16:9 — Panoramico",
-      "fr": "16:9 — Écran large"
+      "fr": "16:9 — Écran large",
+      "uk": "16:9 — широкоекранне"
+    },
+    "Full screen — fit device": {
+      "es": "Pantalla completa — ajustar al dispositivo",
+      "it": "Schermo intero — adatta al dispositivo",
+      "fr": "Plein écran — adapté à l'appareil",
+      "uk": "Повний екран — під пристрій"
+    },
+    "Full screen": {
+      "es": "Pantalla completa",
+      "it": "Schermo intero",
+      "fr": "Plein écran",
+      "uk": "Повний екран"
     },
     "3D resolution": {
       "es": "Resolución 3D",
       "it": "Risoluzione 3D",
-      "fr": "Résolution 3D"
+      "fr": "Résolution 3D",
+      "uk": "Роздільна здатність 3D"
     },
     "Standard": {
       "es": "Estándar",
       "it": "Standard",
-      "fr": "Standard"
+      "fr": "Standard",
+      "uk": "Стандартна"
     },
     "High — sharper edges": {
       "es": "Alta — bordes más definidos",
       "it": "Alta — bordi più nitidi",
-      "fr": "Élevée — contours plus nets"
+      "fr": "Élevée — contours plus nets",
+      "uk": "Висока — чіткіші краї"
     },
     "Performance — lower resolution": {
       "es": "Rendimiento — menor resolución",
       "it": "Prestazioni — risoluzione ridotta",
-      "fr": "Performances — résolution réduite"
+      "fr": "Performances — résolution réduite",
+      "uk": "Продуктивність — нижча роздільна здатність"
     },
     "3D texture filtering": {
       "es": "Filtrado de texturas 3D",
       "it": "Filtro texture 3D",
-      "fr": "Filtrage des textures 3D"
+      "fr": "Filtrage des textures 3D",
+      "uk": "Фільтрація 3D-текстур"
     },
     "Sharp — original textures": {
       "es": "Nítido — texturas originales",
       "it": "Nitido — texture originali",
-      "fr": "Net — textures originales"
+      "fr": "Net — textures originales",
+      "uk": "Чітка — оригінальні текстури"
     },
     "Smooth — bilinear textures": {
       "es": "Suave — texturas bilineales",
       "it": "Uniforme — texture bilineari",
-      "fr": "Lissé — textures bilinéaires"
+      "fr": "Lissé — textures bilinéaires",
+      "uk": "Згладжена — білінійні текстури"
     },
-    "Smooth blends 3D texture colors within the game palette. Menus and HUD stay sharp. Changes apply on the next Play.": {
-      "es": "Suave mezcla los colores de las texturas 3D dentro de la paleta del juego. Los menús y el HUD siguen nítidos. Se aplica al próximo inicio.",
-      "it": "Il filtro uniforme mescola i colori delle texture 3D nella tavolozza del gioco. Menu e HUD restano nitidi. Si applica al prossimo avvio.",
-      "fr": "Le lissage mélange les couleurs des textures 3D dans la palette du jeu. Les menus et le HUD restent nets. Il s'applique au prochain lancement."
+    "Smooth blends 3D texture colors within the game palette and uses mipmaps to stop distant textures shimmering. Menus and HUD stay sharp. Changes apply on the next Play.": {
+      "es": "Suave mezcla los colores de las texturas 3D dentro de la paleta del juego y usa mipmaps para que las texturas lejanas no parpadeen. Los menús y el HUD siguen nítidos. Se aplica al próximo inicio.",
+      "it": "Il filtro uniforme mescola i colori delle texture 3D nella tavolozza del gioco e usa le mipmap per evitare lo sfarfallio delle texture lontane. Menu e HUD restano nitidi. Si applica al prossimo avvio.",
+      "fr": "Le lissage mélange les couleurs des textures 3D dans la palette du jeu et utilise des mipmaps pour éviter le scintillement des textures lointaines. Les menus et le HUD restent nets. Il s'applique au prochain lancement.",
+      "uk": "Згладжена фільтрація змішує кольори 3D-текстур у межах ігрової палітри й використовує mip-рівні, щоб далекі текстури не мерехтіли. Меню та HUD залишаються чіткими. Зміни застосуються під час наступного запуску."
     },
     "Draw distance": {
       "es": "Distancia de dibujado",
       "it": "Distanza di visualizzazione",
-      "fr": "Distance d'affichage"
+      "fr": "Distance d'affichage",
+      "uk": "Дальність промальовування"
     },
     "Original": {
       "es": "Original",
       "it": "Originale",
-      "fr": "D'origine"
+      "fr": "D'origine",
+      "uk": "Оригінал"
     },
     "Extended (1.5×)": {
       "es": "Ampliada (1.5×)",
       "it": "Estesa (1.5×)",
-      "fr": "Étendue (1.5×)"
+      "fr": "Étendue (1.5×)",
+      "uk": "Збільшена (1.5×)"
     },
     "Far (2×)": {
       "es": "Lejana (2×)",
       "it": "Lontana (2×)",
-      "fr": "Lointaine (2×)"
+      "fr": "Lointaine (2×)",
+      "uk": "Далека (2×)"
     },
     "Frame-rate cap": {
       "es": "Límite de FPS",
       "it": "Limite FPS",
-      "fr": "Limite d'images par seconde"
+      "fr": "Limite d'images par seconde",
+      "uk": "Обмеження частоти кадрів"
     },
     "Uncapped": {
       "es": "Sin límite",
       "it": "Senza limite",
-      "fr": "Sans limite"
+      "fr": "Sans limite",
+      "uk": "Без обмеження"
     },
     "The cap covers menus and races. Higher settings may reduce performance. A higher cap does not change your display’s refresh rate.": {
       "es": "El límite afecta a menús y carreras. Los ajustes más altos pueden reducir el rendimiento. No cambia la frecuencia de actualización de la pantalla.",
       "it": "Il limite vale per menu e gare. Impostazioni più alte possono ridurre le prestazioni. Non cambia la frequenza di aggiornamento dello schermo.",
-      "fr": "La limite s'applique aux menus et aux courses. Des réglages plus élevés peuvent réduire les performances. Elle ne modifie pas la fréquence de l'écran."
+      "fr": "La limite s'applique aux menus et aux courses. Des réglages plus élevés peuvent réduire les performances. Elle ne modifie pas la fréquence de l'écran.",
+      "uk": "Обмеження діє в меню та гонках. Вищі значення можуть знизити продуктивність. Вище обмеження не змінює частоту оновлення дисплея."
     },
     "Make it feel right.": {
       "es": "Ajusta los controles a tu gusto.",
       "it": "Adatta i comandi al tuo stile.",
-      "fr": "Adaptez les commandes à votre style."
+      "fr": "Adaptez les commandes à votre style.",
+      "uk": "Налаштуйте під себе."
     },
     "Steering · touch & left stick": {
       "es": "Dirección · táctil y stick izquierdo",
       "it": "Sterzo · touch e levetta sinistra",
-      "fr": "Direction · tactile et stick gauche"
+      "fr": "Direction · tactile et stick gauche",
+      "uk": "Кермо · сенсор і лівий стік"
     },
     "Analog": {
       "es": "Analógica",
       "it": "Analogico",
-      "fr": "Analogique"
+      "fr": "Analogique",
+      "uk": "Аналогове"
     },
     "Digital": {
       "es": "Digital",
       "it": "Digitale",
-      "fr": "Numérique"
+      "fr": "Numérique",
+      "uk": "Цифрове"
     },
     "Haptic feedback": {
       "es": "Respuesta háptica",
       "it": "Feedback aptico",
-      "fr": "Retour haptique"
+      "fr": "Retour haptique",
+      "uk": "Тактильний відгук"
     },
     "Customize touch layout  ›": {
       "es": "Personalizar controles táctiles  ›",
       "it": "Personalizza comandi touch  ›",
-      "fr": "Personnaliser les commandes tactiles  ›"
+      "fr": "Personnaliser les commandes tactiles  ›",
+      "uk": "Налаштувати сенсорне керування  ›"
     },
     "Remap controller  ›": {
       "es": "Reasignar mando  ›",
       "it": "Rimappa controller  ›",
-      "fr": "Configurer la manette  ›"
+      "fr": "Configurer la manette  ›",
+      "uk": "Перепризначити кнопки контролера  ›"
     },
     "Move and resize touch controls in the layout editor.": {
       "es": "Mueve y redimensiona los controles en el editor.",
       "it": "Sposta e ridimensiona i comandi nell'editor.",
-      "fr": "Déplacez et redimensionnez les commandes dans l'éditeur."
+      "fr": "Déplacez et redimensionnez les commandes dans l'éditeur.",
+      "uk": "Переміщуйте й змінюйте розмір сенсорних елементів у редакторі розкладки."
     },
     "Controller mapping": {
       "es": "Asignación del mando",
       "it": "Mappatura controller",
-      "fr": "Configuration de la manette"
+      "fr": "Configuration de la manette",
+      "uk": "Призначення кнопок контролера"
     },
     "Changes apply on the next Play. Return the gear stick to centre between shifts.": {
       "es": "Los cambios se aplican al próximo inicio. Centra el stick entre cambios de marcha.",
       "it": "Le modifiche si applicano al prossimo avvio. Riporta la levetta al centro tra un cambio e l'altro.",
-      "fr": "Les changements s'appliquent au prochain lancement. Recentrez le stick entre les changements de rapport."
+      "fr": "Les changements s'appliquent au prochain lancement. Recentrez le stick entre les changements de rapport.",
+      "uk": "Зміни застосуються під час наступного запуску. Між перемиканнями повертайте стік передач у центр."
     },
     "Steering input": {
       "es": "Entrada de dirección",
       "it": "Comando dello sterzo",
-      "fr": "Commande de direction"
+      "fr": "Commande de direction",
+      "uk": "Керування кермом"
     },
     "Left stick + D-pad": {
       "es": "Stick izquierdo y cruceta",
       "it": "Levetta sinistra e croce direzionale",
-      "fr": "Stick gauche et croix directionnelle"
+      "fr": "Stick gauche et croix directionnelle",
+      "uk": "Лівий стік + хрестовина"
     },
     "Left stick only": {
       "es": "Solo stick izquierdo",
       "it": "Solo levetta sinistra",
-      "fr": "Stick gauche uniquement"
+      "fr": "Stick gauche uniquement",
+      "uk": "Лише лівий стік"
     },
     "Right stick only": {
       "es": "Solo stick derecho",
       "it": "Solo levetta destra",
-      "fr": "Stick droit uniquement"
+      "fr": "Stick droit uniquement",
+      "uk": "Лише правий стік"
     },
     "D-pad only": {
       "es": "Solo cruceta",
       "it": "Solo croce direzionale",
-      "fr": "Croix directionnelle uniquement"
+      "fr": "Croix directionnelle uniquement",
+      "uk": "Лише хрестовина"
     },
     "Restore controller defaults": {
       "es": "Restaurar mando predeterminado",
       "it": "Ripristina comandi predefiniti",
-      "fr": "Rétablir les commandes par défaut"
+      "fr": "Rétablir les commandes par défaut",
+      "uk": "Відновити типові налаштування контролера"
     },
     "Back to Controls": {
       "es": "Volver a Controles",
       "it": "Torna ai Comandi",
-      "fr": "Retour aux Commandes"
+      "fr": "Retour aux Commandes",
+      "uk": "Назад до керування"
     },
     "Optional single-player race helpers.": {
       "es": "Ayudas opcionales para un jugador.",
       "it": "Aiuti opzionali per giocatore singolo.",
-      "fr": "Aides facultatives en solo."
+      "fr": "Aides facultatives en solo.",
+      "uk": "Необов’язкові помічники для одиночних гонок."
     },
     "Enable cheats": {
       "es": "Activar trucos",
       "it": "Attiva trucchi",
-      "fr": "Activer les codes"
+      "fr": "Activer les codes",
+      "uk": "Увімкнути чити"
     },
     "Invulnerability": {
       "es": "Invulnerabilidad",
       "it": "Invulnerabilità",
-      "fr": "Invulnérabilité"
+      "fr": "Invulnérabilité",
+      "uk": "Невразливість"
     },
     "Free repairs": {
       "es": "Reparaciones gratis",
       "it": "Riparazioni gratuite",
-      "fr": "Réparations gratuites"
+      "fr": "Réparations gratuites",
+      "uk": "Безкоштовний ремонт"
     },
     "Freeze race timer": {
       "es": "Congelar tiempo de carrera",
       "it": "Blocca il tempo di gara",
-      "fr": "Figer le chronomètre"
+      "fr": "Figer le chronomètre",
+      "uk": "Зупинити таймер гонки"
     },
     "Enable the master switch and choose your cheats. Changes apply on the next Play and last throughout each single-player race, including Splat Pack. Free repairs still require holding Repair.": {
       "es": "Activa el interruptor principal y elige los trucos. Se aplican al próximo inicio durante cada carrera individual, también en Splat Pack. Para reparar gratis debes mantener Reparar.",
       "it": "Attiva l'interruttore principale e scegli i trucchi. Si applicano al prossimo avvio per tutta la gara in singolo, anche in Splat Pack. Per riparare gratis tieni premuto Ripara.",
-      "fr": "Activez l'interrupteur principal et choisissez les codes. Ils s'appliquent au prochain lancement pendant chaque course solo, y compris Splat Pack. Maintenez Réparer pour les réparations gratuites."
+      "fr": "Activez l'interrupteur principal et choisissez les codes. Ils s'appliquent au prochain lancement pendant chaque course solo, y compris Splat Pack. Maintenez Réparer pour les réparations gratuites.",
+      "uk": "Увімкніть головний перемикач і виберіть чити. Зміни застосуються під час наступного запуску й діють протягом кожної одиночної гонки, зокрема в Splat Pack. Для безкоштовного ремонту все одно потрібно утримувати «Ремонт»."
     },
     "Switch off Enable cheats for normal gameplay; your selections are remembered. Races still save progress and rewards.": {
       "es": "Desactiva Activar trucos para jugar normalmente; tus selecciones se conservan. El progreso y las recompensas se siguen guardando.",
       "it": "Disattiva Attiva trucchi per giocare normalmente; le scelte vengono conservate. Progressi e ricompense vengono comunque salvati.",
-      "fr": "Désactivez Activer les codes pour jouer normalement ; vos choix sont conservés. La progression et les récompenses sont toujours sauvegardées."
+      "fr": "Désactivez Activer les codes pour jouer normalement ; vos choix sont conservés. La progression et les récompenses sont toujours sauvegardées.",
+      "uk": "Для звичайної гри вимкніть «Увімкнути чити» — ваш вибір збережеться. Гонки й надалі зберігають прогрес і нагороди."
     },
     "Optional tools for testing and troubleshooting.": {
       "es": "Herramientas opcionales de prueba y diagnóstico.",
       "it": "Strumenti opzionali per test e diagnosi.",
-      "fr": "Outils facultatifs de test et de diagnostic."
+      "fr": "Outils facultatifs de test et de diagnostic.",
+      "uk": "Необов’язкові інструменти для тестування й пошуку проблем."
     },
     "Record performance diagnostics": {
       "es": "Registrar diagnóstico de rendimiento",
       "it": "Registra diagnostica prestazioni",
-      "fr": "Enregistrer le diagnostic de performances"
+      "fr": "Enregistrer le diagnostic de performances",
+      "uk": "Записувати діагностику продуктивності"
     },
     "Record error logs": {
       "es": "Registrar errores",
       "it": "Registra errori",
-      "fr": "Enregistrer les erreurs"
+      "fr": "Enregistrer les erreurs",
+      "uk": "Записувати журнали помилок"
     },
     "Export diagnostics ZIP  ↑": {
       "es": "Exportar diagnóstico ZIP  ↑",
       "it": "Esporta diagnostica ZIP  ↑",
-      "fr": "Exporter le diagnostic ZIP  ↑"
+      "fr": "Exporter le diagnostic ZIP  ↑",
+      "uk": "Експортувати ZIP діагностики  ↑"
     },
     "Export error logs ZIP  ↑": {
       "es": "Exportar errores ZIP  ↑",
       "it": "Esporta errori ZIP  ↑",
-      "fr": "Exporter les erreurs ZIP  ↑"
+      "fr": "Exporter les erreurs ZIP  ↑",
+      "uk": "Експортувати ZIP журналів помилок  ↑"
     },
     "Monitor overlay": {
       "es": "Monitor en pantalla",
       "it": "Monitor su schermo",
-      "fr": "Moniteur à l'écran"
+      "fr": "Moniteur à l'écran",
+      "uk": "Накладка моніторингу"
     },
     "FPS only": {
       "es": "Solo FPS",
       "it": "Solo FPS",
-      "fr": "FPS uniquement"
+      "fr": "FPS uniquement",
+      "uk": "Лише FPS"
     },
     "FPS + temperature": {
       "es": "FPS y temperatura",
       "it": "FPS e temperatura",
-      "fr": "FPS et température"
+      "fr": "FPS et température",
+      "uk": "FPS + температура"
     },
     "No profiling sessions yet. Enable recording and start a race first.": {
       "es": "No hay sesiones de rendimiento. Activa la grabación y empieza una carrera.",
       "it": "Nessuna sessione di prestazioni. Attiva la registrazione e avvia una gara.",
-      "fr": "Aucune session de performances. Activez l'enregistrement et lancez une course."
+      "fr": "Aucune session de performances. Activez l'enregistrement et lancez une course.",
+      "uk": "Сесій профілювання ще немає. Увімкніть запис і спершу почніть гонку."
     },
     "Diagnostics exported. Send the ZIP for analysis.": {
       "es": "Diagnóstico exportado. Envía el ZIP para analizarlo.",
       "it": "Diagnostica esportata. Invia lo ZIP per l'analisi.",
-      "fr": "Diagnostic exporté. Envoyez le ZIP pour analyse."
+      "fr": "Diagnostic exporté. Envoyez le ZIP pour analyse.",
+      "uk": "Діагностику експортовано. Надішліть ZIP для аналізу."
     },
     "Error logs exported. Share the ZIP for investigation.": {
       "es": "Errores exportados. Comparte el ZIP para investigarlos.",
       "it": "Errori esportati. Condividi lo ZIP per l'analisi.",
-      "fr": "Erreurs exportées. Partagez le ZIP pour analyse."
+      "fr": "Erreurs exportées. Partagez le ZIP pour analyse.",
+      "uk": "Журнали помилок експортовано. Надішліть ZIP для дослідження."
     },
     "Continue": {
       "es": "Continuar",
       "it": "Continua",
-      "fr": "Continuer"
+      "fr": "Continuer",
+      "uk": "Продовжити"
     },
     "Recover car": {
       "es": "Recuperar coche",
       "it": "Recupera auto",
-      "fr": "Replacer la voiture"
+      "fr": "Replacer la voiture",
+      "uk": "Відновити авто"
     },
     "Abandon race": {
       "es": "Abandonar carrera",
       "it": "Abbandona gara",
-      "fr": "Abandonner la course"
+      "fr": "Abandonner la course",
+      "uk": "Покинути гонку"
     },
     "End game": {
       "es": "Terminar partida",
       "it": "Termina partita",
-      "fr": "Terminer la partie"
+      "fr": "Terminer la partie",
+      "uk": "Завершити гру"
     },
     "Quit": {
       "es": "Salir",
       "it": "Esci",
-      "fr": "Quitter"
+      "fr": "Quitter",
+      "uk": "Вийти"
     },
     "New game": {
       "es": "Nueva partida",
       "it": "Nuova partita",
-      "fr": "Nouvelle partie"
+      "fr": "Nouvelle partie",
+      "uk": "Нова гра"
     },
     "Network game": {
       "es": "Partida en red",
       "it": "Partita in rete",
-      "fr": "Partie en réseau"
+      "fr": "Partie en réseau",
+      "uk": "Мережева гра"
     },
     "Load game": {
       "es": "Cargar partida",
       "it": "Carica partita",
-      "fr": "Charger une partie"
+      "fr": "Charger une partie",
+      "uk": "Завантажити гру"
     },
     "Save game": {
       "es": "Guardar partida",
       "it": "Salva partita",
-      "fr": "Sauvegarder la partie"
+      "fr": "Sauvegarder la partie",
+      "uk": "Зберегти гру"
     },
     "Options": {
       "es": "Opciones",
       "it": "Opzioni",
-      "fr": "Options"
+      "fr": "Options",
+      "uk": "Параметри"
     },
     "Easy": {
       "es": "Fácil",
       "it": "Facile",
-      "fr": "Facile"
+      "fr": "Facile",
+      "uk": "Легко"
     },
     "Normal": {
       "es": "Normal",
       "it": "Normale",
-      "fr": "Normal"
+      "fr": "Normal",
+      "uk": "Звичайно"
     },
     "Hard": {
       "es": "Difícil",
       "it": "Difficile",
-      "fr": "Difficile"
+      "fr": "Difficile",
+      "uk": "Складно"
     },
     "Sound": {
       "es": "Sonido",
       "it": "Audio",
-      "fr": "Son"
+      "fr": "Son",
+      "uk": "Звук"
     },
     "Music": {
       "es": "Música",
       "it": "Musica",
-      "fr": "Musique"
+      "fr": "Musique",
+      "uk": "Музика"
     },
     "Repair": {
       "es": "Reparar",
       "it": "Ripara",
-      "fr": "Réparer"
+      "fr": "Réparer",
+      "uk": "Ремонт"
     },
     "Recover": {
       "es": "Recuperar",
       "it": "Recupera",
-      "fr": "Replacer"
+      "fr": "Replacer",
+      "uk": "Відновити"
     },
     "Accelerate": {
       "es": "Acelerar",
       "it": "Accelera",
-      "fr": "Accélérer"
+      "fr": "Accélérer",
+      "uk": "Газ"
     },
     "Brake / reverse": {
       "es": "Frenar / marcha atrás",
       "it": "Frena / retromarcia",
-      "fr": "Freiner / marche arrière"
+      "fr": "Freiner / marche arrière",
+      "uk": "Гальмо / задній хід"
     },
     "Handbrake": {
       "es": "Freno de mano",
       "it": "Freno a mano",
-      "fr": "Frein à main"
+      "fr": "Frein à main",
+      "uk": "Ручне гальмо"
     },
     "Map": {
       "es": "Mapa",
       "it": "Mappa",
-      "fr": "Carte"
+      "fr": "Carte",
+      "uk": "Мапа"
     },
     "Camera": {
       "es": "Cámara",
       "it": "Visuale",
-      "fr": "Caméra"
+      "fr": "Caméra",
+      "uk": "Камера"
     },
     "Gear up": {
       "es": "Subir marcha",
       "it": "Marcia superiore",
-      "fr": "Rapport supérieur"
+      "fr": "Rapport supérieur",
+      "uk": "Передача вгору"
     },
     "Gear down": {
       "es": "Bajar marcha",
       "it": "Marcia inferiore",
-      "fr": "Rapport inférieur"
+      "fr": "Rapport inférieur",
+      "uk": "Передача вниз"
     },
     "Pause": {
       "es": "Pausa",
       "it": "Pausa",
-      "fr": "Pause"
+      "fr": "Pause",
+      "uk": "Пауза"
     },
     "Restore defaults": {
       "es": "Restaurar valores",
       "it": "Ripristina predefiniti",
-      "fr": "Rétablir les réglages"
+      "fr": "Rétablir les réglages",
+      "uk": "Відновити типові"
     },
     "Invulnerability on": {
       "es": "Invulnerabilidad activada",
       "it": "Invulnerabilità attiva",
-      "fr": "Invulnérabilité activée"
+      "fr": "Invulnérabilité activée",
+      "uk": "Невразливість увімкнено"
     },
     "Timer frozen": {
       "es": "Tiempo congelado",
       "it": "Tempo bloccato",
-      "fr": "Chronomètre figé"
+      "fr": "Chronomètre figé",
+      "uk": "Таймер зупинено"
     },
     "Mirror on": {
       "es": "Retrovisor activado",
       "it": "Specchietto attivo",
-      "fr": "Rétroviseur activé"
+      "fr": "Rétroviseur activé",
+      "uk": "Дзеркало увімкнено"
     },
     "Mirror off": {
       "es": "Retrovisor desactivado",
       "it": "Specchietto disattivo",
-      "fr": "Rétroviseur désactivé"
+      "fr": "Rétroviseur désactivé",
+      "uk": "Дзеркало вимкнено"
     },
     "Repair cost:": {
       "es": "Coste de reparación:",
       "it": "Costo riparazione:",
-      "fr": "Coût de réparation :"
+      "fr": "Coût de réparation :",
+      "uk": "Вартість ремонту:"
     },
     "Recovery cost:": {
       "es": "Coste de recuperación:",
       "it": "Costo recupero:",
-      "fr": "Coût de replacement :"
+      "fr": "Coût de replacement :",
+      "uk": "Вартість відновлення:"
     },
     "Recovery voucher used": {
       "es": "Vale de recuperación usado",
       "it": "Buono recupero utilizzato",
-      "fr": "Bon de replacement utilisé"
+      "fr": "Bon de replacement utilisé",
+      "uk": "Використано ваучер відновлення"
     },
     "Not enough credits": {
       "es": "Créditos insuficientes",
       "it": "Crediti insufficienti",
-      "fr": "Crédits insuffisants"
+      "fr": "Crédits insuffisants",
+      "uk": "Недостатньо кредитів"
     },
     "credit": {
       "es": "crédito",
       "it": "credito",
-      "fr": "crédit"
+      "fr": "crédit",
+      "uk": "кредит"
     },
     "credits": {
       "es": "créditos",
       "it": "crediti",
-      "fr": "crédits"
+      "fr": "crédits",
+      "uk": "кредитів"
     },
     "Penalty": {
       "es": "Penalización",
       "it": "Penalità",
-      "fr": "Pénalité"
+      "fr": "Pénalité",
+      "uk": "Штраф"
     },
     "Empty slot": {
       "es": "LIBRE",
       "it": "VUOTO",
-      "fr": "CASE VIDE"
+      "fr": "CASE VIDE",
+      "uk": "Порожній слот"
     },
     "Pedestrians": {
       "es": "Peatones",
       "it": "Pedoni",
-      "fr": "Piétons"
+      "fr": "Piétons",
+      "uk": "Пішоходи"
     },
     "Opponents": {
       "es": "Rivales",
       "it": "Avversari",
-      "fr": "Adversaires"
+      "fr": "Adversaires",
+      "uk": "Суперники"
     },
     "Lap": {
       "es": "Vuelta",
       "it": "Giro",
-      "fr": "Tour"
+      "fr": "Tour",
+      "uk": "Коло"
     },
     "Checkpoint": {
       "es": "Punto de control",
       "it": "Checkpoint",
-      "fr": "Point de contrôle"
+      "fr": "Point de contrôle",
+      "uk": "Контрольна точка"
     },
     "Bonus": {
       "es": "Bonificación",
       "it": "Bonus",
-      "fr": "Bonus"
+      "fr": "Bonus",
+      "uk": "Бонус"
     },
     "Time bonus": {
       "es": "Bonificación de tiempo",
       "it": "Bonus tempo",
-      "fr": "Bonus de temps"
+      "fr": "Bonus de temps",
+      "uk": "Бонус часу"
     },
     "Wasted!": {
       "es": "¡Destrozado!",
       "it": "Distrutto!",
-      "fr": "Détruit !"
+      "fr": "Détruit !",
+      "uk": "Знищено!"
     },
     "Vulnerability returns!": {
       "es": "¡Vuelves a ser vulnerable!",
       "it": "Sei di nuovo vulnerabile!",
-      "fr": "Vous êtes de nouveau vulnérable !"
+      "fr": "Vous êtes de nouveau vulnérable !",
+      "uk": "Вразливість повернулася!"
     },
     "Timer thawed out": {
       "es": "El tiempo vuelve a correr",
       "it": "Il tempo riprende",
-      "fr": "Le chronomètre repart"
+      "fr": "Le chronomètre repart",
+      "uk": "Таймер знову йде"
     },
     "You Cheat!": {
       "es": "¡Tramposo!",
       "it": "Hai barato!",
-      "fr": "Tricheur !"
+      "fr": "Tricheur !",
+      "uk": "Ти шахраюєш!"
     },
     "Race completed": {
       "es": "Carrera completada",
       "it": "Gara completata",
-      "fr": "Course terminée"
+      "fr": "Course terminée",
+      "uk": "Гонку завершено"
     },
     "Race over": {
       "es": "Fin de carrera",
       "it": "Fine gara",
-      "fr": "Fin de course"
+      "fr": "Fin de course",
+      "uk": "Гонку закінчено"
     },
     "Checkpoint missed": {
       "es": "Punto de control perdido",
       "it": "Checkpoint mancato",
-      "fr": "Point de contrôle manqué"
+      "fr": "Point de contrôle manqué",
+      "uk": "Контрольну точку пропущено"
     },
     "Time added": {
       "es": "Tiempo añadido",
       "it": "Tempo aggiunto",
-      "fr": "Temps ajouté"
+      "fr": "Temps ajouté",
+      "uk": "Час додано"
     },
     "Race start": {
       "es": "Iniciar carrera",
       "it": "Inizia gara",
-      "fr": "Démarrer la course"
+      "fr": "Démarrer la course",
+      "uk": "Старт гонки"
     },
     "Change car": {
       "es": "Cambiar coche",
       "it": "Cambia auto",
-      "fr": "Changer de voiture"
+      "fr": "Changer de voiture",
+      "uk": "Змінити авто"
     },
     "Change race": {
       "es": "Cambiar carrera",
       "it": "Cambia gara",
-      "fr": "Changer de course"
+      "fr": "Changer de course",
+      "uk": "Змінити гонку"
     },
     "Parts shop": {
       "es": "Tienda de mejoras",
       "it": "Negozio ricambi",
-      "fr": "Boutique de pièces"
+      "fr": "Boutique de pièces",
+      "uk": "Магазин запчастин"
     },
     "Start race": {
       "es": "Empezar carrera",
       "it": "Avvia gara",
-      "fr": "Lancer la course"
+      "fr": "Lancer la course",
+      "uk": "Почати гонку"
     },
     "Armor": {
       "es": "Blindaje",
       "it": "Corazza",
-      "fr": "Blindage"
+      "fr": "Blindage",
+      "uk": "Броня"
     },
     "Power": {
       "es": "Potencia",
       "it": "Potenza",
-      "fr": "Puissance"
+      "fr": "Puissance",
+      "uk": "Потужність"
     },
     "Offensive": {
       "es": "Ataque",
       "it": "Attacco",
-      "fr": "Attaque"
+      "fr": "Attaque",
+      "uk": "Атака"
     },
     "More options": {
       "es": "Más opciones",
       "it": "Altre opzioni",
-      "fr": "Plus d'options"
+      "fr": "Plus d'options",
+      "uk": "Більше параметрів"
     },
     "Recover / respawn": {
       "es": "Recuperar / reaparecer",
       "it": "Recupera / ricomincia",
-      "fr": "Replacer / réapparaître"
+      "fr": "Replacer / réapparaître",
+      "uk": "Відновити / відродитися"
     },
     "Camera view": {
       "es": "Vista de cámara",
       "it": "Visuale telecamera",
-      "fr": "Vue caméra"
+      "fr": "Vue caméra",
+      "uk": "Вид камери"
     },
     "Accelerate · second input": {
       "es": "Acelerar · segunda entrada",
       "it": "Accelera · secondo comando",
-      "fr": "Accélérer · deuxième commande"
+      "fr": "Accélérer · deuxième commande",
+      "uk": "Газ · друга кнопка"
     },
     "Menu confirm": {
       "es": "Confirmar en menú",
       "it": "Conferma nel menu",
-      "fr": "Confirmer dans le menu"
+      "fr": "Confirmer dans le menu",
+      "uk": "Підтвердження в меню"
     },
     "Menu back": {
       "es": "Volver en menú",
       "it": "Indietro nel menu",
-      "fr": "Retour dans le menu"
+      "fr": "Retour dans le menu",
+      "uk": "Назад у меню"
     },
     "Unassigned": {
       "es": "Sin asignar",
       "it": "Non assegnato",
-      "fr": "Non attribué"
+      "fr": "Non attribué",
+      "uk": "Не призначено"
     },
     "Select / Back": {
       "es": "Select / Atrás",
       "it": "Select / Indietro",
-      "fr": "Select / Retour"
+      "fr": "Select / Retour",
+      "uk": "Select / Back"
     },
     "D-pad up": {
       "es": "Cruceta arriba",
       "it": "Croce su",
-      "fr": "Croix haut"
+      "fr": "Croix haut",
+      "uk": "Хрестовина вгору"
     },
     "D-pad down": {
       "es": "Cruceta abajo",
       "it": "Croce giù",
-      "fr": "Croix bas"
+      "fr": "Croix bas",
+      "uk": "Хрестовина вниз"
     },
     "D-pad left": {
       "es": "Cruceta izquierda",
       "it": "Croce sinistra",
-      "fr": "Croix gauche"
+      "fr": "Croix gauche",
+      "uk": "Хрестовина вліво"
     },
     "D-pad right": {
       "es": "Cruceta derecha",
       "it": "Croce destra",
-      "fr": "Croix droite"
+      "fr": "Croix droite",
+      "uk": "Хрестовина вправо"
     },
     "Left stick left": {
       "es": "Stick izquierdo hacia la izquierda",
       "it": "Levetta sinistra a sinistra",
-      "fr": "Stick gauche vers la gauche"
+      "fr": "Stick gauche vers la gauche",
+      "uk": "Лівий стік вліво"
     },
     "Left stick right": {
       "es": "Stick izquierdo hacia la derecha",
       "it": "Levetta sinistra a destra",
-      "fr": "Stick gauche vers la droite"
+      "fr": "Stick gauche vers la droite",
+      "uk": "Лівий стік вправо"
     },
     "Left stick up": {
       "es": "Stick izquierdo arriba",
       "it": "Levetta sinistra su",
-      "fr": "Stick gauche vers le haut"
+      "fr": "Stick gauche vers le haut",
+      "uk": "Лівий стік угору"
     },
     "Left stick down": {
       "es": "Stick izquierdo abajo",
       "it": "Levetta sinistra giù",
-      "fr": "Stick gauche vers le bas"
+      "fr": "Stick gauche vers le bas",
+      "uk": "Лівий стік униз"
     },
     "Right stick left": {
       "es": "Stick derecho hacia la izquierda",
       "it": "Levetta destra a sinistra",
-      "fr": "Stick droit vers la gauche"
+      "fr": "Stick droit vers la gauche",
+      "uk": "Правий стік вліво"
     },
     "Right stick right": {
       "es": "Stick derecho hacia la derecha",
       "it": "Levetta destra a destra",
-      "fr": "Stick droit vers la droite"
+      "fr": "Stick droit vers la droite",
+      "uk": "Правий стік вправо"
     },
     "Right stick up": {
       "es": "Stick derecho arriba",
       "it": "Levetta destra su",
-      "fr": "Stick droit vers le haut"
+      "fr": "Stick droit vers le haut",
+      "uk": "Правий стік угору"
     },
     "Right stick down": {
       "es": "Stick derecho abajo",
       "it": "Levetta destra giù",
-      "fr": "Stick droit vers le bas"
+      "fr": "Stick droit vers le bas",
+      "uk": "Правий стік униз"
     },
     "In-game performance overlay": {
       "es": "Monitor de rendimiento en el juego",
       "it": "Monitor prestazioni nel gioco",
-      "fr": "Moniteur de performances en jeu"
+      "fr": "Moniteur de performances en jeu",
+      "uk": "Накладка продуктивності в грі"
     },
     "Battery temperature": {
       "es": "Temperatura de batería",
       "it": "Temperatura batteria",
-      "fr": "Température de la batterie"
+      "fr": "Température de la batterie",
+      "uk": "Температура батареї"
     },
     "FPS + battery temperature": {
       "es": "FPS y temperatura de batería",
       "it": "FPS e temperatura batteria",
-      "fr": "FPS et température de la batterie"
+      "fr": "FPS et température de la batterie",
+      "uk": "FPS + температура батареї"
     },
     "Includes the latest 12 sessions, graphics settings and battery/thermal readings. No game data. Nothing is uploaded automatically.": {
       "es": "Incluye las últimas 12 sesiones, ajustes gráficos y lecturas de batería y temperatura. No incluye datos del juego. Nada se sube automáticamente.",
       "it": "Include le ultime 12 sessioni, impostazioni grafiche e dati di batteria e temperatura. Nessun dato del gioco. Nulla viene caricato automaticamente.",
-      "fr": "Inclut les 12 dernières sessions, les réglages graphiques et les mesures de batterie et de température. Aucune donnée du jeu. Aucun envoi automatique."
+      "fr": "Inclut les 12 dernières sessions, les réglages graphiques et les mesures de batterie et de température. Aucune donnée du jeu. Aucun envoi automatique.",
+      "uk": "Містить останні 12 сесій, налаштування графіки та показники батареї й температури. Без даних гри. Нічого не надсилається автоматично."
     },
     "Off by default. Enable before Play. After an unexpected exit, return here and export the error ZIP. Recording is separate from performance diagnostics.": {
       "es": "Desactivado por defecto. Actívalo antes de Jugar. Tras una salida inesperada, vuelve aquí y exporta el ZIP de errores. El registro es independiente del diagnóstico de rendimiento.",
       "it": "Disattivo per impostazione predefinita. Attivalo prima di Avvia. Dopo un'uscita imprevista, torna qui ed esporta lo ZIP degli errori. La registrazione è separata dalla diagnostica prestazioni.",
-      "fr": "Désactivé par défaut. Activez-le avant de jouer. Après une fermeture inattendue, revenez ici et exportez le ZIP d'erreurs. Cet enregistrement est indépendant du diagnostic de performances."
+      "fr": "Désactivé par défaut. Activez-le avant de jouer. Après une fermeture inattendue, revenez ici et exportez le ZIP d'erreurs. Cet enregistrement est indépendant du diagnostic de performances.",
+      "uk": "За замовчуванням вимкнено. Увімкніть перед запуском. Після несподіваного виходу поверніться сюди й експортуйте ZIP із помилками. Цей запис окремий від діагностики продуктивності."
     },
     "Keeps up to 12 bounded sessions: app errors, lifecycle events and available Android exit reports. Reports vary by Android/device. Logs may contain app messages and file paths. Nothing is uploaded automatically.": {
       "es": "Conserva hasta 12 sesiones limitadas: errores, eventos y los informes de cierre de Android disponibles. Los informes varían según el dispositivo. Los registros pueden contener mensajes y rutas de archivos. Nada se sube automáticamente.",
       "it": "Conserva fino a 12 sessioni limitate: errori, eventi e rapporti di chiusura Android disponibili. I rapporti variano secondo il dispositivo. I log possono contenere messaggi e percorsi di file. Nulla viene caricato automaticamente.",
-      "fr": "Conserve jusqu'à 12 sessions limitées : erreurs, événements et rapports de fermeture Android disponibles. Les rapports varient selon l'appareil. Les journaux peuvent contenir des messages et des chemins de fichiers. Aucun envoi automatique."
+      "fr": "Conserve jusqu'à 12 sessions limitées : erreurs, événements et rapports de fermeture Android disponibles. Les rapports varient selon l'appareil. Les journaux peuvent contenir des messages et des chemins de fichiers. Aucun envoi automatique.",
+      "uk": "Зберігає до 12 обмежених сесій: помилки застосунку, події життєвого циклу та доступні звіти Android про завершення. Звіти залежать від версії Android і пристрою. Журнали можуть містити повідомлення застосунку та шляхи до файлів. Нічого не надсилається автоматично."
     },
     "Shared inputs trigger every assigned action. Avoid assigning gears or camera to your steering axis. Automatic shifting remains active after manual gear overrides.": {
       "es": "Las entradas compartidas activan todas sus acciones. Evita asignar marchas o cámara al eje de dirección. El cambio automático sigue activo tras los cambios manuales.",
       "it": "I comandi condivisi attivano tutte le azioni assegnate. Evita di assegnare marce o visuale all'asse dello sterzo. Il cambio automatico resta attivo dopo i cambi manuali.",
-      "fr": "Une entrée partagée déclenche toutes les actions attribuées. Évitez d'affecter les rapports ou la caméra à l'axe de direction. La boîte automatique reste active après les changements manuels."
+      "fr": "Une entrée partagée déclenche toutes les actions attribuées. Évitez d'affecter les rapports ou la caméra à l'axe de direction. La boîte automatique reste active après les changements manuels.",
+      "uk": "Спільна кнопка запускає всі призначені їй дії. Не призначайте передачі чи камеру на вісь керма. Автоматичне перемикання залишається активним після ручного перемикання передач."
     },
     "Defaults: left stick / D-pad steer · RT or X accelerate · LT brake/reverse · LB handbrake · Y recover · RB repair (hold) · Select map · right stick up/down gears · R3 camera · Start pause. Menus: A confirm, B back.": {
       "es": "Por defecto: stick izquierdo / cruceta dirección · RT o X acelerar · LT frenar/reversa · LB freno de mano · Y recuperar · RB reparar (mantener) · Select mapa · stick derecho arriba/abajo marchas · R3 cámara · Start pausa. Menús: A aceptar, B volver.",
       "it": "Predefiniti: levetta sinistra / croce sterzo · RT o X accelera · LT freno/retromarcia · LB freno a mano · Y recupera · RB ripara (tieni premuto) · Select mappa · levetta destra su/giù marce · R3 visuale · Start pausa. Menu: A conferma, B indietro.",
-      "fr": "Par défaut : stick gauche / croix direction · RT ou X accélérer · LT freiner/reculer · LB frein à main · Y replacer · RB réparer (maintenir) · Select carte · stick droit haut/bas rapports · R3 caméra · Start pause. Menus : A confirmer, B retour."
+      "fr": "Par défaut : stick gauche / croix direction · RT ou X accélérer · LT freiner/reculer · LB frein à main · Y replacer · RB réparer (maintenir) · Select carte · stick droit haut/bas rapports · R3 caméra · Start pause. Menus : A confirmer, B retour.",
+      "uk": "Типово: лівий стік / хрестовина — кермо · RT або X — газ · LT — гальмо/задній хід · LB — ручне гальмо · Y — відновлення · RB — ремонт (утримувати) · Select — мапа · правий стік угору/вниз — передачі · R3 — камера · Start — пауза. У меню: A — підтвердити, B — назад."
     },
     "No error sessions yet. Enable Record error logs, then press Play. After an unexpected exit, reopen the launcher and export here.": {
       "es": "No hay sesiones de errores. Activa Registrar errores y pulsa Jugar. Tras una salida inesperada, abre el lanzador y exporta aquí.",
       "it": "Nessuna sessione di errori. Attiva Registra errori e premi Avvia. Dopo un'uscita imprevista, riapri il launcher ed esporta qui.",
-      "fr": "Aucune session d'erreurs. Activez Enregistrer les erreurs puis lancez le jeu. Après une fermeture inattendue, rouvrez le lanceur et exportez ici."
+      "fr": "Aucune session d'erreurs. Activez Enregistrer les erreurs puis lancez le jeu. Après une fermeture inattendue, rouvrez le lanceur et exportez ici.",
+      "uk": "Сесій із помилками ще немає. Увімкніть «Записувати журнали помилок» і натисніть «Грати». Після несподіваного виходу знову відкрийте лаунчер і експортуйте тут."
     },
     "Mirror": {
       "es": "Retrovisor",
       "it": "Specchietto",
-      "fr": "Rétroviseur"
+      "fr": "Rétroviseur",
+      "uk": "Дзеркало"
     },
     "Choose a car": {
       "es": "Elegir coche",
       "it": "Scegli un'auto",
-      "fr": "Choisir une voiture"
+      "fr": "Choisir une voiture",
+      "uk": "Виберіть авто"
     },
     "Enter your name": {
       "es": "Introduce tu nombre",
       "it": "Inserisci il nome",
-      "fr": "Entrez votre nom"
+      "fr": "Entrez votre nom",
+      "uk": "Введіть своє ім’я"
     },
     "Drag controls to move. Tap an icon for its name. Recovery needs a 0.6 second hold.": {
       "es": "Arrastra los controles para moverlos. Toca un icono para ver su nombre. Para recuperar, mantén pulsado 0.6 segundos.",
       "it": "Trascina i comandi per spostarli. Tocca un'icona per vederne il nome. Il recupero richiede una pressione di 0.6 secondi.",
-      "fr": "Faites glisser les commandes pour les déplacer. Touchez une icône pour voir son nom. Maintenez 0.6 seconde pour replacer la voiture."
+      "fr": "Faites glisser les commandes pour les déplacer. Touchez une icône pour voir son nom. Maintenez 0.6 seconde pour replacer la voiture.",
+      "uk": "Перетягуйте елементи, щоб перемістити. Торкніться значка, щоб побачити його назву. Для відновлення утримуйте 0,6 секунди."
     },
     "Save": {
       "es": "Guardar",
       "it": "Salva",
-      "fr": "Enregistrer"
+      "fr": "Enregistrer",
+      "uk": "Зберегти"
     },
     "Reset": {
       "es": "Restablecer",
       "it": "Ripristina",
-      "fr": "Réinitialiser"
+      "fr": "Réinitialiser",
+      "uk": "Скинути"
     },
     "Size: {game}%": {
       "es": "Tamaño: {game}%",
       "it": "Dimensione: {game}%",
-      "fr": "Taille : {game}%"
+      "fr": "Taille : {game}%",
+      "uk": "Розмір: {game}%"
     },
     "Mirrored": {
       "es": "Invertido",
       "it": "Speculare",
-      "fr": "Inversé"
+      "fr": "Inversé",
+      "uk": "Віддзеркалено"
     },
     "Controls saved": {
       "es": "Controles guardados",
       "it": "Comandi salvati",
-      "fr": "Commandes enregistrées"
+      "fr": "Commandes enregistrées",
+      "uk": "Керування збережено"
     },
     "Steering": {
       "es": "Dirección",
       "it": "Sterzo",
-      "fr": "Direction"
+      "fr": "Direction",
+      "uk": "Кермо"
     },
     "Drag any control": {
       "es": "Arrastra un control",
       "it": "Trascina un comando",
-      "fr": "Faites glisser une commande"
+      "fr": "Faites glisser une commande",
+      "uk": "Перетягніть будь-який елемент"
     },
     "Keep controls apart": {
       "es": "Separa los controles",
       "it": "Tieni separati i comandi",
-      "fr": "Écartez les commandes"
+      "fr": "Écartez les commandes",
+      "uk": "Не накладайте елементи"
     },
     "Separate the overlapping controls before saving": {
       "es": "Separa los controles superpuestos antes de guardar",
       "it": "Separa i comandi sovrapposti prima di salvare",
-      "fr": "Séparez les commandes superposées avant de sauvegarder"
+      "fr": "Séparez les commandes superposées avant de sauvegarder",
+      "uk": "Розведіть елементи, що накладаються, перед збереженням"
     },
     "High": {
       "es": "Alta",
       "it": "Alta",
-      "fr": "Élevée"
+      "fr": "Élevée",
+      "uk": "Висока"
     },
     "Performance": {
       "es": "Rendimiento",
       "it": "Prestazioni",
-      "fr": "Performances"
+      "fr": "Performances",
+      "uk": "Продуктивність"
     },
     "Extended": {
       "es": "Ampliada",
       "it": "Estesa",
-      "fr": "Étendue"
+      "fr": "Étendue",
+      "uk": "Збільшена"
     },
     "Far": {
       "es": "Lejana",
       "it": "Lontana",
-      "fr": "Lointaine"
+      "fr": "Lointaine",
+      "uk": "Далека"
+    },
+    "Upscaling": {
+      "es": "Escalado",
+      "it": "Upscaling",
+      "fr": "Mise à l'échelle",
+      "uk": "Масштабування"
+    },
+    "Nearest — crisp pixels": {
+      "es": "Vecino más cercano — píxeles nítidos",
+      "it": "Più vicino — pixel nitidi",
+      "fr": "Plus proche voisin — pixels nets",
+      "uk": "Найближчий сусід — чіткі пікселі"
+    },
+    "AMD FSR 1.0 — edge-adaptive": {
+      "es": "AMD FSR 1.0 — adaptado a bordes",
+      "it": "AMD FSR 1.0 — adattivo ai bordi",
+      "fr": "AMD FSR 1.0 — adapté aux contours",
+      "uk": "AMD FSR 1.0 — з урахуванням країв"
+    },
+    "Snapdragon GSR — faster single pass": {
+      "es": "Snapdragon GSR — una pasada más rápida",
+      "it": "Snapdragon GSR — passaggio singolo più veloce",
+      "fr": "Snapdragon GSR — passe unique plus rapide",
+      "uk": "Snapdragon GSR — швидший однопрохідний"
+    },
+    "FSR and GSR upscale the game image to your screen and sharpen it. GSR is lighter on the GPU. Both work best with Standard or Performance 3D resolution and have no effect when the image is already at screen size.": {
+      "es": "FSR y GSR escalan la imagen del juego a tu pantalla y la enfocan. GSR exige menos a la GPU. Ambos funcionan mejor con resolución 3D Estándar o Rendimiento y no tienen efecto si la imagen ya tiene el tamaño de la pantalla.",
+      "it": "FSR e GSR scalano l'immagine del gioco allo schermo e la rendono più nitida. GSR pesa meno sulla GPU. Entrambi funzionano meglio con risoluzione 3D Standard o Prestazioni e non hanno effetto se l'immagine ha già le dimensioni dello schermo.",
+      "fr": "FSR et GSR mettent l'image du jeu à l'échelle de votre écran et la rendent plus nette. GSR sollicite moins le GPU. Les deux fonctionnent mieux avec la résolution 3D Standard ou Performances et n'ont aucun effet si l'image est déjà à la taille de l'écran.",
+      "uk": "FSR і GSR масштабують зображення гри до вашого екрана й підвищують його різкість. GSR менше навантажує GPU. Обидва найкраще працюють зі стандартною роздільною здатністю 3D або режимом «Продуктивність» і не впливають на зображення, яке вже має розмір екрана."
+    },
+    "Ultra": {
+      "es": "Ultra",
+      "it": "Ultra",
+      "fr": "Ultra",
+      "uk": "Ультра"
+    },
+    "Ultra — 4× supersampling": {
+      "es": "Ultra — supermuestreo 4×",
+      "it": "Ultra — supersampling 4×",
+      "fr": "Ultra — suréchantillonnage 4×",
+      "uk": "Ультра — суперсемплінг 4×"
+    },
+    "High and Ultra render 3D at 3× or 4× and average it down to your screen for smoother edges. Ultra needs a fast GPU.": {
+      "es": "Alta y Ultra renderizan el 3D a 3× o 4× y lo reducen a tu pantalla para suavizar los bordes. Ultra necesita una GPU rápida.",
+      "it": "Alta e Ultra eseguono il rendering 3D a 3× o 4× e lo riducono allo schermo per bordi più morbidi. Ultra richiede una GPU veloce.",
+      "fr": "Élevée et Ultra rendent la 3D en 3× ou 4× puis la réduisent à votre écran pour des contours plus lisses. Ultra nécessite un GPU rapide.",
+      "uk": "«Висока» та «Ультра» рендерять 3D у 3× або 4× і усереднюють до розміру екрана для плавніших країв. «Ультра» потребує швидкого GPU."
+    },
+    "Anisotropic filtering": {
+      "es": "Filtrado anisotrópico",
+      "it": "Filtro anisotropico",
+      "fr": "Filtrage anisotrope",
+      "uk": "Анізотропна фільтрація"
+    },
+    "2×": {
+      "es": "2×",
+      "it": "2×",
+      "fr": "2×",
+      "uk": "2×"
+    },
+    "4×": {
+      "es": "4×",
+      "it": "4×",
+      "fr": "4×",
+      "uk": "4×"
+    },
+    "Keeps roads and walls sharp when seen at a shallow angle. Works with Smooth texture filtering. Higher values cost more GPU time.": {
+      "es": "Mantiene nítidas las carreteras y paredes vistas en ángulo bajo. Funciona con el filtrado de texturas Suave. Los valores altos exigen más a la GPU.",
+      "it": "Mantiene nitide strade e muri visti di scorcio. Funziona con il filtro texture Uniforme. Valori più alti richiedono più GPU.",
+      "fr": "Garde les routes et les murs nets vus sous un angle rasant. Fonctionne avec le filtrage des textures Lissé. Les valeurs élevées sollicitent davantage le GPU.",
+      "uk": "Зберігає чіткість доріг і стін, які видно під гострим кутом. Працює зі згладженою фільтрацією текстур. Вищі значення більше навантажують GPU."
+    },
+    "Edge smoothing (FXAA)": {
+      "es": "Suavizado de bordes (FXAA)",
+      "it": "Smussatura dei bordi (FXAA)",
+      "fr": "Lissage des contours (FXAA)",
+      "uk": "Згладжування країв (FXAA)"
+    },
+    "Sharpening": {
+      "es": "Nitidez",
+      "it": "Nitidezza",
+      "fr": "Netteté",
+      "uk": "Різкість"
+    },
+    "Low": {
+      "es": "Baja",
+      "it": "Bassa",
+      "fr": "Faible",
+      "uk": "Низька"
+    },
+    "Medium": {
+      "es": "Media",
+      "it": "Media",
+      "fr": "Moyenne",
+      "uk": "Середня"
+    },
+    "FXAA smooths jagged 3D edges cheaply, which helps most with Standard or Performance 3D resolution. Sharpening restores detail softened by smoothing or upscaling. Menus and HUD are not smoothed. With FSR, the sharpening level replaces FSR's own.": {
+      "es": "FXAA suaviza los bordes dentados del 3D con poco coste y ayuda sobre todo con la resolución 3D Estándar o Rendimiento. La nitidez recupera el detalle que suavizan el filtrado o el escalado. Los menús y el HUD no se suavizan. Con FSR, el nivel de nitidez sustituye al de FSR.",
+      "it": "FXAA smussa i bordi frastagliati del 3D con un costo ridotto ed è utile soprattutto con risoluzione 3D Standard o Prestazioni. La nitidezza recupera i dettagli ammorbiditi da smussatura o upscaling. Menu e HUD non vengono smussati. Con FSR, il livello di nitidezza sostituisce quello di FSR.",
+      "fr": "FXAA lisse à faible coût les contours crénelés de la 3D, surtout utile en résolution 3D Standard ou Performances. La netteté restaure les détails adoucis par le lissage ou la mise à l'échelle. Les menus et le HUD ne sont pas lissés. Avec FSR, le niveau de netteté remplace celui de FSR.",
+      "uk": "FXAA недорого згладжує зубчасті 3D-краї — найкорисніше зі стандартною роздільною здатністю 3D або режимом «Продуктивність». Різкість повертає деталі, розмиті згладжуванням або масштабуванням. Меню та HUD не згладжуються. З FSR цей рівень різкості замінює власний рівень FSR."
+    },
+    "Menu and HUD scaling": {
+      "es": "Escalado de menús y HUD",
+      "it": "Scala di menu e HUD",
+      "fr": "Mise à l'échelle des menus et du HUD",
+      "uk": "Масштабування меню та HUD"
+    },
+    "Pixel — original": {
+      "es": "Píxel — original",
+      "it": "Pixel — originale",
+      "fr": "Pixel — d'origine",
+      "uk": "Піксельне — оригінал"
+    },
+    "Sharp — even pixels": {
+      "es": "Nítido — píxeles uniformes",
+      "it": "Nitido — pixel uniformi",
+      "fr": "Net — pixels réguliers",
+      "uk": "Чітке — рівні пікселі"
+    },
+    "Smooth — rounded diagonals": {
+      "es": "Suave — diagonales redondeadas",
+      "it": "Uniforme — diagonali arrotondate",
+      "fr": "Lissé — diagonales arrondies",
+      "uk": "Згладжене — заокруглені діагоналі"
+    },
+    "Sharp keeps menus, text and HUD crisp while making every game pixel the same size on screen. Smooth also rounds stair-stepped diagonals in fonts and icons.": {
+      "es": "Nítido mantiene definidos los menús, el texto y el HUD y hace que todos los píxeles del juego tengan el mismo tamaño en pantalla. Suave además redondea las diagonales escalonadas de fuentes e iconos.",
+      "it": "Nitido mantiene definiti menu, testo e HUD e rende ogni pixel del gioco della stessa dimensione sullo schermo. Uniforme arrotonda anche le diagonali a gradini di caratteri e icone.",
+      "fr": "Net garde les menus, le texte et le HUD précis tout en donnant la même taille à chaque pixel du jeu à l'écran. Lissé arrondit aussi les diagonales en escalier des polices et des icônes.",
+      "uk": "«Чітке» зберігає різкість меню, тексту й HUD і робить усі пікселі гри однаковими за розміром на екрані. «Згладжене» ще й заокруглює ступінчасті діагоналі в шрифтах і значках."
+    },
+    "Field of view": {
+      "es": "Campo de visión",
+      "it": "Campo visivo",
+      "fr": "Champ de vision",
+      "uk": "Поле зору"
+    },
+    "Wide (+8°)": {
+      "es": "Amplio (+8°)",
+      "it": "Ampio (+8°)",
+      "fr": "Large (+8°)",
+      "uk": "Широке (+8°)"
+    },
+    "Wider (+16°)": {
+      "es": "Más amplio (+16°)",
+      "it": "Più ampio (+16°)",
+      "fr": "Plus large (+16°)",
+      "uk": "Ширше (+16°)"
+    },
+    "Brightness": {
+      "es": "Brillo",
+      "it": "Luminosità",
+      "fr": "Luminosité",
+      "uk": "Яскравість"
+    },
+    "Bright": {
+      "es": "Más claro",
+      "it": "Più chiaro",
+      "fr": "Plus clair",
+      "uk": "Світліше"
+    },
+    "Brighter": {
+      "es": "Muy claro",
+      "it": "Molto chiaro",
+      "fr": "Très clair",
+      "uk": "Значно світліше"
+    },
+    "Darker": {
+      "es": "Más oscuro",
+      "it": "Più scuro",
+      "fr": "Plus sombre",
+      "uk": "Темніше"
+    },
+    "Colour": {
+      "es": "Color",
+      "it": "Colore",
+      "fr": "Couleur",
+      "uk": "Колір"
+    },
+    "Vivid": {
+      "es": "Vivo",
+      "it": "Vivace",
+      "fr": "Vif",
+      "uk": "Насичений"
+    },
+    "Scanlines": {
+      "es": "Líneas de escaneo",
+      "it": "Linee di scansione",
+      "fr": "Lignes de balayage",
+      "uk": "Лінії розгортки"
+    },
+    "Light": {
+      "es": "Suaves",
+      "it": "Leggere",
+      "fr": "Légères",
+      "uk": "Слабкі"
+    },
+    "Strong": {
+      "es": "Marcadas",
+      "it": "Marcate",
+      "fr": "Marquées",
+      "uk": "Виразні"
+    },
+    "Scanlines imitate a CRT monitor and look best on large, high-resolution screens. A wider field of view shows more of the track around your car.": {
+      "es": "Las líneas de escaneo imitan un monitor CRT y se ven mejor en pantallas grandes de alta resolución. Un campo de visión más amplio muestra más pista alrededor de tu coche.",
+      "it": "Le linee di scansione imitano un monitor CRT e rendono meglio su schermi grandi ad alta risoluzione. Un campo visivo più ampio mostra più tracciato intorno all'auto.",
+      "fr": "Les lignes de balayage imitent un moniteur CRT et rendent mieux sur les grands écrans haute résolution. Un champ de vision plus large montre davantage de circuit autour de votre voiture.",
+      "uk": "Лінії розгортки імітують ЕПТ-монітор і найкраще виглядають на великих екранах із високою роздільною здатністю. Ширше поле зору показує більше траси навколо вашого авто."
+    },
+    "Tilt steering": {
+      "es": "Dirección por inclinación",
+      "it": "Sterzo con inclinazione",
+      "fr": "Direction par inclinaison",
+      "uk": "Кермування нахилом"
+    },
+    "Low sensitivity": {
+      "es": "Sensibilidad baja",
+      "it": "Sensibilità bassa",
+      "fr": "Sensibilité faible",
+      "uk": "Низька чутливість"
+    },
+    "Medium sensitivity": {
+      "es": "Sensibilidad media",
+      "it": "Sensibilità media",
+      "fr": "Sensibilité moyenne",
+      "uk": "Середня чутливість"
+    },
+    "High sensitivity": {
+      "es": "Sensibilidad alta",
+      "it": "Sensibilità alta",
+      "fr": "Sensibilité élevée",
+      "uk": "Висока чутливість"
+    },
+    "Turn the phone like a steering wheel. The way you hold it when a race starts (or when you return to the game) counts as straight ahead. Touching the steering pad overrides tilt.": {
+      "es": "Gira el teléfono como un volante. La posición en la que lo sostienes al empezar una carrera (o al volver al juego) cuenta como recto. Tocar el control de dirección anula la inclinación.",
+      "it": "Ruota il telefono come un volante. La posizione in cui lo tieni all'inizio della gara (o quando torni al gioco) vale come dritto. Toccare il comando di sterzo ha la precedenza sull'inclinazione.",
+      "fr": "Tournez le téléphone comme un volant. La position dans laquelle vous le tenez au départ d'une course (ou au retour dans le jeu) correspond à tout droit. Toucher la commande de direction remplace l'inclinaison.",
+      "uk": "Повертайте телефон, як кермо. Положення, у якому ви тримаєте його на старті гонки (або коли повертаєтеся в гру), вважається прямим. Дотик до сенсорного керма має пріоритет над нахилом."
+    },
+    "Crash vibration": {
+      "es": "Vibración en choques",
+      "it": "Vibrazione negli urti",
+      "fr": "Vibration lors des chocs",
+      "uk": "Вібрація при зіткненнях"
+    },
+    "Vibrates harder for bigger hits. With a controller in use, the controller rumbles instead of the phone.": {
+      "es": "Vibra más fuerte cuanto mayor es el golpe. Si usas un mando, vibra el mando en lugar del teléfono.",
+      "it": "Vibra più forte negli urti più violenti. Se usi un controller, vibra il controller invece del telefono.",
+      "fr": "Vibre plus fort pour les chocs plus violents. Si vous utilisez une manette, c'est elle qui vibre à la place du téléphone.",
+      "uk": "Що сильніший удар, то сильніша вібрація. Якщо використовується контролер, вібрує він замість телефона."
+    },
+    "Tilt steering needs a motion sensor this device does not have.": {
+      "es": "La dirección por inclinación necesita un sensor de movimiento que este dispositivo no tiene.",
+      "it": "Lo sterzo con inclinazione richiede un sensore di movimento che questo dispositivo non ha.",
+      "fr": "La direction par inclinaison nécessite un capteur de mouvement absent sur cet appareil.",
+      "uk": "Для кермування нахилом потрібен датчик руху, якого немає на цьому пристрої."
+    },
+    "Cockpit mirror": {
+      "es": "Retrovisor de cabina",
+      "it": "Specchietto in abitacolo",
+      "fr": "Rétroviseur du cockpit",
+      "uk": "Дзеркало в кабіні"
+    },
+    "Every frame": {
+      "es": "En cada fotograma",
+      "it": "A ogni fotogramma",
+      "fr": "À chaque image",
+      "uk": "Кожен кадр"
+    },
+    "Half rate — faster": {
+      "es": "Mitad de frecuencia — más rápido",
+      "it": "Metà frequenza — più veloce",
+      "fr": "Demi-fréquence — plus rapide",
+      "uk": "Половинна частота — швидше"
+    },
+    "Off at race start": {
+      "es": "Apagado al empezar",
+      "it": "Spento a inizio gara",
+      "fr": "Désactivé au départ",
+      "uk": "Вимкнене на старті"
+    },
+    "The rear-view mirror in cockpit view costs a second 3D render. Half rate updates it every other frame. Off starts races without it; the in-game mirror key still turns it on.": {
+      "es": "El retrovisor de la vista de cabina requiere un segundo renderizado 3D. Mitad de frecuencia lo actualiza cada dos fotogramas. Apagado empieza las carreras sin él; la tecla de retrovisor del juego aún lo activa.",
+      "it": "Lo specchietto nella visuale abitacolo richiede un secondo rendering 3D. Metà frequenza lo aggiorna un fotogramma sì e uno no. Spento avvia le gare senza; il tasto specchietto del gioco lo riattiva.",
+      "fr": "Le rétroviseur en vue cockpit nécessite un second rendu 3D. Demi-fréquence le met à jour une image sur deux. Désactivé démarre les courses sans lui ; la touche rétroviseur du jeu le réactive.",
+      "uk": "Дзеркало заднього виду в кабіні потребує другого 3D-рендера. «Половинна частота» оновлює його через кадр. «Вимкнене» починає гонки без нього; ігрова клавіша дзеркала все одно його вмикає."
+    },
+    "Stronger": {
+      "es": "Más fuerte",
+      "it": "Più forte",
+      "fr": "Plus forte",
+      "uk": "Сильніша"
+    },
+    "Crisp — sharp texels, no shimmer": {
+      "es": "Definido — téxeles nítidos, sin parpadeo",
+      "it": "Definito — texel nitidi, senza sfarfallio",
+      "fr": "Précis — texels nets, sans scintillement",
+      "uk": "Чітка — різкі тексели без мерехтіння"
+    },
+    "Crisp keeps the original blocky texture look up close, but smooths each texel edge and stops distant textures shimmering.": {
+      "es": "Definido mantiene de cerca el aspecto pixelado original de las texturas, pero suaviza el borde de cada téxel y evita el parpadeo de las texturas lejanas.",
+      "it": "Definito mantiene da vicino l'aspetto squadrato originale delle texture, ma ammorbidisce il bordo di ogni texel ed evita lo sfarfallio delle texture lontane.",
+      "fr": "Précis conserve de près l'aspect pixelisé d'origine des textures, mais adoucit le bord de chaque texel et évite le scintillement des textures lointaines.",
+      "uk": "«Чітка» зберігає зблизька оригінальний піксельний вигляд текстур, але згладжує край кожного текселя й прибирає мерехтіння далеких текстур."
+    },
+    "Compatibility": {
+      "es": "Compatibilidad",
+      "it": "Compatibilità",
+      "fr": "Compatibilité",
+      "uk": "Сумісність"
+    },
+    "These switch off changes that are always on in this version, to restore the 0.9.2 behaviour for comparison or if something looks wrong.": {
+      "es": "Desactivan cambios que en esta versión están siempre activos, para recuperar el comportamiento de la 0.9.2 y comparar o si algo se ve mal.",
+      "it": "Disattivano modifiche sempre attive in questa versione, per ripristinare il comportamento della 0.9.2 a scopo di confronto o se qualcosa non va.",
+      "fr": "Désactivent des changements toujours actifs dans cette version, pour retrouver le comportement de la 0.9.2 afin de comparer ou si quelque chose semble anormal.",
+      "uk": "Ці перемикачі вимикають зміни, що в цій версії діють завжди, і повертають поведінку 0.9.2 — для порівняння або якщо щось виглядає неправильно."
+    },
+    "Supersampling (High and Ultra)": {
+      "es": "Supermuestreo (Alta y Ultra)",
+      "it": "Supersampling (Alta e Ultra)",
+      "fr": "Suréchantillonnage (Élevée et Ultra)",
+      "uk": "Суперсемплінг («Висока» та «Ультра»)"
+    },
+    "Average samples — smoother": {
+      "es": "Promediar muestras — más suave",
+      "it": "Media dei campioni — più morbido",
+      "fr": "Moyenne des échantillons — plus lisse",
+      "uk": "Усереднення вибірок — плавніше"
+    },
+    "Single sample — 0.9.2": {
+      "es": "Una muestra — 0.9.2",
+      "it": "Campione singolo — 0.9.2",
+      "fr": "Échantillon unique — 0.9.2",
+      "uk": "Одна вибірка — 0.9.2"
+    },
+    "Mirror render size": {
+      "es": "Tamaño de render del retrovisor",
+      "it": "Dimensione di rendering dello specchietto",
+      "fr": "Taille de rendu du rétroviseur",
+      "uk": "Розмір рендера дзеркала"
+    },
+    "Game resolution — faster": {
+      "es": "Resolución del juego — más rápido",
+      "it": "Risoluzione del gioco — più veloce",
+      "fr": "Résolution du jeu — plus rapide",
+      "uk": "Роздільна здатність гри — швидше"
+    },
+    "Full 3D resolution — 0.9.2": {
+      "es": "Resolución 3D completa — 0.9.2",
+      "it": "Risoluzione 3D completa — 0.9.2",
+      "fr": "Résolution 3D complète — 0.9.2",
+      "uk": "Повна роздільна здатність 3D — 0.9.2"
+    },
+    "Track visibility test": {
+      "es": "Prueba de visibilidad del circuito",
+      "it": "Test di visibilità del tracciato",
+      "fr": "Test de visibilité du circuit",
+      "uk": "Перевірка видимості траси"
+    },
+    "View-based — faster": {
+      "es": "Según la vista — más rápido",
+      "it": "In base alla visuale — più veloce",
+      "fr": "Selon la vue — plus rapide",
+      "uk": "За полем зору — швидше"
+    },
+    "Original box — 0.9.2": {
+      "es": "Caja original — 0.9.2",
+      "it": "Riquadro originale — 0.9.2",
+      "fr": "Zone d'origine — 0.9.2",
+      "uk": "Оригінальна область — 0.9.2"
+    },
+    "Reset graphics to defaults": {
+      "es": "Restablecer gráficos",
+      "it": "Ripristina grafica predefinita",
+      "fr": "Réinitialiser les graphismes",
+      "uk": "Скинути налаштування графіки"
+    },
+    "Every setting on this page goes back to its default. Controls, language and cheats are not changed.": {
+      "es": "Todos los ajustes de esta página vuelven a su valor predeterminado. Los controles, el idioma y los trucos no cambian.",
+      "it": "Tutte le impostazioni di questa pagina tornano ai valori predefiniti. Comandi, lingua e trucchi non cambiano.",
+      "fr": "Tous les réglages de cette page reprennent leur valeur par défaut. Les commandes, la langue et les astuces ne changent pas.",
+      "uk": "Усі налаштування на цій сторінці повернуться до типових. Керування, мова та чити не зміняться."
+    },
+    "Tilt with a controller": {
+      "es": "Inclinación con mando",
+      "it": "Inclinazione con controller",
+      "fr": "Inclinaison avec une manette",
+      "uk": "Нахил разом із контролером"
+    },
+    "Combine with stick": {
+      "es": "Combinar con el stick",
+      "it": "Combina con lo stick",
+      "fr": "Combiner avec le stick",
+      "uk": "Поєднувати зі стіком"
+    },
+    "Controller only": {
+      "es": "Solo el mando",
+      "it": "Solo controller",
+      "fr": "Manette uniquement",
+      "uk": "Лише контролер"
+    },
+    "Combine adds tilt to the controller's steering, for a phone held in a controller grip. Controller only ignores tilt while a controller is in use.": {
+      "es": "Combinar suma la inclinación a la dirección del mando, para un teléfono montado en un mando. Solo el mando ignora la inclinación mientras se usa un mando.",
+      "it": "Combina aggiunge l'inclinazione allo sterzo del controller, per un telefono montato su un controller. Solo controller ignora l'inclinazione mentre usi un controller.",
+      "fr": "Combiner ajoute l'inclinaison à la direction de la manette, pour un téléphone fixé sur une manette. Manette uniquement ignore l'inclinaison quand une manette est utilisée.",
+      "uk": "«Поєднувати» додає нахил до кермування контролером — для телефона, закріпленого в тримачі контролера. «Лише контролер» ігнорує нахил, поки використовується контролер."
+    },
+    "Ukrainian covers the launcher only: the game's fonts have no Cyrillic letters, so in-game text stays in English.": {
+      "es": "El ucraniano solo cubre el lanzador: las fuentes del juego no tienen letras cirílicas, así que el texto del juego sigue en inglés.",
+      "it": "L'ucraino riguarda solo il launcher: i caratteri del gioco non hanno lettere cirilliche, quindi il testo nel gioco resta in inglese.",
+      "fr": "L'ukrainien ne concerne que le lanceur : les polices du jeu n'ont pas de lettres cyrilliques, le texte en jeu reste donc en anglais.",
+      "uk": "Українська мова доступна лише в лаунчері: шрифти гри не мають кириличних літер, тому текст у грі залишається англійською."
+    },
+    "Tyre smoke and skid marks": {
+      "es": "Humo de neumáticos y marcas de derrape",
+      "it": "Fumo degli pneumatici e segni di frenata",
+      "fr": "Fumée des pneus et traces de dérapage",
+      "uk": "Дим шин і сліди заносу"
+    },
+    "Sparks and debris": {
+      "es": "Chispas y restos",
+      "it": "Scintille e detriti",
+      "fr": "Étincelles et débris",
+      "uk": "Іскри та уламки"
+    },
+    "Enhanced": {
+      "es": "Mejorado",
+      "it": "Migliorato",
+      "fr": "Amélioré",
+      "uk": "Покращено"
+    },
+    "Enhanced tyre smoke follows every sliding wheel on tarmac and skid marks stay on the track three times longer. Enhanced impacts throw more sparks and twice the car fragments. Both use the game's own effects and may cost some performance in busy races.": {
+      "es": "Con la opción mejorada, el humo sale de cada rueda que derrapa sobre el asfalto y las marcas de derrape duran tres veces más. Los choques mejorados lanzan más chispas y el doble de fragmentos. Ambos usan los efectos propios del juego y pueden reducir algo el rendimiento en carreras intensas.",
+      "it": "Con l'opzione migliorata, il fumo segue ogni ruota che slitta sull'asfalto e i segni di frenata restano sul tracciato tre volte più a lungo. Gli urti migliorati producono più scintille e il doppio dei frammenti. Entrambi usano gli effetti del gioco e possono ridurre un po' le prestazioni nelle gare più movimentate.",
+      "fr": "En mode amélioré, la fumée suit chaque roue qui glisse sur l'asphalte et les traces de dérapage restent trois fois plus longtemps. Les chocs améliorés projettent plus d'étincelles et deux fois plus de fragments. Les deux utilisent les effets du jeu et peuvent réduire un peu les performances dans les courses chargées.",
+      "uk": "У покращеному режимі дим іде від кожного колеса, що ковзає по асфальту, а сліди заносу лишаються на трасі втричі довше. Покращені зіткнення дають більше іскор і вдвічі більше уламків. Обидва ефекти використовують власні ефекти гри й можуть трохи знизити продуктивність у насичених гонках."
     }
   },
   "misc_indices": {

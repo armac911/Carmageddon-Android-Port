@@ -125,7 +125,6 @@ public class TouchOverlayView extends View {
     private void feedback(boolean strong) {
         if (haptics) performHapticFeedback(strong ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.VIRTUAL_KEY);
     }
-    public void impactFeedback() { feedback(true); }
     private final Runnable recoverCheck = () -> {
         if (held(4) && SystemClock.uptimeMillis() - recoverStart >= 600) {
             recoverReady = true;
@@ -157,10 +156,18 @@ public class TouchOverlayView extends View {
             if (action >= 0 && (action != 4 || recoverReady)) mask |= 1 << action;
         }
         listener.input(mask, Math.round(axis * 65535), steeringPointer >= 0);
-        invalidate();
+        // Move events arrive at 120-240 Hz: redraw only when something visible changed.
+        boolean steering = steeringPointer >= 0;
+        if (mask != drawnMask || steering != drawnSteering || Math.abs(axis - drawnAxis) > 0.01f) {
+            drawnMask = mask; drawnSteering = steering; drawnAxis = axis;
+            invalidate();
+        }
     }
+    private int drawnMask = -1;
+    private boolean drawnSteering;
+    private float drawnAxis = Float.NaN;
     public void reset() {
-        pointers.clear(); steeringPointer = -1; axis = 0; mask = 0;
+        pointers.clear(); steeringPointer = -1; axis = 0; mask = 0; drawnMask = -1;
         recoverReady = false; removeCallbacks(recoverCheck);
         listener.reset(); invalidate();
     }

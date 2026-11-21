@@ -1,12 +1,13 @@
 #ifndef _SKIDMARK_H_
 #define _SKIDMARK_H_
+#include "../android_effects.h"
 
 #include "brender/br_types.h"
 #include "dr_types.h"
 
 extern char* gBoring_material_names[2];
 extern char* gMaterial_names[2];
-extern tSkid gSkids[100];
+extern tSkid gSkids[DR_SKID_POOL];
 
 void StretchMark(tSkid* pMark, br_vector3* pFrom, br_vector3* pTo, br_scalar pTexture_start);
 

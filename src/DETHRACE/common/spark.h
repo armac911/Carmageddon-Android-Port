@@ -1,5 +1,6 @@
 #ifndef _SPARK_H_
 #define _SPARK_H_
+#include "../android_effects.h"
 
 #include "brender/br_types.h"
 #include "dr_types.h"
@@ -32,7 +33,7 @@ extern br_matrix4 gCameraToScreen;
 extern tSpark gSparks[32];
 extern br_pixelmap* gShade_list[16];
 extern int gN_BR_smoke_structs;
-extern tSmoke gSmoke[25];
+extern tSmoke gSmoke[DR_SMOKE_POOL];
 extern tU32 gSplash_flags;
 extern tU32 gNext_splash;
 extern br_model* gLollipop_model;
@@ -41,7 +42,7 @@ extern br_model* gSplash_model;
 extern int gDust_rotate;
 extern br_camera* gSpark_cam;
 extern br_material* gBlack_material;
-extern tShrapnel gShrapnel[15];
+extern tShrapnel gShrapnel[DR_SHRAPNEL_POOL];
 
 void DrawDot(br_scalar z, tU8* scr_ptr, tU16* depth_ptr, tU8* shade_ptr);
 

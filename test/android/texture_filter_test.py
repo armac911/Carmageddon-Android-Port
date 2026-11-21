@@ -40,6 +40,7 @@ for name, unit in [('u_material_texture_pixelmap',0), ('u_material_palette',1),
                    ('u_colour_buffer',4), ('u_filter_lut',7)]:
     seti(name, unit)
 seti('u_clip_plane_count',0)
+gl('glUniform1f',None,I,F)(loc('u_palette_scale'),1.0)
 setu('u_material_texture_enabled',1); setu('u_material_flags',0)
 setu('u_material_blend_enabled',0)
 setu('u_material_shade_table_height',2)
@@ -134,7 +135,10 @@ def expected(x,y,smooth,lit=False,blended=False,tx=0,ty=0):
         else:
             total=sum(w for i,w in taps)
             color=[sum(colors[i][k]*w for i,w in taps)/total for k in range(3)]
-            q=[math.floor(c/255*31+.5) for c in color]
+            # 4x4 ordered dither at the fragment centre (x+.5, y+.5).
+            m=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5]
+            d=(m[(y%4)*4+(x%4)]+.5)/16
+            q=[max(0,min(31,math.floor(min(1,max(0,c/255))*31+d))) for c in color]
             result=lut[q[0]+32*q[1]+1024*q[2]]
     if blended:result=blend[7*256+result]
     return result if result else 240
@@ -142,6 +146,10 @@ def expected(x,y,smooth,lit=False,blended=False,tx=0,ty=0):
 transform()
 sharp=render(0);smooth=render(1)
 assert sharp!=smooth and len(set(smooth))>4
+# Crisp at an exact 4x magnification: texel edges fall on pixel edges, so the
+# output equals the original nearest (Sharp) image exactly.
+crisp=render(2)
+assert crisp==sharp,(crisp,sharp)
 for tx,ty in [(0,0),(-.3,1.2)]:
     transform(tx,ty)
     for lit in [False,True]:
@@ -163,4 +171,32 @@ indices=[250]*4;upload(0,2,2,indices);assert set(render(1))=={250}
 setu('u_material_texture_enabled',0);setu('u_material_index_base',11)
 assert set(render(1))=={11}
 assert gl('glGetError',U)()==0
-print('PASS production 3D GLES shaders; 32768-cell LUT and palette refresh; Sharp/Smooth texture-space output; shading; repeating UVs; cutouts; indexed blends; exact flat/untextured indices')
+# Mip levels: a minified 8x8 checker resolves through level 1+ (trilinear),
+# never through the level-0 texels alone; magnification stays on level 0.
+def upload_mipped(unit,w,h,levels):
+    g['active'](0x84c0+unit);g['bind'](0xde1,textures[unit])
+    for level,(lw,lh,values) in enumerate(levels):
+        b=(B*len(values))(*values)
+        g['tex'](0xde1,level,0x8232,lw,lh,0,0x8d94,0x1401,b)
+    g['param'](0xde1,0x2801,0x2700)  # NEAREST_MIPMAP_NEAREST
+    g['param'](0xde1,0x813d,len(levels)-1)  # MAX_LEVEL
+setu('u_material_texture_enabled',1)
+red=colors.index((255,0,0,255)); blue=colors.index((0,0,255,255)); green=colors.index((0,255,0,255))
+checker=[red if (x+y)%2 else blue for y in range(32) for x in range(32)]
+# Level 1+ deliberately hold a distinct index so the test sees which level was used.
+mips=[(32,32,checker)]+[(32>>l,32>>l,[green]*((32>>l)**2)) for l in range(1,6)]
+upload_mipped(0,32,32,mips);transform()
+minified=render(1)
+assert set(minified)=={green},set(minified)
+gl('glUniformMatrix2x3fv',None,I,I,B,P)(loc('u_material_uv_transform'),1,0,(F*6)(1/8,0,0,0,1/8,0))
+magnified=render(1)
+assert green not in magnified,set(magnified)
+# Anisotropy: squash V 4x (4 texels/pixel on X, 1 on Y). Isotropic picks the
+# long axis (level 2, all green); 4 probes stay on level 0 (red/blue only).
+gl('glUniformMatrix2x3fv',None,I,I,B,P)(loc('u_material_uv_transform'),1,0,(F*6)(1,0,0,0,1/4,0))
+seti('u_max_anisotropy',1);iso=render(1)
+assert set(iso)=={green},set(iso)
+seti('u_max_anisotropy',4);aniso=render(1)
+assert green not in aniso,set(aniso)
+seti('u_max_anisotropy',1)
+print('PASS production 3D GLES shaders; 32768-cell LUT and palette refresh; Sharp/Smooth texture-space output; shading; repeating UVs; cutouts; indexed blends; exact flat/untextured indices; dithered quantisation; mip level selection; anisotropic probes; crisp texel edges')

@@ -27,9 +27,9 @@ final class Diagnostics {
         m.put("api",Build.VERSION.SDK_INT);m.put("hardware",Build.HARDWARE);
         java.text.SimpleDateFormat utc=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.US);utc.setTimeZone(TimeZone.getTimeZone("UTC"));
         m.put("started_utc",utc.format(new Date()));m.put("started_elapsed_ms",SystemClock.elapsedRealtime());
-        m.put("aspect",c.getSharedPreferences("display",0).getBoolean("widescreen_16_9",false)?"16:9":"4:3");
-        String[] keys={"quality","distance","steering","monitor","fps_cap","filtering"};
-        String[] defaults={"standard","original","analog","off","60","sharp"};
+        m.put("aspect",DethraceActivity.aspectPreference(c));
+        String[] keys={"quality","distance","steering","monitor","fps_cap","filtering","aniso","upscaler","fxaa","sharpen","ui_scaler","fov","gamma","saturation","scanlines","mirror","ssaa","mirror_res","track_cull","fx_tyres","fx_debris"};
+        String[] defaults={"standard","original","analog","off","60","sharp","nearest"};
         for(int i=0;i<keys.length;i++) m.put(keys[i],c.getSharedPreferences("graphics",0).getString(keys[i],defaults[i]));
         m.put("display_width",c.getResources().getDisplayMetrics().widthPixels);m.put("display_height",c.getResources().getDisplayMetrics().heightPixels);
         m.put("timing_notes","CPU wall-clock ms. Render includes readback/copy/presentation/swap; do not sum nested fields. Readback includes queued GPU work and transfer. No forced GPU sync or GPU timer queries. Draw calls/triangles count model geometry only. Race-loop frames only; exclude rows with excluded=1. Capture stops after 120 seconds of non-excluded race frame time. Sensors stop after 10 minutes. Battery temperature is not CPU/GPU temperature; thermal status -1 means unavailable.");

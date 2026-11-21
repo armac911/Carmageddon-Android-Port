@@ -4,6 +4,70 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## Unreleased — graphics options (development build, not device-tested)
+
+- Real supersampling: High and the new Ultra (4×) 3D resolution now average
+  every rendered sample per screen pixel instead of picking one, including
+  before FSR/GSR upscaling on wide screens. Ultra steps down automatically
+  when the GPU's maximum texture size is too small.
+- Smooth texture filtering gains palette-preserving mipmaps with trilinear
+  filtering, optional 2×/4× anisotropic filtering, and ordered dithering
+  before mapping back to the 256-colour palette. Palette fades reuse the
+  colour lookup table instead of rebuilding it every step.
+- New launcher options: FXAA edge smoothing (3D only, menus and HUD stay
+  crisp), RCAS sharpening levels, Sharp/Smooth (Scale2x) menu and HUD
+  scaling, wider field of view, brightness, vivid colour and CRT scanlines.
+  All default to the original look.
+- The final screen shader is compiled with only the features your settings
+  use. At defaults it does the same texture reads as 0.9.2 (and drops
+  0.9.2's unused smoothing path); SSAA averaging runs only on frames where
+  the 3D image is larger than the screen.
+- Graphics page: a Compatibility section restores 0.9.2 behaviour for the
+  always-on changes (supersampling average, mirror render size, track
+  visibility test), and "Reset graphics to defaults" resets the whole page.
+- Field of view now widens only the external chase camera; cockpit view
+  and the rear-view mirror keep the original angle (the cockpit camera must
+  match its artwork, and a wider mirror only added cost).
+- Track columns outside the camera's view are skipped before they are
+  traversed and submitted. The test is provably conservative for any camera
+  pitch and roll; the original box selection kept up to ~3× more columns on
+  wide screens and wide fields of view.
+- New Crisp texture filtering: original solid texels up close with
+  anti-aliased texel edges, plus mipmaps against distant shimmer.
+- Cockpit mirror: drawn at 1× instead of the full 3D resolution (it is only
+  shown at canvas resolution), with new Half rate and Off-at-race-start
+  options to cut its cost further.
+- Tilt steering (three sensitivities) using the gravity sensor; it
+  re-centres on the current hold at race start and on resume. Touching the
+  steering pad takes priority. With a controller, tilt is added to the stick
+  by default (phone in a controller grip), or can be ignored.
+- Optional enhanced effects (Graphics, off by default): tyre smoke from
+  every sliding wheel on tarmac plus skid marks that last three times
+  longer, and impacts with more sparks and twice the car fragments. They
+  extend the game's own effect systems, so replays and fog treat them like
+  the originals, and they use no extra random numbers for tyre smoke.
+- Memory: textures released by the game (every track change, splash
+  screens) now free their GPU memory; BrBufferClear was a stub, so they all
+  leaked. Released renderer material data is freed too. The mirror's render
+  targets and the CPU readback buffers are sized for what Android uses
+  (about 25 MB GPU and 14 MB CPU less at Ultra).
+- Frame time: readbacks and blend snapshots cover only the drawn area (the
+  mirror was reading the whole screen); shadow and crash-deformed models
+  reuse their GL buffers instead of recreating them every frame; no GL
+  queries on palette changes; the colour lookup table is not rebuilt from
+  dark fade palettes; textures loaded during a black loading screen get
+  their mipmaps during the fade instead of on the first race frame; the
+  snapshot is uploaded only when it changed; settings read every frame are
+  cached; the touch overlay redraws only when it changes; UI polling stops
+  while the game is paused.
+- Ukrainian launcher language. In-game text stays in English because the
+  game's bitmap fonts have no Cyrillic letters.
+- tools/check_apk_privacy.py checks a built APK for personal values,
+  absolute user paths and unstripped native libraries before sharing.
+- Crash vibration now scales with the size of the hit (velocity change) on
+  the phone, or rumbles a controller in use. The previous impact check
+  compared the car's internal speed unit against 5 and could not trigger.
+
 ## 0.9.2 — optional languages and launcher cheats (test candidate)
 
 - Add explicit English/Spanish/Italian/French selection in the launcher. English

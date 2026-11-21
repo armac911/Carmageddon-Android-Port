@@ -4,6 +4,7 @@
 #include <SDL_system.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "android_input.h"
 #include "harness/profiler.h"
 JNIEXPORT void JNICALL Java_com_dethrace_android_DethraceActivity_nativeProfilePause(JNIEnv* env,jobject obj) { DRProfileMarkPause(); }
@@ -11,7 +12,15 @@ JNIEXPORT void JNICALL Java_com_dethrace_android_DethraceActivity_nativeProfileP
 #include "common/input.h"
 #include "constants.h"
 
-static SDL_atomic_t touch_mask, touch_edges, touch_axis, touch_axis_active, touch_reset, impact;
+static SDL_atomic_t touch_mask, touch_edges, touch_axis, touch_axis_active, touch_reset;
+/* Impact strength 0..1000 waiting for the phone vibrator / controller rumble. */
+static SDL_atomic_t impact, controller_rumble;
+/* Tilt steering from the Java rotation sensor (-65535..65535). */
+static SDL_atomic_t tilt_axis, tilt_active;
+/* 1: tilt is added to a controller's steering (phone in a controller grip);
+ * 0: a controller in use overrides tilt. Set once from DETHRACE_TILT_CONTROLLER. */
+static int tilt_with_controller = 1;
+static int digital_steering = -1;
 static SDL_atomic_t using_gamepad, last_screen_touch;
 void DRAndroidGamepadActivity(unsigned timestamp) {
     Uint32 touch = (Uint32)SDL_AtomicGet(&last_screen_touch);
@@ -53,8 +62,12 @@ Java_com_dethrace_android_DethraceActivity_nativeFpsTenths(JNIEnv* env, jobject 
     return SDL_GetTicks() - (Uint32)SDL_AtomicGet(&fps_sample_time) > 2000 ? 0 : SDL_AtomicGet(&measured_fps);
 }
 int DRAndroidDigitalSteering(void) {
-    const char* mode = getenv("DETHRACE_STEERING");
-    return mode && strcmp(mode, "digital") == 0;
+    /* Read every frame: cache the launcher setting (fixed for the session). */
+    if (digital_steering < 0) {
+        const char* mode = getenv("DETHRACE_STEERING");
+        digital_steering = mode && strcmp(mode, "digital") == 0;
+    }
+    return digital_steering;
 }
 int DRAndroidNormalizeStick(int value) {
     if (value < -32767) value = -32767;
@@ -133,22 +146,66 @@ int DRAndroidTouchKey(int key) {
         if ((mask & (1u << i)) && gKey_mapping[actions[i]] == key) return 1;
     return (active_mask & 128) && key == KEY_ESCAPE;
 }
+JNIEXPORT void JNICALL
+Java_com_dethrace_android_DethraceActivity_nativeTilt(JNIEnv* env, jobject obj, jint axis, jboolean active) {
+    SDL_AtomicSet(&tilt_axis, axis < -65535 ? -65535 : axis > 65535 ? 65535 : axis);
+    SDL_AtomicSet(&tilt_active, active);
+}
+void DRAndroidSetTiltWithController(int combine) { tilt_with_controller = combine != 0; }
 int DRAndroidSteering(void) {
-    return SDL_AtomicGet(&touch_axis_active) ? SDL_AtomicGet(&touch_axis) : gamepad_steering;
-}
-void DRAndroidImpact(int collision, float speed) {
-    static int was_collision;
-    static Uint32 last;
-    Uint32 now = SDL_GetTicks();
-    if (collision && !was_collision && speed > 5.f && now - last > 500) {
-        SDL_AtomicSet(&impact, 1);
-        last = now;
+    /* Priority: a finger on the steering pad, then a controller in use (alone
+     * or combined with tilt), then tilt, then an idle controller
+     * (100000 = no steering input). */
+    if (SDL_AtomicGet(&touch_axis_active)) return SDL_AtomicGet(&touch_axis);
+    if (SDL_AtomicGet(&tilt_active)) {
+        int tilt = SDL_AtomicGet(&tilt_axis);
+        if (SDL_AtomicGet(&using_gamepad) && gamepad_steering != 100000) {
+            if (!tilt_with_controller) return gamepad_steering;
+            int sum = gamepad_steering + tilt;
+            return sum < -65535 ? -65535 : sum > 65535 ? 65535 : sum;
+        }
+        return tilt;
     }
-    was_collision = collision;
+    return gamepad_steering;
 }
-JNIEXPORT jboolean JNICALL
+static void store_max(SDL_atomic_t* slot, int value) {
+    int previous;
+    do { previous = SDL_AtomicGet(slot); if (previous >= value) return; }
+    while (!SDL_AtomicCAS(slot, previous, value));
+}
+int DRAndroidImpactStrength(float delta_v) {
+    /* Velocity change in m/s during a collision frame. Scrapes (< 1.5 m/s)
+     * are ignored; ~16.5 m/s (about 37 mph lost at once) is full strength. */
+    if (delta_v < 1.5f) return 0;
+    int strength = 150 + (int)((delta_v - 1.5f) * (850.f / 15.f));
+    return strength > 1000 ? 1000 : strength;
+}
+void DRAndroidImpact(int collision, const float velocity[3]) {
+    static float last_v[3];
+    static Uint32 last_sample, last_pulse;
+    static int has_last, last_strength;
+    Uint32 now = SDL_GetTicks();
+    /* No reference after pauses/menus: a respawn or replay jump is not a hit. */
+    int usable = has_last && now - last_sample < 250;
+    float dx = velocity[0] - last_v[0], dy = velocity[1] - last_v[1], dz = velocity[2] - last_v[2];
+    memcpy(last_v, velocity, sizeof(last_v));
+    has_last = 1;
+    last_sample = now;
+    if (!usable || !collision) return;
+    int strength = DRAndroidImpactStrength(sqrtf(dx * dx + dy * dy + dz * dz));
+    /* Continuous scraping re-triggers at most every 120 ms unless it gets harder. */
+    if (!strength || (now - last_pulse < 120 && strength <= last_strength)) return;
+    store_max(&impact, strength);
+    store_max(&controller_rumble, strength);
+    last_pulse = now;
+    last_strength = strength;
+}
+int DRAndroidTakeControllerRumble(void) {
+    return SDL_AtomicSet(&controller_rumble, 0);
+}
+JNIEXPORT jint JNICALL
 Java_com_dethrace_android_DethraceActivity_nativeTakeImpact(JNIEnv* env, jobject obj) {
-    return SDL_AtomicSet(&impact, 0) != 0;
+    return SDL_AtomicSet(&impact, 0);
 }
 
 void DRAndroidStartText(const char* text, int max_length) {

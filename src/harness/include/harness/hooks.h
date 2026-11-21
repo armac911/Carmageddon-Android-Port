@@ -26,8 +26,12 @@ typedef struct tHarness_platform {
     void (*Renderer_ClearBuffers)(void);
     // Load pixelmap into video memory
     void (*Renderer_BufferTexture)(br_pixelmap* pm);
+    // Release a pixelmap's video memory (may be NULL: nothing to release)
+    void (*Renderer_FreeTexture)(br_pixelmap* pm);
     // Load material
     void (*Renderer_BufferMaterial)(br_material* mat);
+    // Release a material's renderer data (may be NULL)
+    void (*Renderer_FreeMaterial)(br_material* mat);
     // Load model into video memory
     void (*Renderer_BufferModel)(br_model* model);
     // Pull contents of frame and depth buffers from video into main memory for software effects

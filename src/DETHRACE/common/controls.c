@@ -2026,7 +2026,8 @@ void PollCarControls(tU32 pTime_difference) {
                 joystick.right = steering > 0 ? steering : 0;
             }
         }
-        DRAndroidImpact(c->frame_collision_flag, c->speed);
+        /* c->v is the car velocity in m/s (speed = |v| / (WORLD_SCALE * 1000)). */
+        DRAndroidImpact(c->frame_collision_flag, c->v.v);
 #endif
         c->keys = keys;
         c->joystick = joystick;

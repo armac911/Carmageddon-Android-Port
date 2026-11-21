@@ -1,5 +1,6 @@
 #include "harness/render_batch.h"
 #include "graphics.h"
+#include "../android_graphics.h"
 
 #include "brender/brender.h"
 #include "car.h"
@@ -516,6 +517,57 @@ void CopyStripImage(br_pixelmap* pDest, br_int_16 pDest_x, br_int_16 pOffset_x, 
         destn_ptr += pDest->row_bytes;
     }
 }
+
+#ifdef __ANDROID__
+/* Wide canvases only. The cockpit art (a strip image placed at pX,pY in
+ * pDest) is narrower than the canvas; continue its outermost pixel column on
+ * each side to the canvas edge, row by row. Transparent edge pixels (windows)
+ * stay transparent so the world shows through; opaque ones (roof, door frame,
+ * dashboard) carry on, so the sides read as more car interior instead of a
+ * hard-edged 704-wide frame. Reads the run-length data directly: no decode. */
+static void ExtendStripImageEdges(br_pixelmap* pDest, int pX, int pY, tS8* pSource, int pWidth) {
+    int height = *(uint16_t*)pSource;
+    int right_x = pX + pWidth;
+    pSource += 2;
+    if (pX <= 0 && right_x >= pDest->width) {
+        return;
+    }
+    for (int row = 0; row < height; row++) {
+        int y = pY + row;
+        int number_of_chunks = *pSource++;
+        int x = 0;
+        int left = -1;
+        int right = -1;
+        for (int j = 0; j < number_of_chunks; j++) {
+            int chunk_length = *pSource++;
+            if (chunk_length >= 0) {
+                x += chunk_length;
+                continue;
+            }
+            chunk_length = -chunk_length;
+            if (x == 0) {
+                left = (tU8)pSource[0];
+            }
+            if (x <= pWidth - 1 && pWidth - 1 < x + chunk_length) {
+                right = (tU8)pSource[pWidth - 1 - x];
+            }
+            pSource += chunk_length;
+            x += chunk_length;
+        }
+        if (y < 0 || y >= pDest->height) {
+            continue;
+        }
+        tU8* line = (tU8*)pDest->pixels + y * pDest->row_bytes;
+        if (left >= 0 && pX > 0) {
+            memset(line, left, pX < pDest->width ? pX : pDest->width);
+        }
+        if (right >= 0 && right_x < pDest->width) {
+            int start = right_x > 0 ? right_x : 0;
+            memset(line + start, right, pDest->width - start);
+        }
+    }
+}
+#endif
 
 // IDA: void __usercall SetBRenderScreenAndBuffers(int pX_offset@<EAX>, int pY_offset@<EDX>, int pWidth@<EBX>, int pHeight@<ECX>)
 void SetBRenderScreenAndBuffers(int pX_offset, int pY_offset, int pWidth, int pHeight) {
@@ -1707,7 +1759,20 @@ void RenderAFrame(int pDepth_mask_on) {
         BrZbSceneRenderEnd();
     }
     BrMatrix34Copy(&gCamera->t.t.mat, &old_camera_matrix);
-    if (gMirror_on__graphics) {
+    int render_mirror = gMirror_on__graphics;
+#ifdef __ANDROID__
+    if (gMirror_on__graphics && DRAndroidMirrorMode() == 1) {
+        /* Half-rate mirror: the rear-view pixmap keeps its last image, which
+         * is still composited every frame below. Always render the first
+         * frame after the mirror pixmap is (re)allocated. */
+        static br_pixelmap* last_mirror_screen;
+        static int mirror_phase;
+        mirror_phase ^= 1;
+        render_mirror = mirror_phase || last_mirror_screen != gRearview_screen;
+        last_mirror_screen = gRearview_screen;
+    }
+#endif
+    if (render_mirror) {
         BrPixelmapFill(gRearview_screen, 0);
         BrPixelmapFill(gRearview_depth_buffer, 0xFFFFFFFF);
         gRendering_mirror = 1;
@@ -1827,11 +1892,13 @@ void RenderAFrame(int pDepth_mask_on) {
         gBack_screen->base_y = real_base_y;
     } else {
 #ifdef __ANDROID__
-        if (gBack_screen->width == 864 && gBack_screen->height == 486) {
+        if (gBack_screen->width > 640 && gBack_screen->height == 486) {
             wide_back = gBack_screen;
             /* Preserve BRender dispatch pointer bytes as well as public fields. */
             memcpy(&hud_view, wide_back, sizeof(hud_view));
-            hud_view.pixels = (char*)wide_back->pixels + 3 * wide_back->row_bytes + 112;
+            /* Centre the 640x480 HUD in any wide canvas (864 for 16:9, the
+             * device-derived width for fill mode). */
+            hud_view.pixels = (char*)wide_back->pixels + 3 * wide_back->row_bytes + (wide_back->width - 640) / 2;
             hud_view.width = 640;
             hud_view.height = 480;
             hud_view.origin_x = hud_view.origin_y = 0;
@@ -1846,17 +1913,41 @@ void RenderAFrame(int pDepth_mask_on) {
         }
 #endif
         if (cockpit_on) {
+            br_pixelmap* cockpit_dest = gBack_screen;
+            int cockpit_x = -gCurrent_graf_data->cock_margin_x;
+            int cockpit_y = -gCurrent_graf_data->cock_margin_y;
+#ifdef __ANDROID__
+            if (wide_back != NULL) {
+                /* The hi-res cockpit art is 704x528: 32/24 px of margin
+                 * around the 640x480 view, normally only revealed by screen
+                 * wobble. On a wide canvas draw it into the full canvas
+                 * (CopyStripImage clips every edge) so those margins are
+                 * shown instead of being cut off at the HUD's 640 edges. */
+                cockpit_dest = wide_back;
+                cockpit_x += (wide_back->width - 640) / 2;
+                cockpit_y += 3;
+            }
+#endif
             CopyStripImage(
-                gBack_screen,
-                -gCurrent_graf_data->cock_margin_x,
+                cockpit_dest,
+                cockpit_x,
                 gScreen_wobble_x,
-                -gCurrent_graf_data->cock_margin_y,
+                cockpit_y,
                 gScreen_wobble_y,
                 gProgram_state.current_car.cockpit_images[gProgram_state.cockpit_image_index],
                 0,
                 0,
                 gCurrent_graf_data->total_cock_width,
                 gCurrent_graf_data->total_cock_height);
+#ifdef __ANDROID__
+            if (wide_back != NULL) {
+                ExtendStripImageEdges(wide_back,
+                    cockpit_x + gScreen_wobble_x,
+                    cockpit_y + gScreen_wobble_y,
+                    gProgram_state.current_car.cockpit_images[gProgram_state.cockpit_image_index],
+                    gCurrent_graf_data->total_cock_width);
+            }
+#endif
             if (gMirror_on__graphics) {
                 BrPixelmapRectangleCopy(
                     gBack_screen,
