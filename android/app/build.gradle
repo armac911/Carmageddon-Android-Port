@@ -18,7 +18,10 @@ android {
                 arguments "-DANDROID_STL=c++_static",
                           "-DANDROID_PLATFORM=android-24",
                           "-DCMAKE_BUILD_TYPE=Release"
-                cFlags "-O2"
+                // Map the checkout path to "." so __FILE__ strings in the
+                // shipped .so files don't embed the builder's home directory.
+                cFlags "-O2", "-ffile-prefix-map=${rootProject.projectDir.parentFile.absolutePath}=."
+                cppFlags "-ffile-prefix-map=${rootProject.projectDir.parentFile.absolutePath}=."
                 abiFilters 'arm64-v8a'
             }
         }
@@ -32,6 +35,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            // Separate package so a test build installs beside the release app
+            // without replacing it or sharing its data/imported game files.
+            applicationIdSuffix ".displayfix"
             debuggable true
             jniDebuggable true
         }

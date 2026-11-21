@@ -13,7 +13,7 @@
 
 char* gBoring_material_names[2] = { "OILSMEAR.MAT", "ROBSMEAR.MAT" };
 char* gMaterial_names[2] = { "OILSMEAR.MAT", "GIBSMEAR.MAT" };
-tSkid gSkids[100];
+tSkid gSkids[DR_SKID_POOL]; /* 100 used unless enhanced tyre effects are on */
 
 // IDA: void __usercall StretchMark(tSkid *pMark@<EAX>, br_vector3 *pFrom@<EDX>, br_vector3 *pTo@<EBX>, br_scalar pTexture_start)
 void StretchMark(tSkid* pMark, br_vector3* pFrom, br_vector3* pTo, br_scalar pTexture_start) {
@@ -230,7 +230,7 @@ void SkidSection(tCar_spec* pCar, int pWheel_num, br_vector3* pPos, int pMateria
         StretchMark(&gSkids[skid], &pCar->prev_skid_pos[pWheel_num], pPos, pCar->total_length[pWheel_num]);
         PipeSingleSkidAdjustment(skid, &gSkids[skid].actor->t.t.mat, pMaterial_index);
         pCar->old_skid[pWheel_num] = skid;
-        skid = (skid + 1) % COUNT_OF(gSkids);
+        skid = (skid + 1) % DRSkidLimit();
     } else {
         StretchMark(&gSkids[pCar->old_skid[pWheel_num]], &pCar->skid_line_start[pWheel_num], pPos, pCar->total_length[pWheel_num]);
         PipeSingleSkidAdjustment(pCar->old_skid[pWheel_num], &gSkids[pCar->old_skid[pWheel_num]].actor->t.t.mat, pMaterial_index);

@@ -23,7 +23,9 @@ static void mirror_exercise(void) {
   zm.pixels=mirror_z;zm.width=9;zm.height=5;zm.row_bytes=18;
   last_colour_buffer=&pm;last_depth_buffer=&zm;
   static const GLuint zero[4]={0};glClearBufferuiv(GL_COLOR,0,zero);glClear(GL_DEPTH_BUFFER_BIT);
-  rect(0,20,9,5,87,0);GLRenderer_FlushBuffers();
+  // The renderer draws mirror scenes at 1x (canvas resolution) regardless of
+  // the main super factor; draw the test rectangle the same way.
+  {int saved=super_factor;super_factor=1;rect(0,20,9,5,87,0);super_factor=saved;}GLRenderer_FlushBuffers();
   for(int i=0;i<45;i++)assert(mirror_pixels[i]==87);
   for(int i=0;i<33*25;i++)assert(snapshot_data[i]==71);
   glFrontFace(GL_CW);glDepthMask(GL_FALSE);GLRenderer_EndScene();
@@ -33,7 +35,7 @@ static void mirror_exercise(void) {
   glReadPixels(0,0,1,1,GL_RED_INTEGER,GL_UNSIGNED_BYTE,&pixel);assert(pixel==19);
   last_colour_buffer=&colour;last_depth_buffer=&depth;
  }
- puts("PASS mirror target isolation, bounded sub-pixmap readback, main image/depth and snapshot preservation at 1x/2x/3x");
+ puts("PASS mirror target isolation, bounded sub-pixmap readback, main image/depth and snapshot preservation at 1x/2x/3x with the mirror drawn at 1x");
 }
 '''
 source=base['source'];i=source.index('int main(void)');source=source[:i]+extra+'\n'+source[i:]

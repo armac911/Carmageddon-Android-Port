@@ -1,6 +1,8 @@
 // car.c + stuff.c
 
 #include "car.h"
+#include "../android_graphics.h"
+#include "../android_effects.h"
 #include "brender/brender.h"
 #include "brucetrk.h"
 #include "car.h"
@@ -32,6 +34,7 @@
 #include "trig.h"
 #include "utility.h"
 #include "world.h"
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -2997,6 +3000,52 @@ void ScrapeNoise(br_scalar vel, br_vector3* position, int material) {
     }
 }
 
+#ifdef __ANDROID__
+/* Enhanced tyre smoke: a puff per sliding wheel every
+ * DR_TYRE_SMOKE_INTERVAL_MS on surfaces that already smoke in the original
+ * (smoke_type 1), instead of the original one-in-five sound-gated puff.
+ * Uses no random numbers, so gameplay randomness is unchanged. */
+static void DREnhancedTyreSmoke(tCar_spec* pC, int pWheel_num, br_scalar pV, int material) {
+    static struct { tCar_spec* car; tU32 next[4]; } slots[8];
+    static int next_slot;
+    br_vector3 pos, world_pos, wv, wvw;
+    br_scalar ts;
+    int s;
+    tU32 now;
+
+    if (gCurrent_race.material_modifiers[material].smoke_type != 1 || pV < DR_TYRE_SMOKE_MIN_SPEED) {
+        return;
+    }
+    for (s = 0; s < 8 && slots[s].car != pC; s++) {
+    }
+    if (s == 8) {
+        s = next_slot;
+        next_slot = (next_slot + 1) % 8;
+        slots[s].car = pC;
+        memset(slots[s].next, 0, sizeof(slots[s].next));
+    }
+    now = GetTotalTime();
+    if ((tS32)(now - slots[s].next[pWheel_num]) < 0) {
+        return;
+    }
+    slots[s].next[pWheel_num] = now + DR_TYRE_SMOKE_INTERVAL_MS;
+
+    pos.v[0] = (pWheel_num & 1) != 0 ? pC->bounds[1].max.v[0] : pC->bounds[1].min.v[0];
+    pos.v[1] = pC->wpos[pWheel_num].v[1] - pC->oldd[pWheel_num];
+    pos.v[2] = pC->wpos[pWheel_num].v[2];
+    BrMatrix34ApplyP(&world_pos, &pos, &pC->car_master_actor->t.t.mat);
+    BrVector3InvScale(&world_pos, &world_pos, WORLD_SCALE);
+    /* Same drift velocity as the original puff, flattened onto the road. */
+    BrVector3Cross(&wv, &pC->omega, &pos);
+    BrVector3Add(&wv, &wv, &pC->velocity_car_space);
+    ts = -(BrVector3Dot(&wv, &pC->road_normal));
+    BrVector3Scale(&wvw, &pC->road_normal, ts);
+    BrVector3Add(&wv, &wv, &wvw);
+    BrMatrix34ApplyV(&wvw, &wv, &pC->car_master_actor->t.t.mat);
+    CreatePuffOfSmoke(&world_pos, &wvw, DRTyreSmokeStrength(pV), DR_TYRE_SMOKE_DECAY, 4, pC);
+}
+#endif
+
 // IDA: void __usercall SkidNoise(tCar_spec *pC@<EAX>, int pWheel_num@<EDX>, br_scalar pV, int material)
 void SkidNoise(tCar_spec* pC, int pWheel_num, br_scalar pV, int material) {
     br_vector3 pos;
@@ -3012,6 +3061,11 @@ void SkidNoise(tCar_spec* pC, int pWheel_num, br_scalar pV, int material) {
     if (gCurrent_race.material_modifiers[material].tyre_noise_index == -1) {
         return;
     }
+#ifdef __ANDROID__
+    if (DRAndroidTyreEffects()) {
+        DREnhancedTyreSmoke(pC, pWheel_num, pV, material);
+    }
+#endif
     if (IRandomBetween(0, 4) != 0) {
         return;
     }
@@ -3038,7 +3092,11 @@ void SkidNoise(tCar_spec* pC, int pWheel_num, br_scalar pV, int material) {
             0x10000);
         gLast_car_to_skid[i] = pC;
     }
-    if (gCurrent_race.material_modifiers[material].smoke_type == 1) {
+    if (gCurrent_race.material_modifiers[material].smoke_type == 1
+#ifdef __ANDROID__
+        && !DRAndroidTyreEffects() /* the enhanced path already puffs */
+#endif
+    ) {
         BrVector3Cross(&wv, &pC->omega, &pos);
         BrVector3Add(&wv, &wv, &pC->velocity_car_space);
         ts = -(BrVector3Dot(&wv, &pC->road_normal));
@@ -4477,6 +4535,9 @@ void PositionExternalCamera(tCar_spec* c, tU32 pTime) {
     AmIGettingBoredWatchingCameraSpin();
     if ((!gAction_replay_mode || gAction_replay_camera_mode == eAction_replay_standard) && old_camera_mode != -1) {
         camera_ptr->field_of_view = BrDegreeToAngle(gCamera_angle);
+#ifdef __ANDROID__
+        camera_ptr->field_of_view = BrDegreeToAngle(DRAndroidExternalCameraAngle(gCamera_angle));
+#endif
         old_camera_mode = -1;
     }
     if (!gProgram_state.cockpit_on) {

@@ -172,11 +172,16 @@ static void* create_window_and_renderer(char* title, int x, int y, int width, in
 #endif
 
 #ifdef __ANDROID__
-    /* Render the 3D scene at 2× (standard) or 3× (high) pixmap resolution and downsample / present
+    /* Render the 3D scene at 2× (standard), 3× (high) or 4× (ultra) pixmap resolution and downsample / present
      * via the super-res-aware framebuffer shader. The 2D HUD/menu drawing
      * stays at pixmap resolution. */
+    {
+        const char* tilt_controller = getenv("DETHRACE_TILT_CONTROLLER");
+        DRAndroidSetTiltWithController(!(tilt_controller && strcmp(tilt_controller, "controller") == 0));
+    }
     const char* resolution = getenv("DETHRACE_RENDER_QUALITY");
     GLRenderer_SetSuperFactor(resolution && strcmp(resolution,"performance")==0 ? 1 :
+                              resolution && strcmp(resolution,"ultra")==0 ? 4 :
                               resolution && strcmp(resolution,"high")==0 ? 3 : 2);
 #endif
     GLRenderer_Init(opengl_profile, render_width, render_height);
@@ -343,6 +348,24 @@ static void dr_poll_controllers(void) {
     DRAndroidSetGamepadSteering(steering);
     // Polling rebuilds the mask, clearing released/disconnected/background input.
     DRAndroidSetGamepadButtons(buttons);
+
+    /* Impact rumble (DETHRACE_RUMBLE: off / normal / strong). Strength is
+     * 0..1000 from the size of the hit; harder hits also last longer. */
+    int rumble = DRAndroidTakeControllerRumble();
+    static float rumble_scale = -1.f; /* polled every frame: cache the setting */
+    if (rumble_scale < 0.f) {
+        const char* rumble_setting = getenv("DETHRACE_RUMBLE");
+        rumble_scale = rumble_setting && strcmp(rumble_setting, "off") == 0 ? 0.f
+            : rumble_setting && strcmp(rumble_setting, "strong") == 0 ? 1.f : 0.65f;
+    }
+    if (rumble > 0 && rumble_scale > 0.f) {
+        Uint16 low = (Uint16)(65535.f * rumble_scale * rumble / 1000.f);
+        Uint16 high = (Uint16)(low * 0.6f);
+        Uint32 duration = 60 + (Uint32)rumble / 8;
+        for (int i = 0; i < 4; ++i)
+            if (dr_controllers[i] && SDL_GameControllerGetAttached(dr_controllers[i]))
+                SDL_GameControllerRumble(dr_controllers[i], low, high, duration);
+    }
 }
 
 #endif /* __ANDROID__ */
@@ -497,6 +520,8 @@ void Harness_Platform_Init(tHarness_platform* platform) {
     platform->Renderer_BufferModel = GLRenderer_BufferModel;
     platform->Renderer_BufferMaterial = GLRenderer_BufferMaterial;
     platform->Renderer_BufferTexture = GLRenderer_BufferTexture;
+    platform->Renderer_FreeTexture = GLRenderer_FreeTexture;
+    platform->Renderer_FreeMaterial = GLRenderer_FreeMaterial;
     platform->Renderer_SetPalette = set_palette;
     platform->Renderer_FullScreenQuad = GLRenderer_FullScreenQuad;
     platform->Renderer_Model = GLRenderer_Model;

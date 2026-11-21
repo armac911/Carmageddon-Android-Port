@@ -53,6 +53,8 @@ void GLRenderer_EndScene(void);
 void GLRenderer_FullScreenQuad(uint8_t* screen_buffer);
 void GLRenderer_Model(br_actor* actor, br_model* model, br_material* material, br_token render_type, br_matrix34 model_matrix);
 void GLRenderer_BufferTexture(br_pixelmap* pm);
+void GLRenderer_FreeTexture(br_pixelmap* pm);
+void GLRenderer_FreeMaterial(br_material* mat);
 void GLRenderer_BufferMaterial(br_material* mat);
 void GLRenderer_BufferModel(br_model* model);
 void GLRenderer_ClearBuffers(void);

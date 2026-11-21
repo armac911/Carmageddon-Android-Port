@@ -13,6 +13,8 @@ typedef struct tStored_model_context {
 
 typedef struct tStored_pixelmap {
     GLuint id;
+    /* Mips were built before any usable palette was known; rebuild on use. */
+    int mips_need_palette;
 } tStored_pixelmap;
 
 typedef struct tStored_material {
@@ -27,6 +29,9 @@ typedef struct tStored_material {
 } tStored_material;
 
 tStored_model_context* NewStoredModelContext(void);
+
+/* 1 and the names of a released model's VAO/VBO/EBO if one is available. */
+int DRTakePooledModelBuffers(GLuint* vao, GLuint* vbo, GLuint* ebo);
 
 tStored_material* NewStoredMaterial(void);
 

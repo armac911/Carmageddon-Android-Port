@@ -1,5 +1,6 @@
 #include "harness/render_batch.h"
 #include "graphics.h"
+#include "../android_graphics.h"
 
 #include "brender/brender.h"
 #include "car.h"
@@ -1758,7 +1759,20 @@ void RenderAFrame(int pDepth_mask_on) {
         BrZbSceneRenderEnd();
     }
     BrMatrix34Copy(&gCamera->t.t.mat, &old_camera_matrix);
-    if (gMirror_on__graphics) {
+    int render_mirror = gMirror_on__graphics;
+#ifdef __ANDROID__
+    if (gMirror_on__graphics && DRAndroidMirrorMode() == 1) {
+        /* Half-rate mirror: the rear-view pixmap keeps its last image, which
+         * is still composited every frame below. Always render the first
+         * frame after the mirror pixmap is (re)allocated. */
+        static br_pixelmap* last_mirror_screen;
+        static int mirror_phase;
+        mirror_phase ^= 1;
+        render_mirror = mirror_phase || last_mirror_screen != gRearview_screen;
+        last_mirror_screen = gRearview_screen;
+    }
+#endif
+    if (render_mirror) {
         BrPixelmapFill(gRearview_screen, 0);
         BrPixelmapFill(gRearview_depth_buffer, 0xFFFFFFFF);
         gRendering_mirror = 1;

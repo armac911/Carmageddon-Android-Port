@@ -27,6 +27,10 @@ static int pending_shadow;
 static int render_width=33,render_height=25,super_factor;
 static unsigned char result[33*25];
 static unsigned char* screen_buffer_flip_pixels=result;
+typedef struct {void*pixels;int width,height,row_bytes,base_x,base_y;void*stored;} br_pixelmap;
+static br_pixelmap* last_colour_buffer;
+static int mirror_scene,mirror_factor=1;
+static GLint readback_sample_factor,readback_shadow_pixels,readback_use_shadow;
 '''+function+r'''
 static GLuint shader(int type,const char* text) {
  GLuint s=glCreateShader(type);glShaderSource(s,1,&text,NULL);glCompileShader(s);
@@ -53,6 +57,9 @@ int main(void) {
  readback_program=glCreateProgram();glAttachShader(readback_program,vs);glAttachShader(readback_program,fs);glLinkProgram(readback_program);
  int linked;glGetProgramiv(readback_program,GL_LINK_STATUS,&linked);assert(linked);glUseProgram(readback_program);
  glUniform1i(glGetUniformLocation(readback_program,"source_pixels"),0);
+ readback_sample_factor=glGetUniformLocation(readback_program,"sample_factor");
+ readback_shadow_pixels=glGetUniformLocation(readback_program,"shadow_pixels");
+ readback_use_shadow=glGetUniformLocation(readback_program,"use_shadow_pixels");
  float vertices[]={-1,-1,0, 1,-1,0, 1,1,0, -1,1,0};unsigned indices[]={0,1,3,1,2,3};GLuint vbo,ebo;
  glGenVertexArrays(1,&screen_buffer_vao);glBindVertexArray(screen_buffer_vao);
  glGenBuffers(1,&vbo);glBindBuffer(GL_ARRAY_BUFFER,vbo);glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
@@ -79,9 +86,19 @@ int main(void) {
   glGetIntegerv(GL_VIEWPORT,viewport);assert(viewport[0]==3&&viewport[1]==5&&viewport[2]==17&&viewport[3]==19);
   assert(glIsEnabled(GL_DEPTH_TEST)&&glIsEnabled(GL_CULL_FACE)&&glIsEnabled(GL_SCISSOR_TEST));
   glActiveTexture(GL_TEXTURE0);glGetIntegerv(GL_TEXTURE_BINDING_2D,&state);assert(state==(int)dummy);
+  // Only the drawn pixelmap's rectangle is read; the rest of the buffer is untouched.
+  br_pixelmap sub={0};sub.width=11;sub.height=7;sub.base_x=3;sub.base_y=4;last_colour_buffer=&sub;
+  memset(result,0xEE,sizeof(result));glActiveTexture(GL_TEXTURE4);
+  ReadbackAtCanvasResolution();assert(glGetError()==GL_NO_ERROR);
+  for(int y=0;y<25;y++)for(int x=0;x<33;x++){
+   int inside=x>=3&&x<14&&y>=25-4-7&&y<25-4;
+   if(inside)assert(result[y*33+x]==pixels[(y*factor)*w+x*factor]);else assert(result[y*33+x]==0xEE);
+  }
+  GLint pack;glGetIntegerv(GL_PACK_ROW_LENGTH,&pack);assert(pack==0);
+  last_colour_buffer=NULL;
   free(pixels);
  }
- puts("PASS: exact GPU palette samples at 1x/2x/3x, sub-pixmap offsets, GL state restoration");
+ puts("PASS: exact GPU palette samples at 1x/2x/3x, sub-pixmap offsets, sub-rectangle-only readback, GL state restoration");
 }
 '''
 source=source.replace(',VERTEX)',','+shader('framebuffer_vert.glsl')+')').replace(',FRAGMENT)',','+shader('readback_frag.glsl')+')')

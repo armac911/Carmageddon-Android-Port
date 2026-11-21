@@ -4,8 +4,10 @@ import json
 root=Path(__file__).resolve().parents[1]
 data=json.loads((root/'localization/catalog.json').read_text())
 rows={}
+# Ukrainian ('uk') is launcher-only: the game's bitmap fonts have no Cyrillic,
+# so the native catalogue keeps es/it/fr and the game falls back to English.
 for key,translations in data['strings'].items():
- assert set(translations)=={'es','it','fr'}
+ assert set(translations)=={'es','it','fr','uk'},key
  assert all(v and '\x00' not in v and set(v.count('{'+x+'}') for x in ['game'])=={key.count('{game}')} for v in translations.values())
  rows[key]=[key]+[translations[l] for l in ['es','it','fr']]
  if key.isascii() and key.upper()!=key and '{game}' not in key:
@@ -30,14 +32,14 @@ final class UiLanguage {
     static {
 '''
 for key,tr in data['strings'].items():
- j+='        STRINGS.put('+cstring(key)+',new String[]{'+','.join(cstring(tr[l]) for l in ['es','it','fr'])+'});\n'
+ j+='        STRINGS.put('+cstring(key)+',new String[]{'+','.join(cstring(tr[l]) for l in ['es','it','fr','uk'])+'});\n'
 j+='''    }
     static String normalize(String code) {
-        return "es".equals(code)||"it".equals(code)||"fr".equals(code) ? code : "en";
+        return "es".equals(code)||"it".equals(code)||"fr".equals(code)||"uk".equals(code) ? code : "en";
     }
     static void set(String code) {
         String safe=normalize(code);
-        language="es".equals(safe)?1:"it".equals(safe)?2:"fr".equals(safe)?3:0;
+        language="es".equals(safe)?1:"it".equals(safe)?2:"fr".equals(safe)?3:"uk".equals(safe)?4:0;
     }
     static String text(String value) {
         if(language==0 || value==null) return value;

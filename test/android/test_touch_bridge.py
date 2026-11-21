@@ -8,7 +8,10 @@ a=s.index('static SDL_atomic_t'); b=s.index('static SDL_SpinLock')
 source=s[a:b]
 names=['Java_com_dethrace_android_DethraceActivity_nativeTouch',
        'Java_com_dethrace_android_DethraceActivity_nativeResetTouch',
-       'DRAndroidUpdateTouch', 'DRAndroidTouchKey', 'DRAndroidSteering', 'DRAndroidImpact']
+       'Java_com_dethrace_android_DethraceActivity_nativeTilt',
+       'DRAndroidUpdateTouch', 'DRAndroidTouchKey', 'DRAndroidSetTiltWithController', 'DRAndroidSteering', 'store_max',
+       'DRAndroidImpactStrength', 'DRAndroidImpact', 'DRAndroidTakeControllerRumble',
+       'Java_com_dethrace_android_DethraceActivity_nativeTakeImpact']
 for name in names:
     start=s.index(name+'('); start=s.rfind('\n',0,start)+1
     if name.startswith('Java_'): start=s.rfind('JNIEXPORT',0,start)
@@ -24,6 +27,7 @@ prefix='''
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 typedef int SDL_atomic_t;
 typedef uint32_t Uint32;
 typedef int32_t Sint32;
@@ -49,6 +53,7 @@ static int gInterface_within_race_mode, gKey_mapping[67];
 test='''
 #define touch(mask,axis,on) Java_com_dethrace_android_DethraceActivity_nativeTouch(NULL,NULL,mask,axis,on)
 #define reset() Java_com_dethrace_android_DethraceActivity_nativeResetTouch(NULL,NULL)
+#define tilt(axis,on) Java_com_dethrace_android_DethraceActivity_nativeTilt(NULL,NULL,axis,on)
 int main(void) {
  // Stick range, deadzone, asymmetric signed limits, and touch priority.
  assert(DRAndroidNormalizeStick(-32768)==-65535);
@@ -61,8 +66,9 @@ int main(void) {
  touch(0,-12000,1); assert(DRAndroidSteering()==-12000);
  reset(); assert(DRAndroidSteering()==partial);
  DRAndroidSetGamepadSteering(100000); assert(DRAndroidSteering()==100000);
- setenv("DETHRACE_STEERING","digital",1); assert(DRAndroidDigitalSteering());
- setenv("DETHRACE_STEERING","analog",1); assert(!DRAndroidDigitalSteering());
+ setenv("DETHRACE_STEERING","digital",1); digital_steering=-1; assert(DRAndroidDigitalSteering());
+ setenv("DETHRACE_STEERING","analog",1); assert(DRAndroidDigitalSteering()); /* cached for the session */
+ digital_steering=-1; assert(!DRAndroidDigitalSteering());
  // Count presented frames, expire stale samples, reset after suspension.
  ticks=5000; DRAndroidFramePresented();
  for(int i=0;i<60;i++){ticks+=17;DRAndroidFramePresented();}
@@ -113,11 +119,40 @@ int main(void) {
  assert(DRAndroidTouchKey(101) && !DRAndroidTouchKey(48)); assert(DRAndroidSteering()==-65535);
  gInterface_within_race_mode=1; DRAndroidUpdateTouch();
  assert(!active_mask && DRAndroidSteering()==100000);
- DRAndroidImpact(1,20); assert(SDL_AtomicSet(&impact,0)==1);
- ticks+=100; DRAndroidImpact(1,20); assert(!impact);
- DRAndroidImpact(0,20); DRAndroidImpact(1,20); assert(!impact);
- ticks+=600; DRAndroidImpact(0,20); DRAndroidImpact(1,20); assert(impact);
- puts("PASS: stick normalization, input priority, steering modes, FPS/pause sampling, combined controls, partial steering, keymap, quick taps, reset, menu transition, impact cooldown");
+ // Tilt: after a finger on the pad and a controller in use, before an idle controller.
+ gInterface_within_race_mode=0; reset(); DRAndroidUpdateTouch();
+ DRAndroidSetGamepadSteering(100000); using_gamepad=0;
+ tilt(-30000,1); assert(DRAndroidSteering()==-30000);
+ tilt(-999999,1); assert(DRAndroidSteering()==-65535); tilt(-30000,1);
+ touch(0,5000,1); assert(DRAndroidSteering()==5000); reset();
+ DRAndroidSetGamepadSteering(1234); using_gamepad=1; assert(DRAndroidSteering()==1234-30000); // combined (default)
+ DRAndroidSetGamepadSteering(-50000); assert(DRAndroidSteering()==-65535);                 // clamped
+ DRAndroidSetTiltWithController(0); assert(DRAndroidSteering()==-50000);                  // controller only
+ DRAndroidSetTiltWithController(1); DRAndroidSetGamepadSteering(1234);
+ using_gamepad=0; assert(DRAndroidSteering()==-30000);
+ DRAndroidSetGamepadSteering(100000); using_gamepad=1; assert(DRAndroidSteering()==-30000);
+ using_gamepad=0; DRAndroidSetGamepadSteering(1234); tilt(0,0); assert(DRAndroidSteering()==1234);
+ DRAndroidSetGamepadSteering(100000);
+ // Impact strength follows the velocity change (m/s) of a collision frame.
+ assert(DRAndroidImpactStrength(1.0f)==0 && DRAndroidImpactStrength(1.5f)==150);
+ assert(DRAndroidImpactStrength(16.5f)==1000 && DRAndroidImpactStrength(40.f)==1000);
+ assert(DRAndroidImpactStrength(5.f)<DRAndroidImpactStrength(10.f));
+ float still[3]={0,0,0}, fast[3]={20,0,0}, slowed[3]={8,0,0}, scrape1[3]={5,0,0}, scrape2[3]={2,0,0};
+ #define take() Java_com_dethrace_android_DethraceActivity_nativeTakeImpact(NULL,NULL)
+ ticks+=1000; DRAndroidImpact(1,fast); assert(!impact);            // no reference after a gap
+ ticks+=16; DRAndroidImpact(0,fast); ticks+=16; DRAndroidImpact(1,slowed);
+ int hit=take(); assert(hit==DRAndroidImpactStrength(12.f)); assert(!impact);
+ assert(DRAndroidTakeControllerRumble()==hit); assert(!controller_rumble);
+ ticks+=16; DRAndroidImpact(0,still); assert(!impact);             // hard braking, no collision
+ ticks+=16; DRAndroidImpact(1,still); assert(!impact);             // contact without a speed change
+ ticks+=200; DRAndroidImpact(1,scrape1); int first=take(); assert(first==DRAndroidImpactStrength(5.f));
+ ticks+=16; DRAndroidImpact(1,still); assert(take()==0);           // same-size scrape within 120 ms: suppressed
+ ticks+=16; DRAndroidImpact(1,fast); assert(take()==1000);         // a harder hit always gets through
+ ticks+=200; DRAndroidImpact(1,still); assert(take()==1000);       // after the cooldown any hit pulses again
+ ticks+=200; DRAndroidImpact(1,scrape2); ticks+=200; DRAndroidImpact(1,(float[]){14,0,0});
+ assert(take()==DRAndroidImpactStrength(12.f));                    // strongest pending hit wins
+ (void)slowed;
+ puts("PASS: stick normalization, input priority, tilt priority, tilt + controller combine, steering modes, FPS/pause sampling, combined controls, partial steering, keymap, quick taps, reset, menu transition, graded impacts and scrape cooldown");
 }
 '''
 with tempfile.TemporaryDirectory() as d:

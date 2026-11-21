@@ -83,6 +83,9 @@ void AllocateCamera(void) {
         camera_ptr = gCamera_list[i]->type_data;
         camera_ptr->type = BR_CAMERA_PERSPECTIVE_FOV;
         camera_ptr->field_of_view = BrDegreeToAngle(gCamera_angle);
+#ifdef __ANDROID__
+        camera_ptr->field_of_view = BrDegreeToAngle(DRAndroidExternalCameraAngle(gCamera_angle));
+#endif
         camera_ptr->hither_z = gCamera_hither;
         camera_ptr->yon_z = gCamera_yon;
 #ifdef __ANDROID__

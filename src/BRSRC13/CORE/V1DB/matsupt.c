@@ -1,6 +1,7 @@
 #include "matsupt.h"
 #include "CORE/FW/resource.h"
 #include "CORE/V1DB/dbsetup.h"
+#include "harness/hooks.h"
 #include "harness/trace.h"
 #include <stddef.h>
 #include <string.h>
@@ -24,5 +25,9 @@ br_material* BrMaterialAllocate(char* name) {
 // IDA: void __cdecl BrMaterialFree(br_material *m)
 void BrMaterialFree(br_material* m) {
     LOG_TRACE("(%p)", m);
+    /* Added by dethrace: release the renderer's copy (previously leaked). */
+    if (m != NULL && m->stored != NULL && gHarness_platform.Renderer_FreeMaterial != NULL) {
+        gHarness_platform.Renderer_FreeMaterial(m);
+    }
     BrResFree(m);
 }

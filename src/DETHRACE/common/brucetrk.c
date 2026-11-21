@@ -1,4 +1,5 @@
 #include "../android_graphics.h"
+#include "../column_cull.h"
 #include "brucetrk.h"
 
 #include "brender/brender.h"
@@ -16,6 +17,18 @@
 
 br_actor* gMr_blendy;
 int gDefault_blend_pc;
+#ifdef __ANDROID__
+/* View wedge of the camera RenderTrack last set up (see column_cull.h). */
+static tDR_column_wedge gColumn_wedge;
+static int ColumnInView(tTrack_spec* pTrack_spec, int pColumn_x, int pColumn_z) {
+    /* Grow the cell by one column on every side: like RenderTrack's own +-1
+     * column margin, this keeps models that extend past their cell. */
+    float x0 = pTrack_spec->origin_x + (pColumn_x - 1) * pTrack_spec->column_size_x;
+    float z0 = pTrack_spec->origin_z + (pColumn_z - 1) * pTrack_spec->column_size_z;
+    return DRColumnInWedge(&gColumn_wedge, x0, z0,
+        x0 + 3.f * pTrack_spec->column_size_x, z0 + 3.f * pTrack_spec->column_size_z);
+}
+#endif
 
 // IDA: void __usercall AllocateActorMatrix(tTrack_spec *pTrack_spec@<EAX>, br_actor ****pDst@<EDX>)
 void AllocateActorMatrix(tTrack_spec* pTrack_spec, br_actor**** pDst) {
@@ -341,6 +354,11 @@ void DrawColumns(int pDraw_blends, tTrack_spec* pTrack_spec, int pMin_x, int pMa
                 } else {
                     column_z2 = column_z;
                 }
+#ifdef __ANDROID__
+                if (!ColumnInView(pTrack_spec, column_x2, column_z2)) {
+                    continue;
+                }
+#endif
                 if (pDraw_blends) {
                     blended_polys = pTrack_spec->blends[column_z2][column_x2];
                     if (blended_polys) {
@@ -373,6 +391,11 @@ void DrawColumns(int pDraw_blends, tTrack_spec* pTrack_spec, int pMin_x, int pMa
                 } else {
                     column_z2 = column_z;
                 }
+#ifdef __ANDROID__
+                if (!ColumnInView(pTrack_spec, column_x2, column_z2)) {
+                    continue;
+                }
+#endif
                 if (pDraw_blends) {
                     blended_polys = pTrack_spec->blends[column_z2][column_x2];
                     if (blended_polys) {
@@ -496,6 +519,15 @@ void RenderTrack(br_actor* pWorld, tTrack_spec* pTrack_spec, br_actor* pCamera, 
             if (pTrack_spec->ncolumns_z - 1 > max_z) {
                 max_z++;
             }
+#ifdef __ANDROID__
+            {
+                float column_size = pTrack_spec->column_size_x > pTrack_spec->column_size_z
+                    ? pTrack_spec->column_size_x : pTrack_spec->column_size_z;
+                DRColumnWedgeSetup(&gColumn_wedge, (const float(*)[3])pCamera_to_world->m,
+                    BrAngleToRadian(camera->field_of_view), camera->aspect, column_size);
+                if (gMap_mode || !DRAndroidViewCulling()) gColumn_wedge.enabled = 0;
+            }
+#endif
             DrawColumns(0, pTrack_spec, min_x, max_x, min_z, max_z, pCamera_to_world);
         }
     } else {

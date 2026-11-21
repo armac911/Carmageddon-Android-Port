@@ -50,6 +50,11 @@ const uint BR_MATF_PRELIT = 2u;
 uniform int u_texture_filtering;
 uniform sampler2D u_material_palette;
 uniform highp usampler2D u_filter_lut;
+// Current palette = LUT palette * u_palette_scale during fades (see
+// DRPaletteFadeScale); dividing maps filtered colours back into LUT space.
+uniform highp float u_palette_scale;
+// Anisotropic probes along the longer screen-space texture axis (1 = off, max 4).
+uniform int u_max_anisotropy;
 
 uint shaded_index(uint index) {
     if ((u_material_flags & BR_MATF_LIGHT) != 0u) {
@@ -60,22 +65,29 @@ uint shaded_index(uint index) {
     return index;
 }
 
-uint smooth_texture(highp vec2 uv, uint nearest_index) {
-    highp vec2 size = vec2(textureSize(u_material_texture_pixelmap, 0));
+// Palette-aware bilinear on one mip level: accumulates decoded RGB, skipping
+// transparent texels so cutouts get no dark fringes.
+void accumulate_level(highp vec2 uv, int level, highp float level_weight,
+                      highp vec2 crisp_width,
+                      inout highp vec3 color, inout highp float total,
+                      inout uint first, inout bool same) {
+    highp vec2 size = vec2(textureSize(u_material_texture_pixelmap, level));
     highp vec2 point = uv * size - 0.5;
     highp vec2 base = floor(point);
-    highp vec2 f = fract(point);
-    highp vec3 color = vec3(0.0);
-    highp float total = 0.0;
-    uint first = 0u;
-    bool same = true;
-    // Center coverage remains the original nearest texel. Exclude transparent
-    // neighbors and renormalize to avoid dark fringes on cutout textures.
+    highp vec2 f = point - base;
+    if (crisp_width.x > 0.0) {
+        // Crisp: keep each texel solid and blend only across the last screen
+        // pixel before its edge. crisp_width is level-0 texels per screen
+        // pixel; when a texel is smaller than a pixel this is plain bilinear.
+        highp vec2 w = clamp(crisp_width / exp2(float(level)), vec2(1e-3), vec2(1.0));
+        f = clamp((f - 0.5) / w + 0.5, 0.0, 1.0);
+    }
     for (int y = 0; y < 2; ++y) {
         for (int x = 0; x < 2; ++x) {
             highp vec2 tap = (base + vec2(float(x), float(y)) + 0.5) / size;
-            uint index = texture(u_material_texture_pixelmap, tap).r;
-            highp float weight = (x == 0 ? 1.0 - f.x : f.x) * (y == 0 ? 1.0 - f.y : f.y);
+            // Explicit level: the sampler repeats UVs but never picks a level.
+            uint index = textureLod(u_material_texture_pixelmap, tap, float(level)).r;
+            highp float weight = (x == 0 ? 1.0 - f.x : f.x) * (y == 0 ? 1.0 - f.y : f.y) * level_weight;
             if (index != 0u && weight > 0.0) {
                 uint lit = shaded_index(index);
                 if (total == 0.0) first = lit; else if (lit != first) same = false;
@@ -84,15 +96,76 @@ uint smooth_texture(highp vec2 uv, uint nearest_index) {
             }
         }
     }
+}
+
+// 4x4 ordered-dither threshold in (0, 1); averages to 0.5 so it is unbiased.
+highp float bayer4(highp vec2 frag) {
+    int x = int(mod(frag.x, 4.0));
+    int y = int(mod(frag.y, 4.0));
+    int m[16] = int[16](0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5);
+    return (float(m[y * 4 + x]) + 0.5) / 16.0;
+}
+
+// Trilinear (two mip levels, each bilinear) in decoded RGB, then back to a
+// palette index. dx/dy are the screen-space derivatives of the texel
+// coordinate. When a surface is seen at a shallow angle its footprint is a
+// long thin ellipse: instead of choosing the mip for the long axis (blurry
+// roads), take up to u_max_anisotropy probes spread along it, each at the mip
+// of the short axis. Close up (lod <= 0) this is the original single-level
+// bilinear.
+const int MAX_ANISOTROPY = 4;
+
+uint smooth_texture(highp vec2 uv, uint nearest_index, highp vec2 dx, highp vec2 dy) {
+    highp vec2 size0 = vec2(textureSize(u_material_texture_pixelmap, 0));
+    highp float len_x = length(dx);
+    highp float len_y = length(dy);
+    highp vec2 major_axis = len_x >= len_y ? dx : dy;
+    highp float major = max(len_x, len_y);
+    highp float minor = max(min(len_x, len_y), 1e-4);
+    highp float probes = clamp(ceil(major / minor), 1.0, float(clamp(u_max_anisotropy, 1, MAX_ANISOTROPY)));
+
+    highp float max_level = floor(log2(max(size0.x, size0.y)));
+    highp float lod = clamp(log2(max(major / probes, 1e-4)), 0.0, max_level);
+    int level = int(floor(lod));
+    highp float blend = lod - float(level);
+
+    // Mode 2 (Crisp): texel footprint per screen pixel on each axis.
+    highp vec2 crisp_width = u_texture_filtering == 2 ? max(abs(dx) + abs(dy), vec2(1e-3)) : vec2(0.0);
+    highp vec2 step_uv = major_axis / size0 / probes;
+    highp float probe_weight = 1.0 / probes;
+    highp vec3 color = vec3(0.0);
+    highp float total = 0.0;
+    uint first = 0u;
+    bool same = true;
+    for (int i = 0; i < MAX_ANISOTROPY; ++i) {
+        if (float(i) >= probes) break;
+        highp vec2 probe_uv = uv + step_uv * (float(i) + 0.5 - 0.5 * probes);
+        accumulate_level(probe_uv, level, (1.0 - blend) * probe_weight, crisp_width, color, total, first, same);
+        if (blend > 0.0) accumulate_level(probe_uv, level + 1, blend * probe_weight, crisp_width, color, total, first, same);
+    }
+
     // Keep exact indices for uniform regions and duplicate palette colors.
     if (total <= 0.0) return nearest_index;
     if (same) return first;
-    highp ivec3 q = ivec3(floor(clamp(color / total, 0.0, 1.0) * 31.0 + 0.5));
+    // Ordered dither between neighbouring cells of the 32-level colour cube
+    // turns banding into fine grain, which the SSAA resolve then averages out.
+    highp vec3 cell = floor(clamp(color / (total * u_palette_scale), 0.0, 1.0) * 31.0 + bayer4(gl_FragCoord.xy));
+    highp ivec3 q = ivec3(clamp(cell, 0.0, 31.0));
     highp int address = q.r + 32 * q.g + 1024 * q.b;
     return texelFetch(u_filter_lut, ivec2(address % 256, address / 256), 0).r;
 }
 
 void main(void) {
+    // Mip level from screen-space UV derivatives. Computed before any discard
+    // so the derivatives are taken in uniform control flow.
+    highp vec2 sample_coord = vec3(v_tex_coord.xy, 1) * u_material_uv_transform;
+    highp vec2 texel_dx = vec2(0.0);
+    highp vec2 texel_dy = vec2(0.0);
+    if (u_texture_filtering != 0) {
+        highp vec2 texels = sample_coord * vec2(textureSize(u_material_texture_pixelmap, 0));
+        texel_dx = dFdx(texels);
+        texel_dy = dFdy(texels);
+    }
 
     for(int i = 0; i < u_clip_plane_count; i++) {
         // calculate signed plane-vertex distance
@@ -112,9 +185,8 @@ void main(void) {
         }
     }
     else {
-        // calculate texture uv coordinates
-        vec2 sample_coord = vec3(v_tex_coord.xy, 1) * u_material_uv_transform;
-        uint texel = texture(u_material_texture_pixelmap, sample_coord.xy).r;
+        // Cutout coverage and the Sharp index always come from level 0.
+        uint texel = textureLod(u_material_texture_pixelmap, sample_coord.xy, 0.0).r;
 
         // color 0 is always transparent
         if (texel == 0u) {
@@ -123,7 +195,7 @@ void main(void) {
 
         out_palette_index = shaded_index(texel);
         if (u_texture_filtering != 0) {
-            out_palette_index = smooth_texture(sample_coord, out_palette_index);
+            out_palette_index = smooth_texture(sample_coord, out_palette_index, texel_dx, texel_dy);
         }
     }
 

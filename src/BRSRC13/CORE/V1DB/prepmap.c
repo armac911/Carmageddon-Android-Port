@@ -24,7 +24,13 @@ void BrBufferUpdate(br_pixelmap* pm, br_token use, br_uint_16 flags) {
 void BrBufferClear(br_pixelmap* pm) {
     LOG_TRACE("(%p)", pm);
 
-    STUB_ONCE();
+    /* Added by dethrace: pm->stored is the harness renderer's texture record
+     * (see BrBufferUpdate), not a BRender object with a dispatch table, so
+     * the renderer frees it. Previously a stub, which leaked every removed
+     * texture's GPU memory (all track textures on every race change). */
+    if (pm != NULL && pm->stored != NULL && gHarness_platform.Renderer_FreeTexture != NULL) {
+        gHarness_platform.Renderer_FreeTexture(pm);
+    }
     return;
 
     // FIXME: use a proper br_buffer_storage object with br_buffer_stored_dispatch dispatch table

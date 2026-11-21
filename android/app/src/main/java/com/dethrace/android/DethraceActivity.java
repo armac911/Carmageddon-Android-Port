@@ -45,7 +45,12 @@ public class DethraceActivity extends SDLActivity {
         }
         return super.dispatchTouchEvent(event);
     }
-    private native boolean nativeTakeImpact();
+    /** Strength 0..1000 of the strongest crash since the last call, 0 if none. */
+    private native int nativeTakeImpact();
+    private native void nativeTilt(int axis, boolean active);
+    private TiltSteering mTilt;
+    private ImpactVibrator mVibrator;
+    private boolean mWasRacing;
     private native void nativeTouch(int mask, int axis, boolean steering);
     private native void nativeResetTouch();
     private native void nativeSubmitText(int session, String text, boolean accept);
@@ -123,6 +128,9 @@ public class DethraceActivity extends SDLActivity {
     @Override protected void onPause() {
         ErrorLogs.event("game.onPause");
         if (mOverlay != null) mOverlay.reset();
+        if (mTilt != null) mTilt.stop();
+        if (mVibrator != null) mVibrator.cancel();
+        mUiHandler.removeCallbacks(mPollRaceState); // no 50 ms polling while paused
         mUiHandler.removeCallbacks(mPollMonitor);
         try { nativeProfilePause(); } catch (UnsatisfiedLinkError ignored) {}
         if (diagnostics != null) diagnostics.pause();
@@ -134,6 +142,11 @@ public class DethraceActivity extends SDLActivity {
         super.onResume();
         ErrorLogs.event("game.onResume");
         if (diagnostics != null) diagnostics.resume();
+        if (mTilt != null) mTilt.start(); // also re-centres on the current hold
+        if (mOverlay != null) {
+            mUiHandler.removeCallbacks(mPollRaceState);
+            mUiHandler.postDelayed(mPollRaceState, 50);
+        }
         mUiHandler.removeCallbacks(mPollMonitor);
         if (mMonitor != null) mUiHandler.postDelayed(mPollMonitor, 500);
     }
@@ -168,6 +181,7 @@ public class DethraceActivity extends SDLActivity {
     @Override
     protected void onDestroy() {
         mUiHandler.removeCallbacks(mPollRaceState);
+        if (mTilt != null) mTilt.stop();
         mUiHandler.removeCallbacks(mPollMonitor);
         closeTextDialog();
         if (diagnostics != null) diagnostics.pause();
@@ -239,7 +253,38 @@ public class DethraceActivity extends SDLActivity {
             android.system.Os.setenv("DETHRACE_DRAW_DISTANCE", distance, true);
             android.system.Os.setenv("DETHRACE_RENDER_QUALITY", quality, true);
             String filtering=getSharedPreferences("graphics",MODE_PRIVATE).getString("filtering","sharp");
-            android.system.Os.setenv("DETHRACE_IMAGE_FILTER", "smooth".equals(filtering)?"smooth":"sharp", true);
+            android.system.Os.setenv("DETHRACE_IMAGE_FILTER", "smooth".equals(filtering)||"crisp".equals(filtering)?filtering:"sharp", true);
+            String fxaa=getSharedPreferences("graphics",MODE_PRIVATE).getString("fxaa","0");
+            android.system.Os.setenv("DETHRACE_FXAA", "1".equals(fxaa)?"1":"0", true);
+            String sharpen=getSharedPreferences("graphics",MODE_PRIVATE).getString("sharpen","off");
+            android.system.Os.setenv("DETHRACE_SHARPEN", "low".equals(sharpen)||"medium".equals(sharpen)||"high".equals(sharpen)?sharpen:"off", true);
+            android.content.SharedPreferences controlPrefs=getSharedPreferences("controls",MODE_PRIVATE);
+            android.system.Os.setenv("DETHRACE_TILT_CONTROLLER",
+                "controller".equals(controlPrefs.getString("tilt_controller","combine"))?"controller":"combine", true);
+            String rumble=controlPrefs.getString("impact_rumble","normal");
+            android.system.Os.setenv("DETHRACE_RUMBLE", "off".equals(rumble)||"strong".equals(rumble)?rumble:"normal", true);
+            android.content.SharedPreferences graphics=getSharedPreferences("graphics",MODE_PRIVATE);
+            android.system.Os.setenv("DETHRACE_SSAA", "off".equals(graphics.getString("ssaa","on"))?"off":"on", true);
+            android.system.Os.setenv("DETHRACE_MIRROR_RES", "full".equals(graphics.getString("mirror_res","game"))?"full":"game", true);
+            android.system.Os.setenv("DETHRACE_TRACK_CULL", "off".equals(graphics.getString("track_cull","on"))?"off":"on", true);
+            android.system.Os.setenv("DETHRACE_FX_TYRES", "on".equals(graphics.getString("fx_tyres","off"))?"on":"off", true);
+            android.system.Os.setenv("DETHRACE_FX_DEBRIS", "on".equals(graphics.getString("fx_debris","off"))?"on":"off", true);
+            String mirror=graphics.getString("mirror","full");
+            android.system.Os.setenv("DETHRACE_MIRROR", "half".equals(mirror)||"off".equals(mirror)?mirror:"full", true);
+            String uiScaler=graphics.getString("ui_scaler","pixel");
+            android.system.Os.setenv("DETHRACE_UI_SCALER", "sharp".equals(uiScaler)||"smooth".equals(uiScaler)?uiScaler:"pixel", true);
+            String fov=graphics.getString("fov","original");
+            android.system.Os.setenv("DETHRACE_FOV", "wide".equals(fov)||"wider".equals(fov)?fov:"original", true);
+            String gamma=graphics.getString("gamma","normal");
+            android.system.Os.setenv("DETHRACE_GAMMA", "bright".equals(gamma)||"brighter".equals(gamma)||"darker".equals(gamma)?gamma:"normal", true);
+            String saturation=graphics.getString("saturation","original");
+            android.system.Os.setenv("DETHRACE_SATURATION", "vivid".equals(saturation)?"vivid":"original", true);
+            String scanlines=graphics.getString("scanlines","off");
+            android.system.Os.setenv("DETHRACE_SCANLINES", "light".equals(scanlines)||"strong".equals(scanlines)?scanlines:"off", true);
+            String aniso=getSharedPreferences("graphics",MODE_PRIVATE).getString("aniso","1");
+            android.system.Os.setenv("DETHRACE_ANISO", "2".equals(aniso)||"4".equals(aniso)?aniso:"1", true);
+            String upscaler=getSharedPreferences("graphics",MODE_PRIVATE).getString("upscaler","nearest");
+            android.system.Os.setenv("DETHRACE_UPSCALER", "fsr1".equals(upscaler)||"gsr1".equals(upscaler)?upscaler:"nearest", true);
         } catch (Exception e) {
             Log.e(TAG, "Failed to setenv", e);
         }
@@ -268,6 +313,20 @@ public class DethraceActivity extends SDLActivity {
                 public void reset() { nativeResetTouch(); }
             });
             mOverlay.setVisibility(View.GONE);
+            android.content.SharedPreferences controls = getSharedPreferences("controls", MODE_PRIVATE);
+            mVibrator = new ImpactVibrator(this, controls.getString("impact_rumble", "normal"));
+            float fullLock = TiltSteering.fullLockDegrees(controls.getString("tilt", "off"));
+            if (fullLock > 0f) {
+                mTilt = new TiltSteering(this, fullLock, (axis, active) -> {
+                    try { nativeTilt(axis, active); } catch (UnsatisfiedLinkError ignored) { }
+                });
+                if (mTilt.available()) mTilt.start();
+                else {
+                    mTilt = null;
+                    android.widget.Toast.makeText(this, UiLanguage.text("Tilt steering needs a motion sensor this device does not have."),
+                        android.widget.Toast.LENGTH_LONG).show();
+                }
+            }
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
@@ -332,8 +391,12 @@ public class DethraceActivity extends SDLActivity {
         public void run() {
             try {
                 boolean racing = nativeIsInRace();
-                boolean impact = nativeTakeImpact();
-                if (racing && impact && mOverlay != null) mOverlay.impactFeedback();
+                int impact = nativeTakeImpact();
+                // A controller in use rumbles natively; the phone vibrates otherwise.
+                if (racing && impact > 0 && mVibrator != null && !nativeUsingGamepad()) mVibrator.impact(impact);
+                // Each race starts with the current hold as "straight ahead".
+                if (racing && !mWasRacing && mTilt != null) mTilt.recenter();
+                mWasRacing = racing;
                 if (mOverlay != null) {
                     int target = racing && !nativeUsingGamepad() ? View.VISIBLE : View.GONE;
                     if (mOverlay.getVisibility() != target) {
@@ -345,7 +408,7 @@ public class DethraceActivity extends SDLActivity {
                 // libmain.so not yet ready or symbol not exported
             } catch (Throwable ignore) {
             }
-            mUiHandler.postDelayed(this, 100);
+            mUiHandler.postDelayed(this, 50); // keeps crash vibration within ~50 ms
         }
     };
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Debug-only label so the side-by-side test build is distinguishable. -->
+    <string name="app_name">Carmageddon (display fix test)</string>
+</resources>

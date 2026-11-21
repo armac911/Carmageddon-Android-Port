@@ -46,7 +46,7 @@ br_matrix4 gCameraToScreen;
 tSpark gSparks[32];
 br_pixelmap* gShade_list[16];
 int gN_BR_smoke_structs;
-tSmoke gSmoke[25];
+tSmoke gSmoke[DR_SMOKE_POOL]; /* 25 used unless enhanced tyre effects are on */
 tU32 gSplash_flags;
 tU32 gNext_splash;
 br_model* gLollipop_model;
@@ -55,7 +55,7 @@ br_model* gSplash_model;
 int gDust_rotate;
 br_camera* gSpark_cam;
 br_material* gBlack_material;
-tShrapnel gShrapnel[15];
+tShrapnel gShrapnel[DR_SHRAPNEL_POOL]; /* 15 used unless enhanced debris is on */
 
 // gSmoke_column has 25 elements but all the code just checks the first 5 elements
 #define MAX_SMOKE_COLUMNS 5
@@ -468,10 +468,7 @@ void CreateSparks(br_vector3* pos, br_vector3* v, br_vector3* pForce, br_scalar 
     BrVector3Scale(&norm, pForce, ts2);
     BrVector3Accumulate(v, &norm);
     num = FRandomBetween(0.f, BrVector3Length(v) / 2.f + 0.7f) * sparkiness;
-
-    if (num > 10) {
-        num = 10;
-    }
+    num = DRSparkCount(num, 10);
     for (i = 0; i < num; i++) {
         BrVector3Copy(&gSparks[gNext_spark].pos, pos);
         BrVector3Copy(&gSparks[gNext_spark].normal, &normal);
@@ -497,10 +494,7 @@ void CreateSparks(br_vector3* pos, br_vector3* v, br_vector3* pForce, br_scalar 
         BrMatrix34TApplyV(&norm, &normal, &pCar->car_master_actor->t.t.mat);
         BrVector3Scale(&tv, &norm, .1f);
         BrVector3Accumulate(&pos2, &tv);
-        num = (ts * sparkiness / 10.f) + 3;
-        if (num > 10) {
-            num = 10;
-        }
+        num = DRSparkCount((int)(ts * sparkiness / 10.f) + 3, 10);
         for (i = 0; i < num; i++) {
             BrVector3Copy(&gSparks[gNext_spark].pos, &pos2);
             BrVector3Copy(&gSparks[gNext_spark].normal, &norm);
@@ -553,6 +547,7 @@ void CreateSparkShower(br_vector3* pos, br_vector3* v, br_vector3* pForce, tCar_
     BrMatrix34TApplyV(pos, &normal, &c->car_master_actor->t.t.mat);
     BrMatrix34TApplyV(&normal, pForce, &c->car_master_actor->t.t.mat);
     num = (ts / 10.f) + 3;
+    if (DRAndroidDebrisEffects()) num = DRSparkCount(num, num);
     for (i = 0; i < num; i++) {
         BrVector3Copy(&gSparks[gNext_spark].pos, pos);
         BrVector3SetFloat(&gSparks[gNext_spark].normal, 0.f, 0.f, 0.f);
@@ -667,7 +662,7 @@ void CreateShrapnelShower(br_vector3* pos, br_vector3* v, br_vector3* pNormal, b
     tv.v[1] = v->v[1] + ts - pNormal->v[1] * ts2;
     tv.v[2] = v->v[2] - pNormal->v[2] * ts2;
 
-    num = (pForce / 10.f) * 3;
+    num = DRShrapnelCount((int)((pForce / 10.f) * 3));
     rnd = ((pForce + 20.f) * 3.f) / 200.f;
     for (i = 0; i < num; i++) {
         if ((gShrapnel_flags & (1u << gNext_shrapnel)) == 0) {
@@ -689,7 +684,7 @@ void CreateShrapnelShower(br_vector3* pos, br_vector3* v, br_vector3* pNormal, b
             gShrapnel[gNext_shrapnel].actor->material = gBlack_material;
         }
         gNext_shrapnel++;
-        if (gNext_shrapnel >= COUNT_OF(gShrapnel)) {
+        if (gNext_shrapnel >= DRShrapnelLimit()) {
             gNext_shrapnel = 0;
         }
     }
@@ -762,7 +757,7 @@ void ReplayShrapnel(tU32 pTime) {
 
     for (i = 0; i < COUNT_OF(gShrapnel); i++) {
         mat = &gShrapnel[i].actor->t.t.mat;
-        if (gShrapnel_flags & (1 << i)) {
+        if (gShrapnel_flags & (1u << i)) {
             gShrapnel[i].age += GetReplayRate() * pTime;
             DrMatrix34Rotate(mat, gShrapnel[i].age * BrDegreeToAngle(1), &gShrapnel[i].axis);
             BrMatrix34PreShearX(mat, gShrapnel[i].shear1, gShrapnel[i].shear2);
@@ -1341,7 +1336,7 @@ void CreatePuffOfSmoke(br_vector3* pos, br_vector3* v, br_scalar strength, br_sc
     gSmoke[gSmoke_num].decay_factor = pDecay_factor;
     gSmoke[gSmoke_num].pipe_me = 1;
     gSmoke_num++;
-    if (gSmoke_num >= COUNT_OF(gSmoke)) {
+    if (gSmoke_num >= DRSmokeLimit()) {
         gSmoke_num = 0;
     }
 }
@@ -1362,7 +1357,7 @@ void AdjustSmoke(int pIndex, tU8 pType, br_vector3* pPos, br_scalar pRadius, br_
     gSmoke[pIndex].radius = pRadius;
     gSmoke[pIndex].strength = pStrength;
     BrVector3Copy(&gSmoke[pIndex].pos, pPos);
-    gSmoke_flags |= 1 << pIndex;
+    gSmoke_flags |= 1u << pIndex;
 }
 
 // IDA: void __cdecl ActorError()

@@ -127,8 +127,8 @@ public class LauncherActivity extends Activity {
     }
     private void language(){
         heading("Language","Choose your language here. English is the default, regardless of your phone language.");
-        LinearLayout c=card();String[] codes={"en","es","it","fr"};
-        String[] labels={"English","Español","Italiano","Français"};
+        LinearLayout c=card();String[] codes={"en","es","it","fr","uk"};
+        String[] labels={"English","Español","Italiano","Français","Українська"};
         String current=UiLanguage.normalize(getSharedPreferences("language",0).getString("code","en"));
         int selected=0;for(int i=0;i<codes.length;i++)if(codes[i].equals(current))selected=i;
         final int checked=selected;
@@ -143,6 +143,7 @@ public class LauncherActivity extends Activity {
             }).setNegativeButton(t("Cancel"),null).show();
         });
         note(c,"Launcher changes immediately. Game text changes on the next Play. Original voices and videos are preserved. Some artwork and untranslated text remain in English.");
+        if("uk".equals(current))note(c,"Ukrainian covers the launcher only: the game's fonts have no Cyrillic letters, so in-game text stays in English.");
     }
     private void openWebsite(){
         try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://androgaming.com")));}
@@ -187,12 +188,55 @@ public class LauncherActivity extends Activity {
         LinearLayout c=card();
         DethraceActivity.aspectPreference(this); // migrate the old 16:9 switch before showing the choice
         choice(c,"Aspect ratio","display","aspect",new String[]{"4:3 — Classic","16:9 — Widescreen","Full screen — fit device"},new String[]{"classic","wide","fill"},false);
-        choice(c,"3D resolution","graphics","quality",new String[]{"Standard","High — sharper edges","Performance — lower resolution"},new String[]{"standard","high","performance"},false);
-        choice(c,"3D texture filtering","graphics","filtering",new String[]{"Sharp — original textures","Smooth — bilinear textures"},new String[]{"sharp","smooth"},false);
-        note(c,"Smooth blends 3D texture colors within the game palette. Menus and HUD stay sharp. Changes apply on the next Play.");
+        choice(c,"3D resolution","graphics","quality",new String[]{"Standard","High — sharper edges","Ultra — 4× supersampling","Performance — lower resolution"},new String[]{"standard","high","ultra","performance"},false);
+        note(c,"High and Ultra render 3D at 3× or 4× and average it down to your screen for smoother edges. Ultra needs a fast GPU.");
+        choice(c,"3D texture filtering","graphics","filtering",new String[]{"Sharp — original textures","Smooth — bilinear textures","Crisp — sharp texels, no shimmer"},new String[]{"sharp","smooth","crisp"},false);
+        note(c,"Smooth blends 3D texture colors within the game palette and uses mipmaps to stop distant textures shimmering. Menus and HUD stay sharp. Changes apply on the next Play.");
+        note(c,"Crisp keeps the original blocky texture look up close, but smooths each texel edge and stops distant textures shimmering.");
+        choice(c,"Anisotropic filtering","graphics","aniso",new String[]{"Off","2×","4×"},new String[]{"1","2","4"},false);
+        note(c,"Keeps roads and walls sharp when seen at a shallow angle. Works with Smooth texture filtering. Higher values cost more GPU time.");
+        choice(c,"Upscaling","graphics","upscaler",new String[]{"Nearest — crisp pixels","AMD FSR 1.0 — edge-adaptive","Snapdragon GSR — faster single pass"},new String[]{"nearest","fsr1","gsr1"},false);
+        note(c,"FSR and GSR upscale the game image to your screen and sharpen it. GSR is lighter on the GPU. Both work best with Standard or Performance 3D resolution and have no effect when the image is already at screen size.");
+        choice(c,"Edge smoothing (FXAA)","graphics","fxaa",new String[]{"Off","On"},new String[]{"0","1"},false);
+        choice(c,"Sharpening","graphics","sharpen",new String[]{"Off","Low","Medium","High"},new String[]{"off","low","medium","high"},false);
+        note(c,"FXAA smooths jagged 3D edges cheaply, which helps most with Standard or Performance 3D resolution. Sharpening restores detail softened by smoothing or upscaling. Menus and HUD are not smoothed. With FSR, the sharpening level replaces FSR's own.");
+        choice(c,"Menu and HUD scaling","graphics","ui_scaler",new String[]{"Pixel — original","Sharp — even pixels","Smooth — rounded diagonals"},new String[]{"pixel","sharp","smooth"},false);
+        note(c,"Sharp keeps menus, text and HUD crisp while making every game pixel the same size on screen. Smooth also rounds stair-stepped diagonals in fonts and icons.");
+        choice(c,"Field of view","graphics","fov",new String[]{"Original","Wide (+8°)","Wider (+16°)"},new String[]{"original","wide","wider"},false);
+        choice(c,"Brightness","graphics","gamma",new String[]{"Normal","Bright","Brighter","Darker"},new String[]{"normal","bright","brighter","darker"},false);
+        choice(c,"Colour","graphics","saturation",new String[]{"Original","Vivid"},new String[]{"original","vivid"},false);
+        choice(c,"Scanlines","graphics","scanlines",new String[]{"Off","Light","Strong"},new String[]{"off","light","strong"},false);
+        note(c,"Scanlines imitate a CRT monitor and look best on large, high-resolution screens. A wider field of view shows more of the track around your car.");
+        choice(c,"Cockpit mirror","graphics","mirror",new String[]{"Every frame","Half rate — faster","Off at race start"},new String[]{"full","half","off"},false);
+        note(c,"The rear-view mirror in cockpit view costs a second 3D render. Half rate updates it every other frame. Off starts races without it; the in-game mirror key still turns it on.");
+        choice(c,"Tyre smoke and skid marks","graphics","fx_tyres",new String[]{"Original","Enhanced"},new String[]{"off","on"},false);
+        choice(c,"Sparks and debris","graphics","fx_debris",new String[]{"Original","Enhanced"},new String[]{"off","on"},false);
+        note(c,"Enhanced tyre smoke follows every sliding wheel on tarmac and skid marks stay on the track three times longer. Enhanced impacts throw more sparks and twice the car fragments. Both use the game's own effects and may cost some performance in busy races.");
         choice(c,"Draw distance","graphics","distance",new String[]{"Original","Extended (1.5×)","Far (2×)"},new String[]{"original","extended","far"},false);
         choice(c,"Frame-rate cap","graphics","fps_cap",new String[]{"60 FPS","120 FPS","144 FPS","Uncapped"},new String[]{"60","120","144","0"},false);
         note(c,"The cap covers menus and races. Higher settings may reduce performance. A higher cap does not change your display’s refresh rate.");
+        LinearLayout k=card();
+        k.addView(text("Compatibility",16,TEXT,true));
+        note(k,"These switch off changes that are always on in this version, to restore the 0.9.2 behaviour for comparison or if something looks wrong.");
+        choice(k,"Supersampling (High and Ultra)","graphics","ssaa",new String[]{"Average samples — smoother","Single sample — 0.9.2"},new String[]{"on","off"},false);
+        choice(k,"Mirror render size","graphics","mirror_res",new String[]{"Game resolution — faster","Full 3D resolution — 0.9.2"},new String[]{"game","full"},false);
+        choice(k,"Track visibility test","graphics","track_cull",new String[]{"View-based — faster","Original box — 0.9.2"},new String[]{"on","off"},false);
+        Button reset=button("Reset graphics to defaults",false);
+        reset.setOnClickListener(v->new AlertDialog.Builder(this).setTitle(t("Reset graphics to defaults"))
+            .setMessage(t("Every setting on this page goes back to its default. Controls, language and cheats are not changed."))
+            .setPositiveButton(t("Reset"),(d,w)->{resetGraphics();showPage("Graphics");})
+            .setNegativeButton(t("Cancel"),null).show());
+        k.addView(reset);
+    }
+    /** Keys shown on the Graphics page (the "graphics" store also holds the
+     *  steering and monitor settings of other pages, which stay as they are). */
+    static final String[] GRAPHICS_KEYS={"quality","filtering","aniso","upscaler","fxaa","sharpen","ui_scaler","fov",
+        "gamma","saturation","scanlines","mirror","distance","fps_cap","ssaa","mirror_res","track_cull","fx_tyres","fx_debris"};
+    private void resetGraphics(){
+        SharedPreferences.Editor graphics=getSharedPreferences("graphics",0).edit();
+        for(String key:GRAPHICS_KEYS)graphics.remove(key);
+        graphics.apply();
+        getSharedPreferences("display",0).edit().putString("aspect","classic").remove("widescreen_16_9").apply();
     }
     private void cheats(){
         heading("Cheats","Optional single-player race helpers.");LinearLayout c=card();
@@ -207,6 +251,12 @@ public class LauncherActivity extends Activity {
         heading("Controls","Make it feel right.");LinearLayout c=card();
         choice(c,"Steering · touch & left stick","graphics","steering",new String[]{"Analog","Digital"},new String[]{"analog","digital"},false);
         toggle(c,"Haptic feedback","controls","haptics",true);
+        choice(c,"Tilt steering","controls","tilt",new String[]{"Off","Low sensitivity","Medium sensitivity","High sensitivity"},new String[]{"off","low","medium","high"},false);
+        note(c,"Turn the phone like a steering wheel. The way you hold it when a race starts (or when you return to the game) counts as straight ahead. Touching the steering pad overrides tilt.");
+        choice(c,"Tilt with a controller","controls","tilt_controller",new String[]{"Combine with stick","Controller only"},new String[]{"combine","controller"},false);
+        note(c,"Combine adds tilt to the controller's steering, for a phone held in a controller grip. Controller only ignores tilt while a controller is in use.");
+        choice(c,"Crash vibration","controls","impact_rumble",new String[]{"Normal","Stronger","Off"},new String[]{"normal","strong","off"},false);
+        note(c,"Vibrates harder for bigger hits. With a controller in use, the controller rumbles instead of the phone.");
         Button customize=button("Customize touch layout  ›",false);customize.setOnClickListener(v->startActivity(new Intent(this,ControlEditorActivity.class)));c.addView(customize);
         Button controller=button("Remap controller  ›",false);controller.setOnClickListener(v->controllerMapping());c.addView(controller);
         note(c,"Defaults: left stick / D-pad steer · RT or X accelerate · LT brake/reverse · LB handbrake · Y recover · RB repair (hold) · Select map · right stick up/down gears · R3 camera · Start pause. Menus: A confirm, B back.");
