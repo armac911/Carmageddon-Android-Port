@@ -4,72 +4,46 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
-## 0.9.7 — centred widescreen map (test candidate)
+## 0.9.7 — controls, widescreen rendering and map fixes (pre-release)
 
-- Compose the complete original map screen at its original 4:3 proportions,
-  centred at full available height in 16:9 and device-fit canvases. Clear side
-  bars and force CPU presentation so the race view cannot show through.
-- Scale map artwork, checkpoints, car blips, timer and live preview together,
-  preserving their alignment. Original 4:3 and low-resolution paths stay intact.
-- Retain the 0.9.6 cockpit fix, confirmed by the maintainer. Mirror behavior
-  remains cockpit-only, matching the inherited engine; no external mirror added.
-- Physical-device map confirmation pending.
+### Controls
 
-## 0.9.6 — remove artificial cockpit side extensions (test candidate)
+- Add stick/touch deadzone and sensitivity, trigger deadzone/pedal sensitivity,
+  digital steering strength and action-stick activation adjustments in the launcher.
+- Add elapsed-time steering smoothing, separate build/return times, pedal build
+  time and a tuning reset that preserves mappings and saves. Vehicle grip is unchanged.
+- Support proportional trigger/remapped-axis acceleration and braking; progressive
+  button/touch pedals release immediately. Fix analog-throttle abort, brake integer
+  division/accumulation and traction-limiter scaling for partial input.
+- Improve neutral/reset handling and include effective tuning in opt-in exports.
 
-- Remove the cockpit side-extension pass. The row-colour extension in 0.9.4
-  caused streaks; the black fill in 0.9.5 replaced them with rectangular blocks.
-  Draw the original cockpit image at its native size and leave the already
-  rendered world visible outside its bounds and through transparent windows.
-- Preserve the controls and other PR #5 fixes. Regression checks exercise the
-  production cockpit copier with camera wobble, clipping and guard bytes,
-  requiring untouched world pixels on both sides of the original artwork.
-- Physical-device visual confirmation remains pending.
+### Rendering and game fixes
 
-## 0.9.5 — cockpit side streaking (test candidate)
+- Integrate Cianid's PR #5: correct GPU sub-pixmap readback offsets, add optional
+  device-fit aspect with preference migration, and improve wide cockpit projection.
+- Keep original cockpit artwork centred without artificial side extensions,
+  eliminating reported edge streaks and black blocks.
+- Centre the complete map at its original proportions on wide canvases. Scale
+  artwork, checkpoints, markers, timer and live preview together; clear side bars
+  and prevent stale race geometry from showing through.
+- Fix strength-5 car-stealing table bounds, retaining original eligibility,
+  rank thresholds and chance rules.
 
-- Replace stretched cockpit edge colours with palette-black opaque side fill,
-  retaining the original cockpit artwork and transparent window rows. This
-  addresses the horizontal streaking reported on S24 FE and Retroid Flip 2.
-- Preserve the PR #5 fixes and 0.9.3 controls. The maintainer reports partial
-  triggers and other controls working on Flip 2 with the 0.9.4 candidate.
-- Regression checks require identical black extensions for differently coloured
-  edge pixels, with transparent windows, artwork bounds and clipping preserved.
-  Physical-device confirmation of this visual fix is still pending.
+### Testing, credits and limitations
 
-## 0.9.4 — PR #5 and control improvements (combined test candidate)
-
-- Integrate Cianid's PR #5 on top of the 0.9.3 input changes, preserving
-  controller remapping, all tuning sliders and proportional pedals.
-- Apply BRender sub-pixmap destination offsets during GPU readback, fixing
-  off-centre views when the render rectangle is inset.
-- Add an optional device-fit aspect mode, migrate existing aspect preferences,
-  and retain centred menus/HUD. Wider rendering may increase GPU cost.
-- Improve wide cockpit composition, projection offset and opaque edge extension
-  while preserving transparent window rows.
-- Restore original strength 1–5 car-stealing thresholds and clamp the strength
-  before indexing, removing the strength-5 out-of-bounds access.
-- Credit: Cianid authored these fixes with disclosed Claude Code assistance;
-  AndroGaming's integration/build/regression work used ChatGPT/Codex assistance.
-- Device testing of this combined APK is pending; PR #5 remains open for review.
-
-## 0.9.3 — adjustable input response (unreleased test candidate)
-
-- Smooth stick, D-pad and touch steering with elapsed-time rate limits, including
-  separate steering build/return times. Original vehicle grip is unchanged.
-- Add launcher sliders for stick/touch deadzones and sensitivity, trigger
-  deadzone/pedal sensitivity, digital steering strength and action-stick
-  activation (including gear changes), with one-tap tuning reset.
-- Make acceleration and brake axes proportional, including remapped axes;
-  button/touch pedals build progressively and release immediately.
-- Remove an inherited abort in the unused analog throttle path; fix integer
-  division and accumulation in analog brake pressure. Scale the existing
-  traction limiter by pedal position rather than overriding a small press.
-- Include effective tuning in opt-in diagnostic/error exports. Automated checks
-  cover partial input, reversals, release, reverse selection and remapping.
-- Requires driving validation on physical devices. New tuning labels/help use
-  English; existing language support remains available. Multiplayer and the
-  known cockpit FPS limitation are unchanged.
+- Maintainer device testing: Galaxy S24 FE and Retroid Pocket Flip 2; partial
+  triggers/controls and cockpit/map fixes confirmed through iterative tests.
+  Cianid reported PR #5 testing on Motorola Edge 50 Ultra.
+- Targeted production-code checks cover input timing/partial pedals/remaps,
+  GPU offsets, cockpit clipping/transparency, map composition and car-stealing
+  bounds. Android signing and 16 KiB packaging/alignment checks pass.
+- Thanks to Cianid (PR #5), Draknu (#2), porkuskorpz (#3), DentonTheFox (#4),
+  the upstream contributors and community testers. AndroGaming integration used
+  ChatGPT/Codex; Cianid disclosed Claude Code assistance. Full credits in README.
+- Cockpit FPS cost, audio settings/mixing (#3), resume overlay (#4), partial
+  localisation and unavailable LAN/Wi-Fi multiplayer remain limitations.
+- See [release notes](docs/RELEASE-NOTES-0.9.7.md) for update instructions and
+  [archived test checkpoints](docs/TEST-BUILD-HISTORY-0.9.3-0.9.7.md) for development history.
 
 ## 0.9.2 — optional languages and launcher cheats (test candidate)
 

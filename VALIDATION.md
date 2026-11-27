@@ -1,3 +1,28 @@
+# Validation — 0.9.7 pre-release
+
+- APK built from source commit `88197f4f18f9266e42ad890874135d2825966cc9`;
+  subsequent release-documentation edits do not change the tested binary.
+- Version 0.9.7 / code 32, package `com.androgaming.carma.next`, ARM64.
+- APK SHA-256: `ca8163b3991a4078b80a3ee0cc74a4dad864a5e6a16967e214b08d7ceee1b3d8`.
+- Maintainer certificate SHA-256: `ad560f0512c73af1368b3f07b4869e1587557b25feba254e2d7524fe6e179d9a`.
+- APK v2 signature, ZIP CRC/alignment and native ELF LOAD alignment of at least
+  16 KiB verified. Matching unstripped native symbols retained.
+- Targeted checks exercise production input paths: partial pedals, time-based
+  steering at 30/60/120 FPS, remapping, reversals, immediate release and resets.
+  Engine checks cover partial torque/brake pressure and traction behavior.
+- Native GLES checks cover sub-pixmap offsets, shadow blending, mirror target
+  isolation and forced CPU map presentation. Cockpit checks cover native artwork,
+  transparency, clipping/wobble and untouched world pixels outside its bounds.
+- Map checks cover widths 640, 648, 864, 1056, 1080 and 1296, proportional centring,
+  side bars, checkpoint/preview alignment and guard bytes. Car-stealing checks
+  cover strength bounds, eligibility, thresholds and chance rules under sanitizers.
+- Maintainer reports Galaxy S24 FE and Retroid Pocket Flip 2 testing, confirms
+  partial triggers/controls and approves the final cockpit/map fixes. These were
+  iterative physical-device checks, not a claim that every setting/device was tested.
+  Cianid separately reported PR #5 testing on Motorola Edge 50 Ultra.
+- No general FPS gain is claimed. Cockpit FPS cost, audio-settings/mixing issue #3,
+  resume-overlay issue #4 and full native-speaker localisation review remain open.
+
 # Validation — 0.9.2 test candidate
 
 - Full Android ARM64 game and Java launcher assembleDebug passes with version

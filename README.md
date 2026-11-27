@@ -2,7 +2,7 @@
 
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.7 test build · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.7 pre-release · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -26,12 +26,14 @@ See the
 
 ## What to expect
 
-**0.9.7 is a combined test candidate** with the 0.9.3 steering/deadzone and
-proportional-pedal improvements plus [Cianid's PR #5](https://github.com/armac911/Carmageddon-Android-Port/pull/5):
-offset-view rendering, optional device-fit full screen, wide cockpit fixes and
-strength-5 car-stealing thresholds. The 0.9.6 cockpit fix is confirmed by the maintainer. This 0.9.7 follow-up centres
-the map at its original proportions and clears the side bars on wider screens.
-Map device confirmation is pending. See [test notes](docs/RELEASE-NOTES-0.9.7.md).
+**0.9.7 combines adjustable steering/deadzones and proportional pedals with
+[Cianid's PR #5](https://github.com/armac911/Carmageddon-Android-Port/pull/5):
+offset-view rendering, optional device-fit full screen and strength-5 car-stealing
+fixes. Follow-up fixes remove wide cockpit edge artifacts and centre the complete
+map at its original proportions with clean side bars. The maintainer confirmed
+controls/partial triggers and approved the cockpit/map fixes through iterative
+Galaxy S24 FE and Retroid Pocket Flip 2 testing. See the
+[release notes](docs/RELEASE-NOTES-0.9.7.md) for scope and limitations.
 The language selector, launcher cheats, automatic imports, streamed music and
 cockpit mirror from the previous candidates remain included.
 
@@ -90,7 +92,7 @@ The ZIP importer accepts up to 2 GiB of extracted data and 50,000 entries.
 
 ## Installation
 
-1. Download `carmageddon-android-port-0.9.2-arm64.apk` from this repository's
+1. Download `carmageddon-android-port-0.9.7-arm64.apk` from this repository's
    **Releases** when available, or use the maintainer-supplied APK.
 2. Open the APK on your device. If Android asks, allow APK installation for the
    browser/file manager you are using, then complete installation.
@@ -129,7 +131,7 @@ ISO/CUE/BIN disc images and other installer formats are not imported.
 Install updates **over the existing app**, using the same signing identity.
 Do not uninstall or clear storage if you want to retain imported data and saves.
 The current application ID is `com.androgaming.carma.next`; AndroGaming versions
-0.1.15 onward share this identity. The 0.9.2 APK has a higher internal build code
+0.1.15 onward share this identity. The 0.9.7 APK (internal build code 32) has a higher build code
 than 0.9, 0.8 and the earlier 1.0 candidate, so it can update that installation in place. The older `com.androgaming.carma` installation
 is separate, with no automatic migration.
 
@@ -262,8 +264,10 @@ controls, importing and saves remain part of preparing the 1.0 milestone.
 
 ## Known limitations
 
+- Audio mixing/disabled audio settings ([#3](https://github.com/armac911/Carmageddon-Android-Port/issues/3)) and control overlays obscuring buttons after resume ([#4](https://github.com/armac911/Carmageddon-Android-Port/issues/4)) remain open.
+
 - Network multiplayer is unavailable and disabled on Android.
-- Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in 0.9.2. Use the external view as the current workaround.
+- Cockpit view can show a substantial FPS drop. The restored mirror adds a second camera render and readback/composition work; its exact share of the reported drop has not yet been profiled. Mirror quality/refresh controls are not included in this release. Use the external view as the current workaround.
 - Gear overrides do not provide a selectable fully manual transmission mode.
 - Compatibility across all controllers, Android versions and game-data editions
   is not established. TV-only navigation and other architectures are unverified.
@@ -387,7 +391,7 @@ libraries were not authored by this AI-assisted iteration. Their contributors
 retain credit. OpenAI ChatGPT/Codex is credited as an AI development assistant,
 not as the owner of the project or an endorsement by OpenAI.
 
-Cianid's PR #5 contributions are included in this test integration. The contributor
+Cianid's PR #5 contributions are included in this release. The contributor
 disclosed Claude Code assistance in the PR; ChatGPT/Codex assisted with integration,
 regression checks and packaging. Credit for those fixes belongs to Cianid.
 
@@ -411,6 +415,16 @@ It builds on substantial prior work:
 | [stb_vorbis](https://github.com/nothings/stb), Sean Barrett and contributors | OGG/Vorbis music decoding | [Pinned source](lib/miniaudio/STB-SOURCE.txt), dual MIT/public-domain notice retained in [source](lib/miniaudio/stb_vorbis.c) |
 | [Cianid](https://github.com/Cianid) | Offset rendering, device-fit aspect, wide cockpit and strength-5 car-stealing fixes ([PR #5](https://github.com/armac911/Carmageddon-Android-Port/pull/5)); contributor disclosed Claude Code assistance | Retained project license and Git attribution |
 | OpenAI ChatGPT/Codex | AI development assistance | Full disclosure above |
+
+Community thanks: [Draknu](https://github.com/Draknu) for the display report in
+[#2](https://github.com/armac911/Carmageddon-Android-Port/issues/2),
+[porkuskorpz](https://github.com/porkuskorpz) for steering/audio feedback in
+[#3](https://github.com/armac911/Carmageddon-Android-Port/issues/3), and
+[DentonTheFox](https://github.com/DentonTheFox) for display/resume reports,
+including [#4](https://github.com/armac911/Carmageddon-Android-Port/issues/4).
+Thank you to everyone providing device tests, logs, screenshots and feedback.
+Cianid reported PR #5 testing on Motorola Edge 50 Ultra; this is contributor
+coverage, separate from the maintainer's Galaxy S24 FE/Retroid Pocket Flip 2 tests.
 
 The codebase carries [GNU GPL version 3](LICENSE); dependency notices retain their
 own terms. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). This source snapshot
