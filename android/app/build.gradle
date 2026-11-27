@@ -10,8 +10,8 @@ android {
         applicationId "com.androgaming.carma.next"
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 31
-        versionName "0.9.6"
+        versionCode 32
+        versionName "0.9.7"
 
         externalNativeBuild {
             cmake {

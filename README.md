@@ -2,7 +2,7 @@
 
 # Carmageddon Android Port
 
-**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.6 test build · Android ARM64**
+**An [AndroGaming.com](https://androgaming.com) project · Version 0.9.7 test build · Android ARM64**
 
 Play the original Carmageddon on Android using a native engine built on
 [Dethrace](https://github.com/dethrace-labs/dethrace), with a launcher, touch and
@@ -26,13 +26,12 @@ See the
 
 ## What to expect
 
-**0.9.6 is a combined test candidate** with the 0.9.3 steering/deadzone and
+**0.9.7 is a combined test candidate** with the 0.9.3 steering/deadzone and
 proportional-pedal improvements plus [Cianid's PR #5](https://github.com/armac911/Carmageddon-Android-Port/pull/5):
 offset-view rendering, optional device-fit full screen, wide cockpit fixes and
-strength-5 car-stealing thresholds. The 0.9.6 follow-up removes artificial cockpit side extensions after the earlier
-streaking and black-fill artifacts. The rendered world remains visible beyond
-the original cockpit artwork. Visual confirmation is pending.
-See [test notes](docs/RELEASE-NOTES-0.9.6.md).
+strength-5 car-stealing thresholds. The 0.9.6 cockpit fix is confirmed by the maintainer. This 0.9.7 follow-up centres
+the map at its original proportions and clears the side bars on wider screens.
+Map device confirmation is pending. See [test notes](docs/RELEASE-NOTES-0.9.7.md).
 The language selector, launcher cheats, automatic imports, streamed music and
 cockpit mirror from the previous candidates remain included.
 

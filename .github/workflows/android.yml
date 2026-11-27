@@ -33,6 +33,7 @@ jobs:
           python3 test/android/test_stream_music.py
           python3 test/android/test_mirror_target.py
           python3 test/android/test_pr5_rendering.py
+          python3 test/android/test_map_layout.py
           python3 test/android/test_car_stealing.py
           python3 test/android/test_game_detection.py
           python3 test/android/test_usb_registration.py

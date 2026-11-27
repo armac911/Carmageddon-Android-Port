@@ -1534,6 +1534,39 @@ int ConditionallyFillWithSky(br_pixelmap* pPixelmap) {
     return 1;
 }
 
+#ifdef __ANDROID__
+/* Compose the complete legacy map (including blips, timer and live preview)
+ * as one 4:3 image. Keep its geometry intact and letterbox the wider canvas.
+ * Use a bounded copy because source and destination share the back buffer. */
+static int DRAndroidComposeMap(br_pixelmap* target) {
+    static tU8 map_pixels[640 * 480];
+    if (!target || !target->pixels || target->width < 640 ||
+        target->height != 486 || target->row_bytes < target->width) return 0;
+    tU8* pixels = target->pixels;
+    for (int y = 0; y < 480; ++y)
+        memcpy(map_pixels + y * 640, pixels + y * target->row_bytes, 640);
+    int width = target->width;
+    int height = width * 480 / 640;
+    if (height > target->height) {
+        height = target->height;
+        width = height * 640 / 480;
+    }
+    int left = (target->width - width) / 2;
+    int top = (target->height - height) / 2;
+    for (int y = 0; y < target->height; ++y) {
+        tU8* row = pixels + y * target->row_bytes;
+        memset(row, 0, target->width);
+        if (y < top || y >= top + height) continue;
+        const tU8* source = map_pixels + ((y - top) * 480 / height) * 640;
+        for (int x = 0; x < width; ++x) row[left + x] = source[x * 640 / width];
+    }
+    /* Map borders may equal the old snapshot's palette index. Explicitly
+     * present the whole CPU composition so GPU geometry cannot leak through. */
+    DRPresentCpuRect(0, 0, target->width, target->height);
+    return 1;
+}
+#endif
+
 // IDA: void __usercall RenderAFrame(int pDepth_mask_on@<EAX>)
 void RenderAFrame(int pDepth_mask_on) {
     int cat;
@@ -1581,6 +1614,10 @@ void RenderAFrame(int pDepth_mask_on) {
         gBack_screen->origin_y = 0;
         gBack_screen->base_x = 0;
         gBack_screen->base_y = 0;
+#ifdef __ANDROID__
+        if (gReal_graf_data_index && gBack_screen->width >= 640 && gBack_screen->height == 486)
+            BrPixelmapFill(gBack_screen, 0);
+#endif
         if (gCurrent_race.map_image != NULL) {
             if (gReal_graf_data_index) {
                 BrPixelmapRectangleFill(gBack_screen, 0, 0, 640, 40, 0);
@@ -1933,6 +1970,9 @@ void RenderAFrame(int pDepth_mask_on) {
     }
 #endif
     gRender_screen->pixels = old_pixels;
+#ifdef __ANDROID__
+    if (gMap_mode && gReal_graf_data_index) DRAndroidComposeMap(gBack_screen);
+#endif
     if (!gPalette_fade_time || GetRaceTime() > gPalette_fade_time + 500) {
         PDScreenBufferSwap(0);
     }

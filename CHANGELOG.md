@@ -4,6 +4,17 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.7 — centred widescreen map (test candidate)
+
+- Compose the complete original map screen at its original 4:3 proportions,
+  centred at full available height in 16:9 and device-fit canvases. Clear side
+  bars and force CPU presentation so the race view cannot show through.
+- Scale map artwork, checkpoints, car blips, timer and live preview together,
+  preserving their alignment. Original 4:3 and low-resolution paths stay intact.
+- Retain the 0.9.6 cockpit fix, confirmed by the maintainer. Mirror behavior
+  remains cockpit-only, matching the inherited engine; no external mirror added.
+- Physical-device map confirmation pending.
+
 ## 0.9.6 — remove artificial cockpit side extensions (test candidate)
 
 - Remove the cockpit side-extension pass. The row-colour extension in 0.9.4
