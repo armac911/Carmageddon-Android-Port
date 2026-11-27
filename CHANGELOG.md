@@ -4,6 +4,17 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.6 — remove artificial cockpit side extensions (test candidate)
+
+- Remove the cockpit side-extension pass. The row-colour extension in 0.9.4
+  caused streaks; the black fill in 0.9.5 replaced them with rectangular blocks.
+  Draw the original cockpit image at its native size and leave the already
+  rendered world visible outside its bounds and through transparent windows.
+- Preserve the controls and other PR #5 fixes. Regression checks exercise the
+  production cockpit copier with camera wobble, clipping and guard bytes,
+  requiring untouched world pixels on both sides of the original artwork.
+- Physical-device visual confirmation remains pending.
+
 ## 0.9.5 — cockpit side streaking (test candidate)
 
 - Replace stretched cockpit edge colours with palette-black opaque side fill,

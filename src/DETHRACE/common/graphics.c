@@ -517,55 +517,7 @@ void CopyStripImage(br_pixelmap* pDest, br_int_16 pDest_x, br_int_16 pOffset_x, 
     }
 }
 
-#ifdef __ANDROID__
-/* Wide canvases only: use the cockpit strip's edge opacity to extend roof
- * and dashboard silhouettes, but fill the extra area with palette black.
- * Repeating each row's edge colour stretches texture details into horizontal
- * streaks. Palette entry zero is forced black by the palette setters below.
- * Transparent window rows keep the world visible; original artwork is intact. */
-static void ExtendStripImageEdges(br_pixelmap* pDest, int pX, int pY, tS8* pSource, int pWidth) {
-    int height = *(uint16_t*)pSource;
-    int right_x = pX + pWidth;
-    pSource += 2;
-    if (pX <= 0 && right_x >= pDest->width) {
-        return;
-    }
-    for (int row = 0; row < height; row++) {
-        int y = pY + row;
-        int number_of_chunks = *pSource++;
-        int x = 0;
-        int left_opaque = 0;
-        int right_opaque = 0;
-        for (int j = 0; j < number_of_chunks; j++) {
-            int chunk_length = *pSource++;
-            if (chunk_length >= 0) {
-                x += chunk_length;
-                continue;
-            }
-            chunk_length = -chunk_length;
-            if (x == 0) {
-                left_opaque = 1;
-            }
-            if (x <= pWidth - 1 && pWidth - 1 < x + chunk_length) {
-                right_opaque = 1;
-            }
-            pSource += chunk_length;
-            x += chunk_length;
-        }
-        if (y < 0 || y >= pDest->height) {
-            continue;
-        }
-        tU8* line = (tU8*)pDest->pixels + y * pDest->row_bytes;
-        if (left_opaque && pX > 0) {
-            memset(line, 0, pX < pDest->width ? pX : pDest->width);
-        }
-        if (right_opaque && right_x < pDest->width) {
-            int start = right_x > 0 ? right_x : 0;
-            memset(line + start, 0, pDest->width - start);
-        }
-    }
-}
-#endif
+
 
 // IDA: void __usercall SetBRenderScreenAndBuffers(int pX_offset@<EAX>, int pY_offset@<EDX>, int pWidth@<EBX>, int pHeight@<ECX>)
 void SetBRenderScreenAndBuffers(int pX_offset, int pY_offset, int pWidth, int pHeight) {
@@ -1924,15 +1876,8 @@ void RenderAFrame(int pDepth_mask_on) {
                 0,
                 gCurrent_graf_data->total_cock_width,
                 gCurrent_graf_data->total_cock_height);
-#ifdef __ANDROID__
-            if (wide_back != NULL) {
-                ExtendStripImageEdges(wide_back,
-                    cockpit_x + gScreen_wobble_x,
-                    cockpit_y + gScreen_wobble_y,
-                    gProgram_state.current_car.cockpit_images[gProgram_state.cockpit_image_index],
-                    gCurrent_graf_data->total_cock_width);
-            }
-#endif
+            /* Keep the world visible beyond the original cockpit artwork.
+             * Stretching or filling its side edges creates stripes or boxes. */
             if (gMirror_on__graphics) {
                 BrPixelmapRectangleCopy(
                     gBack_screen,

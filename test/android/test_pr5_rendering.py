@@ -1,4 +1,4 @@
-"""PR5 production aspect selection, cockpit edge decoding and offset GPU readback."""
+"""PR5 production aspect selection, native cockpit composition and offset GPU readback."""
 from pathlib import Path
 import subprocess,tempfile,os,runpy
 root=Path(__file__).resolve().parents[2]
@@ -7,7 +7,9 @@ def function(text,name,prefix):
  while d:d+=(text[e]=='{')-(text[e]=='}');e+=1
  return text[a:e]
 w=(root/'src/harness/platforms/android_widescreen.c').read_text();w=w[w.index('/* Widest canvas'):w.rindex('#endif')]
-g=(root/'src/DETHRACE/common/graphics.c').read_text();edge=function(g,'ExtendStripImageEdges','static void')
+g=(root/'src/DETHRACE/common/graphics.c').read_text()
+assert 'ExtendStripImageEdges' not in g
+edge=function(g,'SkipLines','tS8*')+'\n'+function(g,'CopyStripImage','void')
 source=r'''
 #define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
@@ -17,6 +19,9 @@ source=r'''
 #include <stdio.h>
 #define DR_ANDROID_WIDE_HEIGHT 486
 #define LOG_INFO(...) ((void)0)
+#define LOG_TRACE(...) ((void)0)
+#define LOG_TRACE8(...) ((void)0)
+typedef int16_t br_int_16;typedef uint16_t br_uint_16;
 static struct {int total_width,total_height,phys_width,phys_height,row_bytes;} gGraf_specs[2];
 static struct {int width,height;} gGraf_data[2];
 typedef int8_t tS8;typedef uint8_t tU8;
@@ -36,21 +41,21 @@ int main(void) {
   DRAndroid_ConfigureAspect(&width,&height,screens[i][1],screens[i][0]);assert(width==screens[i][2]);
  }
  width=320;height=200;DRAndroid_ConfigureAspect(&width,&height,2712,1220);assert(width==320&&height==200);
- // Differently coloured opaque edges must extend as black, never colour bands.
- // Rows: opaque edges; transparent window; interior-only pixels; split edge runs.
+ // Original cockpit pixels overlay the world; all outside pixels must survive.
  _Alignas(2) tS8 art[]={4,0,1,-4,10,20,30,40,1,4,3,1,-2,70,80,1,3,-1,33,2,-1,44};
- unsigned char storage[16+16*6+16];memset(storage,77,sizeof(storage));
- br_pixelmap pm={12,6,16,storage+16};ExtendStripImageEdges(&pm,4,1,art,4);
- for(int y=0;y<6;y++)for(int x=0;x<16;x++) {
-  int expected=77;
-  if(y==1&&x<4)expected=0;if(y==1&&x>=8&&x<12)expected=0;
-  if(y==4&&x<4)expected=0;if(y==4&&x>=8&&x<12)expected=0;
-  assert(storage[16+y*16+x]==expected);
+ int pixels[4][4]={{10,20,30,40},{-1,-1,-1,-1},{-1,70,80,-1},{33,-1,-1,44}};
+ unsigned char storage[16+16*6+16];br_pixelmap pm={12,6,16,storage+16};
+ for(int wobble_x=-2;wobble_x<=2;wobble_x+=2)for(int wobble_y=-2;wobble_y<=2;wobble_y+=2) {
+  memset(storage,77,sizeof(storage));
+  CopyStripImage(&pm,4,wobble_x,1,wobble_y,art,0,0,4,4);
+  for(int y=0;y<6;y++)for(int x=0;x<16;x++) {
+   int sx=x-4-wobble_x,sy=y-1-wobble_y,expected=77;
+   if(sx>=0&&sx<4&&sy>=0&&sy<4&&pixels[sy][sx]>=0)expected=pixels[sy][sx];
+   assert(storage[16+y*16+x]==expected);
+  }
+  for(int i=0;i<16;i++)assert(storage[i]==77&&storage[112+i]==77);
  }
- for(int i=0;i<16;i++)assert(storage[i]==77&&storage[112+i]==77);
- memset(storage,77,sizeof(storage));ExtendStripImageEdges(&pm,-4,-2,art,4);
- for(int x=0;x<12;x++)assert(storage[16+16+x]==0);
- puts("PASS aspect modes/migration fallback, common device ratios, limits, unbanded black cockpit extensions, transparent windows, clipping and guard bytes");
+ puts("PASS aspect modes, limits, native cockpit pixels, transparent windows, visible world at both sides, wobble/clipping and guard bytes");
 }
 '''
 with tempfile.TemporaryDirectory() as d:
