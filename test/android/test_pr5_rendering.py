@@ -36,20 +36,21 @@ int main(void) {
   DRAndroid_ConfigureAspect(&width,&height,screens[i][1],screens[i][0]);assert(width==screens[i][2]);
  }
  width=320;height=200;DRAndroid_ConfigureAspect(&width,&height,2712,1220);assert(width==320&&height==200);
+ // Differently coloured opaque edges must extend as black, never colour bands.
  // Rows: opaque edges; transparent window; interior-only pixels; split edge runs.
  _Alignas(2) tS8 art[]={4,0,1,-4,10,20,30,40,1,4,3,1,-2,70,80,1,3,-1,33,2,-1,44};
  unsigned char storage[16+16*6+16];memset(storage,77,sizeof(storage));
  br_pixelmap pm={12,6,16,storage+16};ExtendStripImageEdges(&pm,4,1,art,4);
  for(int y=0;y<6;y++)for(int x=0;x<16;x++) {
   int expected=77;
-  if(y==1&&x<4)expected=10;if(y==1&&x>=8&&x<12)expected=40;
-  if(y==4&&x<4)expected=33;if(y==4&&x>=8&&x<12)expected=44;
+  if(y==1&&x<4)expected=0;if(y==1&&x>=8&&x<12)expected=0;
+  if(y==4&&x<4)expected=0;if(y==4&&x>=8&&x<12)expected=0;
   assert(storage[16+y*16+x]==expected);
  }
  for(int i=0;i<16;i++)assert(storage[i]==77&&storage[112+i]==77);
  memset(storage,77,sizeof(storage));ExtendStripImageEdges(&pm,-4,-2,art,4);
- for(int x=0;x<12;x++)assert(storage[16+16+x]==44);
- puts("PASS aspect modes/migration fallback, common device ratios, limits, cockpit opaque/transparent edges, clipping and guard bytes");
+ for(int x=0;x<12;x++)assert(storage[16+16+x]==0);
+ puts("PASS aspect modes/migration fallback, common device ratios, limits, unbanded black cockpit extensions, transparent windows, clipping and guard bytes");
 }
 '''
 with tempfile.TemporaryDirectory() as d:

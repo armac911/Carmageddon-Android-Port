@@ -4,6 +4,17 @@ This summarizes the major AndroGaming milestones. Detailed historical developmen
 notes remain in [docs/DEVELOPMENT-HISTORY.md](docs/DEVELOPMENT-HISTORY.md).
 Versions group related work rather than documenting every intermediate tweak.
 
+## 0.9.5 — cockpit side streaking (test candidate)
+
+- Replace stretched cockpit edge colours with palette-black opaque side fill,
+  retaining the original cockpit artwork and transparent window rows. This
+  addresses the horizontal streaking reported on S24 FE and Retroid Flip 2.
+- Preserve the PR #5 fixes and 0.9.3 controls. The maintainer reports partial
+  triggers and other controls working on Flip 2 with the 0.9.4 candidate.
+- Regression checks require identical black extensions for differently coloured
+  edge pixels, with transparent windows, artwork bounds and clipping preserved.
+  Physical-device confirmation of this visual fix is still pending.
+
 ## 0.9.4 — PR #5 and control improvements (combined test candidate)
 
 - Integrate Cianid's PR #5 on top of the 0.9.3 input changes, preserving

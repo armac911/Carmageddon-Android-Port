@@ -518,12 +518,11 @@ void CopyStripImage(br_pixelmap* pDest, br_int_16 pDest_x, br_int_16 pOffset_x, 
 }
 
 #ifdef __ANDROID__
-/* Wide canvases only. The cockpit art (a strip image placed at pX,pY in
- * pDest) is narrower than the canvas; continue its outermost pixel column on
- * each side to the canvas edge, row by row. Transparent edge pixels (windows)
- * stay transparent so the world shows through; opaque ones (roof, door frame,
- * dashboard) carry on, so the sides read as more car interior instead of a
- * hard-edged 704-wide frame. Reads the run-length data directly: no decode. */
+/* Wide canvases only: use the cockpit strip's edge opacity to extend roof
+ * and dashboard silhouettes, but fill the extra area with palette black.
+ * Repeating each row's edge colour stretches texture details into horizontal
+ * streaks. Palette entry zero is forced black by the palette setters below.
+ * Transparent window rows keep the world visible; original artwork is intact. */
 static void ExtendStripImageEdges(br_pixelmap* pDest, int pX, int pY, tS8* pSource, int pWidth) {
     int height = *(uint16_t*)pSource;
     int right_x = pX + pWidth;
@@ -535,8 +534,8 @@ static void ExtendStripImageEdges(br_pixelmap* pDest, int pX, int pY, tS8* pSour
         int y = pY + row;
         int number_of_chunks = *pSource++;
         int x = 0;
-        int left = -1;
-        int right = -1;
+        int left_opaque = 0;
+        int right_opaque = 0;
         for (int j = 0; j < number_of_chunks; j++) {
             int chunk_length = *pSource++;
             if (chunk_length >= 0) {
@@ -545,10 +544,10 @@ static void ExtendStripImageEdges(br_pixelmap* pDest, int pX, int pY, tS8* pSour
             }
             chunk_length = -chunk_length;
             if (x == 0) {
-                left = (tU8)pSource[0];
+                left_opaque = 1;
             }
             if (x <= pWidth - 1 && pWidth - 1 < x + chunk_length) {
-                right = (tU8)pSource[pWidth - 1 - x];
+                right_opaque = 1;
             }
             pSource += chunk_length;
             x += chunk_length;
@@ -557,12 +556,12 @@ static void ExtendStripImageEdges(br_pixelmap* pDest, int pX, int pY, tS8* pSour
             continue;
         }
         tU8* line = (tU8*)pDest->pixels + y * pDest->row_bytes;
-        if (left >= 0 && pX > 0) {
-            memset(line, left, pX < pDest->width ? pX : pDest->width);
+        if (left_opaque && pX > 0) {
+            memset(line, 0, pX < pDest->width ? pX : pDest->width);
         }
-        if (right >= 0 && right_x < pDest->width) {
+        if (right_opaque && right_x < pDest->width) {
             int start = right_x > 0 ? right_x : 0;
-            memset(line + start, right, pDest->width - start);
+            memset(line + start, 0, pDest->width - start);
         }
     }
 }
